@@ -7,7 +7,7 @@
 ![Google Cloud](https://img.shields.io/badge/Google_Cloud-GCP-4285F4)
 ![Capacitor](https://img.shields.io/badge/Capacitor-6-119EFF)
 
-<img width="3420" height="1812" alt="screenshot" src="https://github.com/user-attachments/assets/dd7f3650-f74d-4bbb-a1ca-09d677c818fe" />
+<img width="3420" height="1812" alt="hero" src="https://github.com/user-attachments/assets/042fc7fb-7593-474b-b973-04665c120502" />
 
 A full-stack platform for automating financial trading workflows through a suite of interconnected web, mobile and cloud-based applications.
 
@@ -124,12 +124,11 @@ functions/         Firebase Cloud Functions
 
 ## Screenshots
 
-<img width="1103" height="735" alt="mobile" src="https://github.com/user-attachments/assets/4c2e22cf-37f0-4e20-92d0-7abfad5e9b9a" />
+<img width="1103" height="735" alt="mobile" src="https://github.com/user-attachments/assets/1351cd5e-58b5-463a-9575-91a048ef8ea9" />
 
-<img width="3420" height="1812" alt="dashboard" src="https://github.com/user-attachments/assets/f7d405b3-ca77-4466-8875-b8b4a81e8904" />
+<img width="3420" height="1812" alt="dashboard" src="https://github.com/user-attachments/assets/206a7b95-c847-4a5b-b8ba-59980ffdfe2d" />
 
-<img width="3420" height="1812" alt="console" src="https://github.com/user-attachments/assets/b43e08bd-ff46-4413-ae33-992de9d839e4" />
-
+<img width="3420" height="1812" alt="console" src="https://github.com/user-attachments/assets/da78996c-d318-405a-b17f-9028bef0da9b" />
 
 ---
 
