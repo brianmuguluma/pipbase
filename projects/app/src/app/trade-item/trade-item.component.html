@@ -1,0 +1,45 @@
+<ion-item [routerLink]="['/trades', trade().id]" button>
+  <ion-label class="ion-no-margin flex justify-between gap-x-6 py-5">
+    <ion-text color="dark" class="font-semibold leading-6">
+      {{ trade().instrument | slash }}
+    </ion-text>
+    <ion-text color="dark" class="block font-medium leading-6">
+      @if (!closedTrade() && trade().state !== "CLOSED") {
+        <ion-text>
+          {{
+            calculatedTradeState()?.unrealizedPL || trade().unrealizedPL
+              | currency: app.account()?.currency
+          }}
+        </ion-text>
+      }
+      @if (closedTrade()?.state === "CLOSED" || trade().state === "CLOSED") {
+        <ion-text>
+          {{
+            closedTrade()?.realizedPL || trade().realizedPL
+              | currency: app.account()?.currency
+          }}
+        </ion-text>
+      }
+      from
+      {{ trade().initialUnits | compact: app.unitsFormatOptions() }}
+      <span [ngPlural]="trade().initialUnits | absolute">
+        <ng-template ngPluralCase="=1"> unit </ng-template>
+        <ng-template ngPluralCase="other"> units </ng-template>
+      </span>
+    </ion-text>
+    <ion-note class="truncate">
+      @if (trade().state !== "CLOSED") {
+        <span> Opened {{ trade().openTime | formatRelative }} </span>
+      }
+      @if (trade().state === "CLOSED") {
+        <span> Closed {{ trade().closeTime | formatRelative }} </span>
+      }
+    </ion-note>
+  </ion-label>
+  @if (trade().state === "OPEN") {
+    <ion-icon slot="end" name="ellipse" size="small" color="success" />
+  }
+  @if (trade().state === "CLOSE_WHEN_TRADEABLE") {
+    <ion-icon slot="end" name="ellipse" size="small" color="warning" />
+  }
+</ion-item>

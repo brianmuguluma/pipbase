@@ -1,0 +1,301 @@
+<label class="modal-overlay" for="order-update"></label>
+<div class="modal-content flex flex-col gap-5">
+  <label
+    for="order-update"
+    class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+  >
+    ✕
+  </label>
+  <h2 class="text-xl">Update Order</h2>
+  <form
+    [formGroup]="form()"
+    (ngSubmit)="sendSignal()"
+    class="flex h-full flex-col"
+  >
+    <div class="h-0 flex-1 overflow-y-auto">
+      <div class="flex flex-1 flex-col justify-between">
+        <div class="divide-y divide-gray-200 px-px dark:divide-white/10">
+          <div class="space-y-6 pb-5 pt-6">
+            <!-- Instrument -->
+            <div>
+              <label
+                for="instrument"
+                class="block text-sm font-medium leading-6"
+              >
+                Instrument
+              </label>
+              <select
+                id="instrument"
+                name="instrument"
+                (change)="selectInstrument($event.target)"
+                class="select mt-2"
+              >
+                <option [value]="undefined" [disabled]="instrument()">
+                  Select an instrument
+                </option>
+                @for (pair of instruments(); track pair) {
+                <option
+                  [value]="pair.name"
+                  [selected]="pair.name === instrument()?.name"
+                >
+                  {{ pair.displayName }}
+                </option>
+                }
+              </select>
+            </div>
+
+            <!-- Dependants -->
+            <div>
+              <!-- <p
+            class="block text-sm font-medium leading-6 "
+            >
+            Dependants
+          </p> -->
+
+              <h2 class="text-base font-semibold leading-7">Dependants</h2>
+              <p class="text-content2 mt-1 text-sm leading-6">
+                Replace an Order in an Account by simultaneously cancelling it
+                and creating a replacement Order.
+              </p>
+
+              <dl
+                class="mt-2 space-y-6 divide-y divide-gray-100 text-sm leading-6 dark:divide-white/5"
+              >
+                <div class="pt-6">
+                  <div>
+                    <div class="flex justify-between">
+                      <label
+                        for="takeProfit"
+                        class="block text-sm font-medium leading-6"
+                      >
+                        Take Profit
+                      </label>
+                      <span
+                        class="text-content2 text-sm leading-6"
+                        id="take-profit-optional"
+                      >
+                        Optional
+                      </span>
+                    </div>
+                    <div class="mt-2 flex rounded-md shadow-sm">
+                      <div
+                        class="relative flex flex-grow items-stretch focus-within:z-10"
+                      >
+                        <input
+                          type="number"
+                          inputmode="decimal"
+                          formControlName="takeProfit"
+                          name="takeProfit"
+                          id="takeProfit"
+                          class="input"
+                          placeholder="Price"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        (click)="toggleDependant('takeProfit')"
+                        class="relative -ml-px inline-flex items-center gap-x-1.5 rounded-r-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:border-l-0 dark:bg-white/5 dark:ring-white/10 dark:hover:bg-white/10"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                          class="h-5 w-5"
+                        >
+                          @if (form().controls.takeProfit.enabled) {
+                          <path
+                            d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"
+                          />
+                          } @if (form().controls.takeProfit.disabled) {
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                          />
+                          }
+                        </svg>
+
+                        {{ form().controls.takeProfit.disabled ? "Enable" :
+                        "Cancel" }}
+                      </button>
+                    </div>
+                  </div>
+                  @if (form().controls.takeProfit.disabled) {
+                  <p class="mt-2 text-sm text-red-600" id="email-error">
+                    This will cancel all pending Take Profit orders.
+                  </p>
+                  }
+                </div>
+                <div class="pt-6">
+                  <div>
+                    <div class="flex justify-between">
+                      <label
+                        for="stopLoss"
+                        class="block text-sm font-medium leading-6"
+                      >
+                        Stop Loss
+                      </label>
+                      <span
+                        class="text-content2 text-sm leading-6"
+                        id="stop-loss-optional"
+                      >
+                        Optional
+                      </span>
+                    </div>
+                    <div class="mt-2 flex rounded-md shadow-sm">
+                      <div
+                        class="relative flex flex-grow items-stretch focus-within:z-10"
+                      >
+                        <input
+                          type="number"
+                          inputmode="decimal"
+                          formControlName="stopLoss"
+                          name="stopLoss"
+                          id="stopLoss"
+                          class="input"
+                          placeholder="Price"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        (click)="toggleDependant('stopLoss')"
+                        class="relative -ml-px inline-flex items-center gap-x-1.5 rounded-r-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:border-l-0 dark:bg-white/5 dark:ring-white/10 dark:hover:bg-white/10"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                          class="h-5 w-5"
+                        >
+                          @if (form().controls.stopLoss.enabled) {
+                          <path
+                            d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"
+                          />
+                          } @if (form().controls.stopLoss.disabled) {
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                          />
+                          }
+                        </svg>
+
+                        {{ form().controls.stopLoss.disabled ? "Enable" :
+                        "Cancel" }}
+                      </button>
+                    </div>
+                  </div>
+                  @if (form().controls.stopLoss.disabled) {
+                  <p class="mt-2 text-sm text-red-600" id="email-error">
+                    This will cancel all pending Stop Loss orders.
+                  </p>
+                  }
+                </div>
+                <div class="pt-6">
+                  <div>
+                    <div class="flex justify-between">
+                      <label
+                        for="trailingStopLoss"
+                        class="block text-sm font-medium leading-6"
+                      >
+                        Trailing Stop Loss
+                      </label>
+                      <span
+                        class="text-content2 text-sm leading-6"
+                        id="trailing-stop-loss-optional"
+                      >
+                        Optional
+                      </span>
+                    </div>
+                    <div class="mt-2 flex rounded-md shadow-sm">
+                      <div
+                        class="relative flex flex-grow items-stretch focus-within:z-10"
+                      >
+                        <input
+                          type="number"
+                          inputmode="decimal"
+                          formControlName="trailingStopLoss"
+                          name="trailingStopLoss"
+                          id="trailingStopLoss"
+                          class="input"
+                          placeholder="Distance"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        (click)="toggleDependant('trailingStopLoss')"
+                        class="relative -ml-px inline-flex items-center gap-x-1.5 rounded-r-md px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:border-l-0 dark:bg-white/5 dark:ring-white/10 dark:hover:bg-white/10"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                          class="h-5 w-5"
+                        >
+                          @if (form().controls.trailingStopLoss.enabled) {
+                          <path
+                            d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"
+                          />
+                          } @if (form().controls.trailingStopLoss.disabled) {
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                          />
+                          }
+                        </svg>
+
+                        {{ form().controls.trailingStopLoss.disabled ? "Enable"
+                        : "Cancel" }}
+                      </button>
+                    </div>
+                  </div>
+                  @if (form().controls.trailingStopLoss.disabled) {
+                  <p class="mt-2 text-sm text-red-600" id="email-error">
+                    This will cancel all pending Trailing Stop Loss orders.
+                  </p>
+                  }
+                </div>
+              </dl>
+            </div>
+
+            <!-- Notes -->
+            <div>
+              <div class="flex justify-between">
+                <label for="notes" class="block text-sm font-medium leading-6">
+                  Notes
+                </label>
+                <span
+                  class="text-content2 text-sm leading-6"
+                  id="notes-optional"
+                >
+                  Optional
+                </span>
+              </div>
+              <div class="mt-2">
+                <textarea
+                  id="notes"
+                  name="notes"
+                  formControlName="notes"
+                  [rows]="4"
+                  class="textarea"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex gap-3">
+      <button
+        type="submit"
+        [disabled]="form().invalid || !instrument()"
+        class="btn btn-block btn-primary"
+      >
+        Send
+      </button>
+
+      <label for="order-update" class="btn btn-block">Cancel</label>
+    </div>
+  </form>
+</div>

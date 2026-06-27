@@ -1,0 +1,18 @@
+<div class="breadcrumbs px-0 text-sm">
+  <ul>
+    <li>
+      <a routerLink="/">Home</a>
+    </li>
+    @for (breadcrumb of breadcrumbs(); track $index) {
+      <li>
+        <a
+          [routerLink]="breadcrumb.route"
+          [queryParams]=""
+          [queryParamsHandling]="queryParamsHandling()"
+        >
+          {{ breadcrumb.title }}
+        </a>
+      </li>
+    }
+  </ul>
+</div>

@@ -1,0 +1,123 @@
+<app-header />
+<div class="isolate px-6 pt-24 sm:pt-32 lg:px-8">
+  <div
+    class="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]"
+    aria-hidden="true"
+  >
+    <div
+      class="relative left-1/2 -z-10 aspect-[1155/678] w-[36.125rem] max-w-none -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-40rem)] sm:w-[72.1875rem]"
+      style="
+        clip-path: polygon(
+          74.1% 44.1%,
+          100% 61.6%,
+          97.5% 26.9%,
+          85.5% 0.1%,
+          80.7% 2%,
+          72.5% 32.5%,
+          60.2% 62.4%,
+          52.4% 68.1%,
+          47.5% 58.3%,
+          45.2% 34.5%,
+          27.5% 76.7%,
+          0.1% 64.9%,
+          17.9% 100%,
+          27.6% 76.8%,
+          76.1% 97.7%,
+          74.1% 44.1%
+        );
+      "
+    ></div>
+  </div>
+  <div class="mx-auto max-w-2xl text-center">
+    <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">Contact sales</h2>
+    <p class="text-content2 mt-2 text-lg leading-8">
+      How can we help you today? Send us a message and we will get back to you
+      shortly.
+    </p>
+  </div>
+  <form class="mx-auto mt-16 max-w-xl sm:mt-20">
+    <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+      <div>
+        <label for="first-name" class="block text-sm font-semibold leading-6">
+          First name
+        </label>
+        <div class="mt-2.5">
+          <input
+            type="text"
+            name="first-name"
+            id="first-name"
+            autocomplete="given-name"
+            class="input"
+          />
+        </div>
+      </div>
+      <div>
+        <label for="last-name" class="block text-sm font-semibold leading-6">
+          Last name
+        </label>
+        <div class="mt-2.5">
+          <input
+            type="text"
+            name="last-name"
+            id="last-name"
+            autocomplete="family-name"
+            class="input"
+          />
+        </div>
+      </div>
+      <div class="sm:col-span-2">
+        <label for="email" class="block text-sm font-semibold leading-6">
+          Email
+        </label>
+        <div class="mt-2.5">
+          <input
+            type="email"
+            name="email"
+            id="email"
+            autocomplete="email"
+            class="input"
+          />
+        </div>
+      </div>
+      <div class="sm:col-span-2">
+        <label for="message" class="block text-sm font-semibold leading-6"
+          >Message</label
+        >
+        <div class="mt-2.5">
+          <textarea
+            name="message"
+            id="message"
+            rows="4"
+            class="textarea"
+          ></textarea>
+        </div>
+      </div>
+      <div class="flex gap-x-4 sm:col-span-2">
+        <div class="flex h-6 items-center">
+          <input
+            id="remember-me"
+            name="remember-me"
+            type="checkbox"
+            class="checkbox-primary checkbox h-5 w-5 rounded"
+          />
+        </div>
+        <label class="text-content2 text-sm leading-6" for="remember-me">
+          By selecting this, you agree to our
+          <a href="" class="link link-primary text-sm font-semibold">
+            privacy&nbsp;policy </a
+          >.
+        </label>
+      </div>
+    </div>
+    <div class="mt-10">
+      <button
+        type="submit"
+        class="btn btn-primary block px-3.5 py-2.5 text-center text-sm font-semibold"
+      >
+        Let's talk
+      </button>
+    </div>
+  </form>
+</div>
+
+<app-footer />

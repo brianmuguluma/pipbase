@@ -1,0 +1,40 @@
+<ion-header collapse="fade" translucent>
+  <ion-toolbar>
+    @if (auth.isAdmin()) {
+    <ion-buttons slot="start">
+      <ion-menu-button [disabled]="!auth.isAdmin()" />
+    </ion-buttons>
+    }
+    <ion-title>Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Settings</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <app-profile-card />
+
+  <ion-list [inset]="true">
+    <ion-item routerLink="/account" button>Account</ion-item>
+    <ion-item routerLink="/billing" button>Billing</ion-item>
+    <ion-item routerLink="/notifications" button>Notifications</ion-item>
+  </ion-list>
+
+  <ion-list-header> Exchange </ion-list-header>
+  <ion-list [inset]="true">
+    <ion-item routerLink="/oanda" button>OANDA</ion-item>
+  </ion-list>
+
+  <ion-list-header> Legal </ion-list-header>
+  <ion-list [inset]="true">
+    <ion-item routerLink="/privacy" button>Privacy</ion-item>
+    <ion-item button>Terms & Conditions</ion-item>
+  </ion-list>
+
+  <!-- Version -->
+  <app-version />
+</ion-content>

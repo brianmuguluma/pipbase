@@ -1,0 +1,49 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/home" />
+    </ion-buttons>
+    <ion-title>Signals</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="createSignal()">
+        <ion-icon slot="icon-only" name="add" />
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [scrollY]="false" [fullscreen]="true">
+  <ion-refresher (ionRefresh)="refresh($any($event))" slot="fixed">
+    <ion-refresher-content />
+  </ion-refresher>
+
+  <cdk-virtual-scroll-viewport
+    [itemSize]="113"
+    [minBufferPx]="1000"
+    [maxBufferPx]="2000"
+    class="ion-content-scroll-host"
+  >
+    @if (!(signals())?.length) {
+    <ion-list lines="none">
+      @for (i of [].constructor(10); track i) {
+      <app-item-skeleton />
+      }
+    </ion-list>
+    } @if ((signals())?.length) {
+    <ion-list lines="none">
+      @for (signal of (signals()); track signal) {
+      <app-signal-item [signal]="signal" />
+      }
+    </ion-list>
+    }
+
+    <!-- Infinite Scroll -->
+    <ion-infinite-scroll
+      [disabled]="!signals()?.length || isEnd()"
+      (ionInfinite)="loadSignals($any($event))"
+      class="ion-margin-top"
+    >
+      <ion-infinite-scroll-content />
+    </ion-infinite-scroll>
+  </cdk-virtual-scroll-viewport>
+</ion-content>

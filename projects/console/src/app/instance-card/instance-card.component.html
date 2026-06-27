@@ -1,0 +1,26 @@
+<a [routerLink]="instance() ? ['/instances', instance()?.id] : null">
+  <div
+    class="ring-border hover:bg-backgroundSecondary col-span-1 rounded-lg shadow-sm ring-1"
+  >
+    <div class="flex w-full items-center justify-between space-x-6 p-6">
+      <div class="flex-1 truncate">
+        @if (!instance()) {
+          <div class="skeleton-pulse h-4 w-1/3 rounded-md"></div>
+          <div class="skeleton-pulse mt-1 h-4 w-2/3 rounded-md"></div>
+        } @else {
+          <h3 class="truncate text-sm font-medium">
+            {{ instance()?.main_ip }}
+          </h3>
+          <p
+            class="text-content2 mt-1 truncate text-sm first-letter:capitalize"
+          >
+            {{ instance()?.power_status }} &middot;
+            @if (region()) {
+              <span> {{ region().city }}, {{ region().country }} </span>
+            }
+          </p>
+        }
+      </div>
+    </div>
+  </div>
+</a>

@@ -1,0 +1,58 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/settings" />
+    </ion-buttons>
+    <ion-title>Billing</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($any($event))">
+    <ion-refresher-content />
+  </ion-refresher>
+
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Billing</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  @if (!app.customer()) {
+  <app-spinner />
+  } @else {
+
+  <ion-card
+    [color]="app.prefersDark() ? undefined : 'light'"
+    class="shadow-none"
+  >
+    <ion-card-header>
+      <ion-card-subtitle>Plan</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-text color="medium">
+        @if (!app.subscriptions()?.length) { You are currently not subscribed to
+        a plan. } @else { You are on the
+        <strong class="font-semibold">
+          {{ app.subscriptions()?.[0]?.plan?.nickname }}
+        </strong>
+        plan. The next payment of {{ app.subscriptions()?.[0]?.plan?.amount! /
+        100 | currency : (app.subscriptions()?.[0]?.plan?.currency! | uppercase)
+        }} will be due on {{ app.subscriptions()?.[0]?.current_period_end! *
+        1000 | date: "longDate" }}. }
+      </ion-text>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-item lines="none">
+    <ion-label class="ion-text-center">
+      <ion-note class="ion-text-center mx-auto w-full">
+        Manage your subscriptions via
+        <strong class="font-semibold">
+          <ion-text color="dark"> pipbase.com </ion-text>
+        </strong>
+      </ion-note>
+    </ion-label>
+  </ion-item>
+  }
+</ion-content>

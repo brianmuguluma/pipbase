@@ -1,0 +1,257 @@
+<!-- Spinner -->
+@if (!response() && (!transactions()?.length || !trades()?.length)) {
+<app-spinner />
+}
+
+<!-- Report -->
+@if (response()?.pages?.length && transactions()?.length) {
+<main>
+  <header class="relative isolate">
+    <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <app-breadcrumbs
+        [breadcrumbs]="[{ title: 'Reports', route: '/reports' }, { title: dateRange(), route: '/reports/' + date()! }]"
+      />
+      <div class="mt-8 flex justify-between">
+        <div>
+          <h3 class="page-heading">Report</h3>
+        </div>
+      </div>
+      <div
+        class="mx-auto flex max-w-2xl items-center justify-between gap-x-8 lg:mx-0 lg:max-w-none"
+      ></div>
+    </div>
+  </header>
+
+  <div class="tabs gap-1">
+    <div class="tab tab-pill">Tab 1</div>
+    <div class="tab tab-pill tab-active">Tab 2</div>
+    <div class="tab tab-pill tab-disabled">Tab 3</div>
+  </div>
+
+  <!-- Stats -->
+  <section class="relative isolate overflow-hidden">
+    <div
+      class="border-b border-b-gray-900/10 lg:border-t lg:border-t-gray-900/5 dark:border-b-white/10 lg:dark:border-t-white/5"
+    >
+      <dl
+        class="mx-auto grid max-w-7xl grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 lg:px-2 xl:px-0"
+      >
+        <!--  Realized -->
+        <div
+          class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 border-t border-gray-900/5 px-4 py-10 sm:px-6 lg:border-t-0 xl:px-8 dark:border-white/5"
+        >
+          <dt class="text-content2 text-sm font-medium leading-6">Realized</dt>
+          @if (change()) {
+          <dd
+            class="text-xs font-medium"
+            [ngClass]="change() >= 0 ? 'text-success' : 'text-error'"
+          >
+            @if (change() > 0) {
+            <span>+</span>
+            }{{ change() | percent : '1.0-2' }}
+          </dd>
+          }
+          <dd
+            class="flex w-full flex-none items-baseline gap-x-2 text-3xl font-medium leading-10 tracking-tight"
+          >
+            {{ (realized() | currency : app.account()?.currency) || '-' }}
+            <span class="text-content2 truncate text-sm">
+              from {{ transactions()?.[0]?.accountBalance | currency :
+              app.account()?.currency }}
+            </span>
+          </dd>
+        </div>
+        <!-- Margin Used -->
+        <div
+          class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 border-t border-gray-900/5 px-4 py-10 sm:border-l sm:px-6 lg:border-t-0 xl:px-8 dark:border-white/5"
+        >
+          <dt class="text-content2 text-sm font-medium leading-6">
+            Margin used
+          </dt>
+          <dd
+            class="w-full flex-none text-3xl font-medium leading-10 tracking-tight"
+          >
+            {{ (margin() | currency : app.account()?.currency) || '-' }}
+          </dd>
+        </div>
+        <!-- Win rate -->
+        <div
+          class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 border-t border-gray-900/5 px-4 py-10 sm:px-6 lg:border-l lg:border-t-0 xl:px-8 dark:border-white/5"
+        >
+          <dt class="text-content2 text-sm font-medium leading-6">Win rate</dt>
+          <dd class="text-xs font-medium">
+            <!-- {{ (trade()?.initialUnits | toNumber) > 0 ? 'Long' : 'Short' }} -->
+          </dd>
+          <dd
+            class="w-full flex-none text-3xl font-medium leading-10 tracking-tight"
+          >
+            {{ winRate() | percent }}
+            <span class="text-content2 truncate text-sm">
+              from {{ trades()?.length | number }} trades.
+            </span>
+          </dd>
+        </div>
+        <!-- Range -->
+        <div
+          class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 border-t border-gray-900/5 px-4 py-10 sm:border-l sm:px-6 lg:border-t-0 xl:px-8 dark:border-white/5"
+        >
+          <dt class="text-content2 text-sm font-medium leading-6">Financing</dt>
+          <dd
+            class="w-full flex-none text-3xl font-medium leading-10 tracking-tight"
+          >
+            {{ financing() | currency : app.account()?.currency }}
+          </dd>
+        </div>
+      </dl>
+    </div>
+    <div
+      class="absolute left-0 top-full -z-10 mt-96 origin-top-left translate-y-40 -rotate-90 transform-gpu opacity-20 blur-3xl sm:left-1/2 sm:-ml-96 sm:-mt-10 sm:translate-y-0 sm:rotate-0 sm:transform-gpu sm:opacity-50"
+      aria-hidden="true"
+    >
+      <div
+        class="aspect-[1154/678] w-[72.125rem] bg-gradient-to-br from-[#FF80B5] to-[#9089FC]"
+        style="
+          clip-path: polygon(
+            100% 38.5%,
+            82.6% 100%,
+            60.2% 37.7%,
+            52.4% 32.1%,
+            47.5% 41.8%,
+            45.2% 65.6%,
+            27.5% 23.4%,
+            0.1% 35.3%,
+            17.9% 0%,
+            27.7% 23.4%,
+            76.2% 2.5%,
+            74.2% 56%,
+            100% 38.5%
+          );
+        "
+      ></div>
+    </div>
+  </section>
+  <div class="space-y-16 py-16 xl:space-y-20">
+    <!-- Transfers -->
+    @if (transfers()?.length) {
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div>
+        <h3 class="text-base font-semibold leading-6">Transfers</h3>
+        <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
+          <div
+            class="overflow-hidden rounded-lg border bg-gray-50 px-4 py-5 sm:p-6 dark:border-white/10 dark:bg-white/5"
+          >
+            <dt class="text-content2 truncate text-sm font-medium">
+              Depositis
+            </dt>
+            <dd class="mt-1 text-3xl font-semibold tracking-tight">
+              {{ deposits() | currency : app.account()?.currency }}
+            </dd>
+          </div>
+          <div
+            class="overflow-hidden rounded-lg border bg-gray-50 px-4 py-5 sm:p-6 dark:border-white/10 dark:bg-white/5"
+          >
+            <dt class="text-content2 truncate text-sm font-medium">
+              Withdrawals
+            </dt>
+            <dd class="mt-1 text-3xl font-semibold tracking-tight">
+              {{ withdrawals() | currency : app.account()?.currency }}
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+    }
+    <!-- Positions -->
+    @if (instruments()?.length && trades()?.length) {
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
+        <h2 class="text-base font-semibold leading-7">Positions</h2>
+        <ul
+          role="list"
+          class="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8"
+        >
+          @for (instrument of instruments(); track $index) {
+          <app-position-report [name]="instrument" [tradeInputs]="trades()!" />
+          }
+        </ul>
+      </div>
+    </div>
+    }
+    <!-- Trades -->
+    <div>
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <h1 class="text-base font-semibold leading-6">Trades</h1>
+      </div>
+      <div class="mt-8 flow-root overflow-hidden">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <table class="w-full text-left">
+            <thead class="">
+              <tr>
+                <th
+                  scope="col"
+                  class="relative isolate py-3.5 pr-3 text-left text-sm font-semibold"
+                >
+                  Instrument
+                  <div
+                    class="absolute inset-y-0 right-full -z-10 w-screen border-b border-b-gray-200 dark:border-white/10 dark:bg-white/5"
+                  ></div>
+                  <div
+                    class="absolute inset-y-0 left-0 -z-10 w-screen border-b border-b-gray-200 dark:border-white/10 dark:bg-white/5"
+                  ></div>
+                </th>
+                <th
+                  scope="col"
+                  class="hidden px-3 py-3.5 text-left text-sm font-semibold sm:table-cell"
+                >
+                  Realized
+                </th>
+                <th
+                  scope="col"
+                  class="hidden px-3 py-3.5 text-left text-sm font-semibold sm:table-cell"
+                >
+                  Change
+                </th>
+                <th
+                  scope="col"
+                  class="hidden px-3 py-3.5 text-left text-sm font-semibold md:table-cell"
+                >
+                  Duration
+                </th>
+                <th
+                  scope="col"
+                  class="hidden px-3 py-3.5 text-left text-sm font-semibold md:table-cell"
+                >
+                  Distance
+                </th>
+                <th
+                  scope="col"
+                  class="px-3 py-3.5 text-left text-sm font-semibold"
+                >
+                  Value
+                </th>
+                <th scope="col" class="relative py-3.5 pl-3">
+                  <span class="sr-only">Edit</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (trade of trades(); track trade.id) {
+              <app-trade-report [trade]="trade" class="contents" />
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+}
+
+<!-- Empty -->
+@if (response() && !response()?.pages?.length && !transactions()?.length) {
+<app-page-not-found
+  [error]="{ errorCode: 'No activity found', errorMessage: 'No trades were made in this month'}"
+/>
+} @if (response() && transactions()?.length) {
+<app-footer />
+}

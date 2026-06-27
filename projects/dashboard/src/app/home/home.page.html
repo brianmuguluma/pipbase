@@ -1,0 +1,440 @@
+<!-- Spinner -->
+@if (auth.user() === undefined) { <app-spinner /> }
+
+<!-- Setup -->
+@if (auth.user() && (!auth.hasApiKey() || !auth.hasAccountId())) {
+<app-setup />
+}
+
+<!-- Home screen -->
+@if (auth.hasApiKey() && auth.hasAccountId()) {
+<main>
+  <div class="flex-1">
+    @if (app.account()) {
+    <div class="relative isolate overflow-hidden">
+      <!-- Secondary navigation -->
+      <header class="pb-4 pt-6 sm:pb-6">
+        <div
+          class="mx-auto flex max-w-7xl flex-wrap items-center gap-6 px-4 sm:flex-nowrap sm:px-6 lg:px-8"
+        >
+          <h1 class="text-base font-semibold leading-7">Overview</h1>
+          <div
+            class="sm:border-border order-last flex w-full gap-x-8 text-sm font-semibold leading-6 sm:order-none sm:w-auto sm:border-l sm:pl-6 sm:leading-7"
+          >
+            <button
+              type="button"
+              (click)="updateDays(7)"
+              [ngClass]="days() === 7 ? 'text-primary' : 'text-content2'"
+            >
+              Last 7 days
+            </button>
+
+            <button
+              type="button"
+              (click)="updateDays(30)"
+              [ngClass]="days() === 30 ? 'text-primary' : 'text-content2'"
+            >
+              Last 30 days
+            </button>
+
+            <button
+              type="button"
+              (click)="updateDays(null)"
+              [ngClass]="days() === null ? 'text-primary' : 'text-content2'"
+            >
+              All-time
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Stats -->
+      <div
+        class="border-b border-b-gray-900/10 lg:border-t lg:border-t-gray-900/5 dark:border-b-white/10 lg:dark:border-t-white/5"
+      >
+        <dl
+          class="mx-auto grid max-w-7xl grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 lg:px-2 xl:px-0"
+        >
+          <!-- Balance -->
+          <div
+            class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 border-t border-gray-900/5 px-4 py-10 sm:px-6 lg:border-t-0 xl:px-8 dark:border-white/5"
+          >
+            <dt class="text-content2 text-sm font-medium leading-6">Balance</dt>
+            <dd
+              class="w-full flex-none text-3xl font-medium leading-10 tracking-tight"
+            >
+              {{ (app.account()?.balance | currency : app.account()?.currency)
+              || '-' }}
+            </dd>
+          </div>
+
+          <!-- Realized -->
+          <div
+            class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 border-t border-gray-900/5 px-4 py-10 sm:border-l sm:px-6 lg:border-t-0 xl:px-8 dark:border-white/5"
+          >
+            <dt class="text-content2 text-sm font-medium leading-6">
+              Realized
+            </dt>
+            @if (app.account() && days() && realizedPercentage() !== 0) {
+            <dd
+              class="text-xs font-medium"
+              [ngClass]="realizedPercentage()! >= 0 ? 'text-success' : 'text-error'"
+            >
+              @if (realizedPercentage()! >= 0) { <span>+</span> } {{
+              realizedPercentage() | percent : '1.0-2' }}
+            </dd>
+            }
+            <dd
+              class="line-clamp-1 w-full flex-none text-ellipsis text-3xl font-medium leading-10 tracking-tight"
+            >
+              @if (days()) { @if (!realized()) { <span>-</span> }
+
+              <!--  -->
+              @if (realized()) {
+              <!--  -->
+              {{ (realized() | compact:app.currencyFormatOptions()) || '-' }} }
+
+              <!-- Account balance -->
+              <!-- @if (orderFills()?.length) {
+                <span
+                  class="text-sm text-content2 truncate line-clamp-1 overflow-ellipsis"
+                >
+                  from {{ realizedFrom().accountBalance |
+                  compact:app.currencyFormatOptions()}}
+                </span>
+                } -->
+              }
+
+              <!-- Days -->
+              @if (!days()) {
+              <span class="line-clamp-1">
+                {{ (app.account()?.pl | currency : app.account()?.currency) ||
+                '-' }}
+              </span>
+              }
+            </dd>
+          </div>
+
+          <!-- Unrealized -->
+          <div
+            class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 border-t border-gray-900/5 px-4 py-10 sm:px-6 lg:border-l lg:border-t-0 xl:px-8 dark:border-white/5"
+          >
+            <dt class="text-content2 text-sm font-medium leading-6">
+              Unrealized
+            </dt>
+            @if (app.poll()?.state?.trades?.length) {
+            <dd
+              class="text-xs font-medium"
+              [ngClass]="unrealizedPercentage()! >= 0 ? 'text-success' : 'text-error'"
+            >
+              @if (unrealizedPercentage()! >= 0) { <span>+</span> } {{
+              unrealizedPercentage() | percent : '1.0-2' }}
+            </dd>
+            }
+            <dd
+              class="w-full flex-none text-3xl font-medium leading-10 tracking-tight"
+            >
+              {{ (app.poll()?.state?.unrealizedPL |
+              compact:app.currencyFormatOptions()) || '-' }}
+
+              <!-- NAV -->
+              <!-- @if (app.poll()?.state?.trades?.length) {
+              <span class="text-sm text-content2 truncate">
+                {{ (app.poll()?.state?.marginCloseoutNAV |
+                compact:app.currencyFormatOptions()) || '-' }}
+              </span>
+              } -->
+            </dd>
+          </div>
+
+          <!-- Available -->
+          <div
+            class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 border-t border-gray-900/5 px-4 py-10 sm:border-l sm:px-6 lg:border-t-0 xl:px-8 dark:border-white/5"
+          >
+            <dt class="text-content2 text-sm font-medium leading-6">
+              Available
+            </dt>
+            <!-- <dd
+                class="text-xs font-medium"
+                [ngClass]="true ? 'text-success' : 'text-error'"
+                >
+                +10.18%
+              </dd> -->
+            <dd
+              class="w-full flex-none text-3xl font-medium leading-10 tracking-tight"
+            >
+              {{ (app.poll()?.state?.marginAvailable ||
+              app.account()?.marginAvailable | currency :
+              app.account()?.currency) || '-' }}
+            </dd>
+          </div>
+        </dl>
+      </div>
+
+      <div
+        class="absolute left-0 top-full -z-10 mt-96 origin-top-left translate-y-40 -rotate-90 transform-gpu opacity-20 blur-3xl sm:left-1/2 sm:-ml-96 sm:-mt-10 sm:translate-y-0 sm:rotate-0 sm:transform-gpu sm:opacity-50"
+        aria-hidden="true"
+      >
+        <div
+          class="aspect-[1154/678] w-[72.125rem] bg-gradient-to-br from-[#FF80B5] to-[#9089FC]"
+          style="
+            clip-path: polygon(
+              100% 38.5%,
+              82.6% 100%,
+              60.2% 37.7%,
+              52.4% 32.1%,
+              47.5% 41.8%,
+              45.2% 65.6%,
+              27.5% 23.4%,
+              0.1% 35.3%,
+              17.9% 0%,
+              27.7% 23.4%,
+              76.2% 2.5%,
+              74.2% 56%,
+              100% 38.5%
+            );
+          "
+        ></div>
+      </div>
+    </div>
+
+    <div class="space-y-16 py-16 xl:space-y-20">
+      <!-- Oanda -->
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
+          <h2 class="text-base font-semibold leading-7">Exchange</h2>
+
+          <ul
+            role="list"
+            class="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8"
+          >
+            <li class="border-border overflow-hidden rounded-xl border">
+              <div
+                class="border-border bg-backgroundSecondary flex items-center gap-x-4 border-b p-6"
+              >
+                <!-- <div
+                  class="h-12 w-12 flex-none rounded-lg bg-yellow-11 object-cover ring-1 ring-gray-900/10 overflow-hidden dark:ring-white/10"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                    />
+                  </svg>
+                </div> -->
+                <!-- <img
+                  src="https://media.licdn.com/dms/image/D4E0BAQGadGanQHcgow/company-logo_200_200/0/1666007622659?e=2147483647&v=beta&t=EmfaRyDU_dICcIfOZuVC-hTf2yDnJTUaUgzGBXD4CyU"
+                  alt="Oanda"
+                  loading="lazy"
+                  class="h-12 w-12 flex-none rounded-lg bg-white object-cover ring-1 ring-gray-900/10 overflow-hidden dark:ring-white/10"
+                /> -->
+                <div class="text-sm font-medium leading-6">Orders</div>
+              </div>
+              <dl
+                class="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6 dark:divide-white/10"
+              >
+                <div class="flex justify-between gap-x-4 py-3">
+                  <dt class="text-content2">Pending</dt>
+                  <dd class="text-content2">
+                    {{ (app.account()?.pendingOrderCount | number) || '-' }}
+                  </dd>
+                </div>
+              </dl>
+            </li>
+
+            <li class="border-border overflow-hidden rounded-xl border">
+              <div
+                class="border-border bg-backgroundSecondary flex items-center gap-x-4 border-b p-6"
+              >
+                <!-- <img
+                  src="https://media.licdn.com/dms/image/D4E0BAQGadGanQHcgow/company-logo_200_200/0/1666007622659?e=2147483647&v=beta&t=EmfaRyDU_dICcIfOZuVC-hTf2yDnJTUaUgzGBXD4CyU"
+                  alt="Oanda"
+                  loading="lazy"
+                  class="h-12 w-12 flex-none rounded-lg bg-white object-cover ring-1 ring-gray-900/10 overflow-hidden dark:ring-white/10"
+                /> -->
+                <div class="text-sm font-medium leading-6">Trades</div>
+              </div>
+              <dl
+                class="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6 dark:divide-white/10"
+              >
+                <div class="flex justify-between gap-x-4 py-3">
+                  <dt class="text-content2">Open</dt>
+                  <dd class="text-content2">
+                    {{ (app.poll()?.state?.trades?.length | number) || '-' }}
+                  </dd>
+                </div>
+              </dl>
+            </li>
+
+            <li class="border-border overflow-hidden rounded-xl border">
+              <div
+                class="border-border bg-backgroundSecondary flex items-center gap-x-4 border-b p-6"
+              >
+                <!-- <img
+                  src="https://media.licdn.com/dms/image/D4E0BAQGadGanQHcgow/company-logo_200_200/0/1666007622659?e=2147483647&v=beta&t=EmfaRyDU_dICcIfOZuVC-hTf2yDnJTUaUgzGBXD4CyU"
+                  alt="Oanda"
+                  loading="lazy"
+                  class="h-12 w-12 flex-none rounded-lg bg-white object-cover ring-1 ring-gray-900/10 overflow-hidden dark:ring-white/10"
+                /> -->
+                <div class="text-sm font-medium leading-6">Positions</div>
+              </div>
+              <dl
+                class="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6 dark:divide-white/10"
+              >
+                <div class="flex justify-between gap-x-4 py-3">
+                  <dt class="text-content2">Open</dt>
+                  <dd class="text-content2">
+                    {{ (app.poll()?.state?.positions?.length | number) || '-' }}
+                  </dd>
+                </div>
+              </dl>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Recent activity -->
+      <div>
+        <div
+          class="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8"
+        >
+          <h2 class="max-w-2xl text-base font-semibold leading-6 lg:max-w-none">
+            Recent activity
+          </h2>
+
+          @if (orderFills()?.length) {
+          <a
+            routerLink="/transactions"
+            [queryParams]="{ type: 'ORDER_FILL' }"
+            class="link text-sm"
+          >
+            View all
+          </a>
+          }
+        </div>
+
+        <div class="border-border mt-6 overflow-hidden border-t">
+          <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
+              <table class="w-full text-left">
+                <thead class="sr-only">
+                  <tr>
+                    <th>Profit & Loss</th>
+                    <th class="hidden sm:table-cell">Instrument</th>
+                    <th>More details</th>
+                  </tr>
+                </thead>
+
+                @if (orderFills()?.length) {
+                <tbody>
+                  <tr class="text-sm leading-6">
+                    <th
+                      scope="colgroup"
+                      colspan="3"
+                      class="relative isolate py-2 font-semibold"
+                    >
+                      Transactions
+                      <div
+                        class="border-border bg-backgroundSecondary absolute inset-y-0 right-full -z-10 w-screen border-b"
+                      ></div>
+                      <div
+                        class="border-border bg-backgroundSecondary absolute inset-y-0 left-0 -z-10 w-screen border-b"
+                      ></div>
+                    </th>
+                  </tr>
+                  @for (transaction of orderFills()?.slice(0,10); track
+                  transaction.id) {
+                  <tr>
+                    <td class="relative py-5 pr-6">
+                      <div class="flex gap-x-6">
+                        <div class="flex-auto">
+                          <div class="flex items-start gap-x-3">
+                            <div class="text-sm font-medium leading-6">
+                              {{ transaction.pl | currency :
+                              app.account()?.currency }}
+                            </div>
+                          </div>
+
+                          <div class="text-content2 mt-1 text-xs leading-5">
+                            {{ transaction.accountBalance | currency :
+                            app.account()?.currency }}
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="bg-border absolute bottom-0 right-full h-px w-screen"
+                      ></div>
+                      <div
+                        class="bg-border absolute bottom-0 left-0 h-px w-screen"
+                      ></div>
+                    </td>
+                    <td class="hidden py-5 pr-6 sm:table-cell">
+                      <div class="text-sm leading-6">
+                        {{ transaction.instrument | slash }}
+                      </div>
+                      <div class="text-content2 mt-1 text-xs leading-5">
+                        {{ transaction.type | noCase | titlecase }} &middot; {{
+                        transaction.reason | noCase | titlecase }}
+                      </div>
+                    </td>
+                    <td class="py-5 text-right">
+                      <div class="flex justify-end">
+                        <a
+                          [routerLink]="['/transactions', transaction.id]"
+                          class="link link-primary text-sm font-medium leading-6"
+                        >
+                          View
+                          <!-- <span class="hidden sm:inline">
+                            &nbsp; transaction
+                          </span> -->
+                          <span class="sr-only"> {{ transaction.id }} </span>
+                        </a>
+                      </div>
+                      <div class="text-content2 mt-1 text-xs leading-5">
+                        ID
+                        <span class=""> {{ transaction.id }} </span>
+                      </div>
+                    </td>
+                  </tr>
+                  }
+                </tbody>
+                }
+              </table>
+            </div>
+          </div>
+
+          <!-- Skeleton -->
+          @if (!transactions() && !transactions()?.count &&
+          !orderFills()?.length && !isEmpty()) {
+          <ul role="list" class="divide-y divide-gray-100 dark:divide-white/5">
+            @for (i of [].constructor(10); track $index) {
+            <!-- <div> -->
+            <app-skeleton />
+            <!-- </div> -->
+            }
+          </ul>
+          }
+
+          <!-- Empty: No transactions -->
+          @if (transactions() && !transactions()?.pages?.length ||
+          !orderFills()?.length) {
+          <app-empty />
+          }
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+</main>
+}
+
+<!-- Footer -->
+@if (transactions()) { <app-footer /> }

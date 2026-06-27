@@ -1,0 +1,23 @@
+<div class="pt-8 sm:inline-block sm:w-full sm:px-4">
+  <figure
+    class="ring-border dark:bg-content1/5 col-span-2 flex h-full flex-col justify-between rounded-2xl bg-white p-8 shadow-lg ring-1 backdrop-blur-lg xl:col-start-2 xl:row-end-1 dark:ring-black/10"
+  >
+    <blockquote class="">
+      <p>“{{ testimonial().testimony }}”</p>
+    </blockquote>
+    <figcaption class="mt-6 flex items-center gap-x-4">
+      <img
+        class="h-10 w-10 rounded-full bg-gray-50 object-cover dark:bg-white/5"
+        [ngSrc]="testimonial().photo"
+        [alt]="testimonial().author"
+        width="100"
+        height="100"
+      />
+      <div>
+        <div class="font-semibold">
+          {{ testimonial().author }}
+        </div>
+      </div>
+    </figcaption>
+  </figure>
+</div>

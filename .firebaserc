@@ -1,0 +1,21 @@
+{
+  "projects": {
+    "default": "pipbase"
+  },
+  "targets": {
+    "pipbase": {
+      "hosting": {
+        "landing": [
+          "pipbase"
+        ],
+        "dashboard": [
+          "pipbase-dashboard"
+        ],
+        "console": [
+          "pipbase-console"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

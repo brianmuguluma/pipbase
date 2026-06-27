@@ -1,0 +1,18 @@
+<div class="mt-12">
+  <h3 class="text-sm font-medium">Verify your email address</h3>
+  <div class="text-content2 mt-2 max-w-lg text-sm">
+    <p>
+      We have sent a verication email to {{ auth.profile()?.email }}. Follow the
+      link to verify your email address.
+    </p>
+  </div>
+  <div class="mt-8">
+    <button
+      type="button"
+      (click)="auth.sendEmailVerification()"
+      class="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+    >
+      Resend email
+    </button>
+  </div>
+</div>

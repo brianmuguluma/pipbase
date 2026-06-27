@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .page-heading {
+    @apply text-2xl font-bold leading-6 sm:truncate sm:text-3xl sm:tracking-tight;
+  }
+
+  .skeleton {
+    @apply h-4 rounded;
+  }
+}

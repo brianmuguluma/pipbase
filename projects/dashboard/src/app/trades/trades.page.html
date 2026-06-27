@@ -1,0 +1,230 @@
+<main>
+  <header class="relative isolate">
+    <app-header />
+
+    <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <app-breadcrumbs
+        [breadcrumbs]="[{ title: 'Trades', route: '/trades', queryParams: queryParams() }]"
+      />
+
+      <div class="mt-8">
+        <div>
+          <h3 class="page-heading">Trades</h3>
+        </div>
+      </div>
+      <div
+        class="mx-auto flex max-w-2xl items-center justify-between gap-x-8 lg:mx-0 lg:max-w-none"
+      ></div>
+    </div>
+  </header>
+
+  <!-- Trades -->
+  <div class="py-10">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="sm:flex sm:items-center">
+        <div class="sm:flex-auto">
+          <h1 class="text-base font-semibold leading-6">
+            @if (!pair()) {
+            <span>All Instruments</span>
+            } @if (pair()) {
+            <span>{{ pair()?.displayName }}</span>
+            }
+          </h1>
+          <p class="text-content2 mt-2 text-sm">
+            A list of all the @if (state() !== 'ALL') {
+            <span> {{ state() | lowercase }} </span>
+            } trades in your account for @if (!pair()) {
+            <span>all instruments</span>
+            } @if (pair()) {
+            <span>{{ pair()?.displayName }}</span>
+            }.
+          </p>
+        </div>
+
+        <!-- Filter -->
+        <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+          <label for="instrument" class="block text-sm font-medium leading-6">
+            Instrument
+          </label>
+          <select
+            id="instrument"
+            name="instrument"
+            (change)="setInstrument($event.target)"
+            class="select mt-2 block min-w-full text-sm"
+          >
+            <option [value]="undefined" [selected]="pair() === undefined">
+              All
+            </option>
+            @for (instrument of instruments(); track instrument.name) {
+            <option
+              [value]="instrument.name"
+              [selected]="instrument.name === pair()?.name"
+            >
+              {{ instrument.displayName }}
+            </option>
+            }
+          </select>
+        </div>
+
+        <div class="pt-6 sm:hidden">
+          <label for="state" class="block text-sm font-medium leading-6">
+            State
+          </label>
+          <select
+            id="state"
+            name="state"
+            (change)="selectTradeState($event.target)"
+            class="select mt-2 block min-w-full text-sm"
+          >
+            @for (filter of tradeStateFilters(); track $index) {
+            <option [value]="filter" [selected]="filter === state()">
+              {{ filter | titlecase }}
+            </option>
+            }
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- State tabs -->
+    <div
+      class="tabs mx-auto mt-10 hidden w-full max-w-7xl gap-1 px-4 sm:flex sm:px-6 lg:px-8"
+    >
+      @for (filter of tradeStateFilters(); track $index) {
+      <a
+        [routerLink]="['/trades']"
+        [queryParams]="{ state: filter === 'ALL' ? null : filter }"
+        [queryParamsHandling]="queryParamsHandling()"
+        class="tab tab-pill"
+        [ngClass]="filter === state() || filter === 'ALL' && !state() ? 'tab-active' : ''"
+      >
+        {{ filter | titlecase }}
+      </a>
+      }
+    </div>
+
+    <!-- Empty -->
+    @if (!trades().length && isEmpty()) {
+    <app-empty />
+    }
+
+    <!-- Trades table -->
+    <div
+      class="mx-auto mt-6 flex w-full max-w-7xl overflow-x-auto px-4 sm:block sm:px-6 lg:px-8"
+    >
+      <div class="flex w-full overflow-x-auto">
+        <table class="table">
+          <thead>
+            <tr>
+              @if (!trades().length) {
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              } @else {
+              <th>ID</th>
+              <th>Instrument</th>
+              <th>P&L</th>
+              <th>Price</th>
+              <th>Units</th>
+              <th>Margin</th>
+              <th>State</th>
+              <th>Date</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @if (!trades().length) { @for (i of [].constructor(count()); track
+            $index) {
+            <tr>
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              <td>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </td>
+              <td>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </td>
+              <td>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </td>
+              <td>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </td>
+              <td>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </td>
+              <td>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </td>
+              <td>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </td>
+            </tr>
+            } } @else { @for (trade of trades() | slice : currentPage() ; track
+            trade.id) {
+            <tr>
+              <th>
+                <a [routerLink]="trade.id" class="link text-sm">
+                  {{ trade.id }}
+                </a>
+              </th>
+              <td>{{ (trade.instrument | slash) || '-' }}</td>
+              <td>
+                {{ trade.unrealizedPL || trade.realizedPL | currency :
+                app.account()?.currency }}
+              </td>
+              <td>{{ trade.price || '-' }}</td>
+              <td>{{ (trade.initialUnits | number) || '-' }}</td>
+              <td>
+                {{ trade.initialMarginRequired | currency :
+                app.account()?.currency }}
+              </td>
+              <td><app-trade-badge [state]="trade.state" /></td>
+              <td>
+                {{ trade.closeTime || trade.openTime | duration : undefined :
+                true }} ago
+              </td>
+            </tr>
+            }}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="pagination mb-10 flex justify-center">
+    <button class="btn">0</button>
+    <button class="btn btn-active">1</button>
+    <button class="btn">2</button>
+    <button disabled class="btn">...</button>
+    <button class="btn">4</button>
+  </div>
+
+  <!-- @if (trades().length && trades().length < count() && !isEnd()) {
+  <button (click)="getNextPage()" class="btn mx-auto block">Load more</button>
+  } @if (!isEnd()) { } -->
+</main>
+
+@if (trades().length) { <app-footer /> }

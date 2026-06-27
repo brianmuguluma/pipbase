@@ -1,0 +1,61 @@
+<div class="mx-auto -mt-12 max-w-7xl px-6 sm:mt-0 lg:px-8 xl:-mt-8">
+  <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
+    <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">Our mission</h2>
+    <div class="mt-6 flex flex-col gap-x-8 gap-y-20 lg:flex-row">
+      <div class="lg:w-full lg:max-w-2xl lg:flex-auto">
+        <p class="text-content2 text-xl leading-8">
+          We pride ourselves on lowering the barrier to entry for Forex and
+          making it a lot more accessible for beginners. Put your money to work
+          and let it make more money with compound interest.
+        </p>
+        <div class="text-content3 mt-10 max-w-xl text-base leading-7">
+          <p>
+            Trading is complicated. Be it controlling your emotions, scanning
+            and analyzing different markets, or growing your portfolio — we've
+            all experienced how turbulent the markets can be.
+          </p>
+          <p class="mt-10">
+            Pipbase was created to eliminate these difficulties preventing your
+            goals from manifesting.
+          </p>
+          <p class="mt-10">
+            We are achieving this by developing a platform that is stable and
+            consistent with better and faster returns than the banks.
+          </p>
+          <p class="mt-10">
+            Our goal is for everyone to easily manage their portfolio and trade
+            more, smarter — automatically.
+          </p>
+        </div>
+      </div>
+      <div class="lg:flex lg:flex-auto lg:justify-center">
+        <dl class="w-64 space-y-8 xl:w-80">
+          @if (false) {
+            <div class="flex flex-col-reverse gap-y-4">
+              <dt class="text-content2 text-base leading-7">
+                Traders on the platform
+              </dt>
+              <dd class="text-5xl font-semibold tracking-tight">
+                {{ app.users() | number }}+
+              </dd>
+            </div>
+          }
+          <div class="flex flex-col-reverse gap-y-4">
+            <dt class="text-content2 text-base leading-7">
+              Average compound interest
+            </dt>
+            <dd class="text-5xl font-semibold tracking-tight">
+              {{ app.interest() | percent: "1.0-1" }}
+            </dd>
+          </div>
+          <div class="flex flex-col-reverse gap-y-4">
+            <dt class="text-content2 text-base leading-7">Uptime guarentee</dt>
+            <dd class="text-5xl font-semibold tracking-tight">
+              {{ app.uptime() | percent: "1.1-1" }}
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,71 @@
+<nav aria-label="Progress" class="mt-12">
+  <ol
+    role="list"
+    class="divide-y divide-gray-300 rounded-md border border-gray-300 md:grid md:grid-cols-3 md:divide-y-0 dark:divide-white/10 dark:border-white/10"
+  >
+    <!-- Create account -->
+    <div>
+      @if (!auth.profile()?.emailVerified) {
+        <app-step-current
+          index="01"
+          step="Create account"
+          [displaySeperator]="true"
+          class="contents"
+        />
+      }
+      @if (auth.profile()?.emailVerified) {
+        <app-step-complete
+          step="Create account"
+          [displaySeperator]="true"
+          class="contents"
+        />
+      }
+    </div>
+
+    <!-- Connect exchange -->
+    <div>
+      @if (!auth.profile()?.emailVerified) {
+        <app-step-upcoming
+          index="02"
+          step="Connect exchange"
+          [displaySeperator]="true"
+          class="content"
+        />
+      }
+      @if (auth.profile()?.emailVerified && !auth.hasApiKey()) {
+        <app-step-current
+          index="02"
+          step="Connect exchange"
+          [displaySeperator]="true"
+          class="contents"
+        />
+      }
+      @if (auth.profile()?.emailVerified && auth.hasApiKey()) {
+        <app-step-complete
+          step="Connect exchange"
+          [displaySeperator]="true"
+          class="contents"
+        />
+      }
+    </div>
+
+    <!-- Default account -->
+    <div>
+      @if (!auth.profile()?.emailVerified || !auth.hasApiKey()) {
+        <app-step-upcoming index="03" step="Select account" class="contents" />
+      }
+      @if (
+        auth.profile()?.emailVerified &&
+        auth.hasApiKey() &&
+        !auth.hasAccountId()
+      ) {
+        <app-step-current index="03" step="Select account" class="contents" />
+      }
+      @if (
+        auth.profile()?.emailVerified && auth.hasApiKey() && auth.hasAccountId()
+      ) {
+        <app-step-complete step="Select account" class="contents" />
+      }
+    </div>
+  </ol>
+</nav>

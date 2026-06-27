@@ -1,0 +1,226 @@
+<app-navbar />
+<div class="flex h-screen flex-col justify-between">
+  <main>
+    <div class="bg-backgroundSecondary border-border border-b">
+      <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <h3 class="text-base font-semibold leading-6">Overview</h3>
+        <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
+          <a>
+            <div
+              class="border-border bg-backgroundPrimary overflow-hidden rounded-lg border px-4 py-5 sm:p-6"
+            >
+              <dt class="text-content2 truncate text-sm font-medium">
+                Instances
+              </dt>
+              <dd class="mt-1 text-3xl font-semibold tracking-tight">
+                {{ (meta()?.total | number) || '-' }}
+              </dd>
+            </div>
+          </a>
+          <div
+            class="border-border bg-backgroundPrimary overflow-hidden rounded-lg border px-4 py-5 sm:p-6"
+          >
+            <dt class="text-content2 truncate text-sm font-medium">
+              Publishers
+            </dt>
+            <dd class="mt-1 text-3xl font-semibold tracking-tight">
+              {{ app.occupancy()?.publishers| number }}
+            </dd>
+          </div>
+          <div
+            class="border-border bg-backgroundPrimary overflow-hidden rounded-lg border px-4 py-5 sm:p-6"
+          >
+            <dt class="text-content2 truncate text-sm font-medium">
+              Subscribers
+            </dt>
+            <dd class="mt-1 text-3xl font-semibold tracking-tight">
+              {{ app.occupancy()?.subscribers | number }}
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+    <!-- Account -->
+    <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <h3 class="text-base font-semibold leading-6">Account</h3>
+      <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
+        <div
+          class="bg-backgroundSecondary ring-border overflow-hidden rounded-lg px-4 py-5 ring-1 sm:p-6"
+        >
+          <dt class="text-content2 truncate text-sm font-medium">Balance</dt>
+          <dd class="mt-1 text-3xl font-semibold tracking-tight">
+            {{ (account()?.account?.balance | currency : 'USD') || '-' }}
+          </dd>
+        </div>
+        <div
+          class="bg-backgroundSecondary ring-border overflow-hidden rounded-lg px-4 py-5 ring-1 sm:p-6"
+        >
+          <dt class="text-content2 truncate text-sm font-medium">
+            Pending Charges
+          </dt>
+          <dd class="mt-1 text-3xl font-semibold tracking-tight">
+            {{ (account()?.account?.pending_charges | currency : 'USD') || '-'
+            }}
+          </dd>
+        </div>
+        <div
+          class="bg-backgroundSecondary ring-border overflow-hidden rounded-lg px-4 py-5 ring-1 sm:p-6"
+        >
+          <dt class="text-content2 truncate text-sm font-medium">
+            Last Payment
+          </dt>
+          <dd class="mt-1 text-3xl font-semibold tracking-tight">
+            {{ (account()?.account?.last_payment_amount | currency : 'USD') ||
+            '-' }} @if (account()?.account?.last_payment_date) {
+            <span class="text-content2 truncate text-sm font-medium">
+              on {{ account()?.account?.last_payment_date | date }}
+            </span>
+            }
+          </dd>
+        </div>
+      </dl>
+    </div>
+
+    <div
+      class="mx-auto max-w-7xl space-y-10 px-4 py-10 sm:block sm:px-6 lg:px-8"
+    >
+      <div class="sm:flex sm:items-center">
+        <div class="sm:flex-auto">
+          <h1 class="text-base font-semibold leading-6">Instances</h1>
+          <p class="text-content2 mt-2 text-sm">A list of all the instances.</p>
+        </div>
+        <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+          @if (instances().length) {
+          <label
+            for="instances-reinstall"
+            class="btn btn-error block rounded-md px-3 py-2 text-sm font-semibold"
+          >
+            Restart Instances
+          </label>
+          }
+        </div>
+      </div>
+
+      <div class="flex w-full overflow-x-auto">
+        <table class="table">
+          <thead>
+            <tr>
+              @if (!instances().length) {
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              } @else {
+              <th>ID</th>
+              <th>IP Address</th>
+              <th>Region</th>
+              <th>Status</th>
+              <th>Power Status</th>
+              <th>Server Status</th>
+              <th>Date Created</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @if (!instances().length) { @for (i of [].constructor(limit());
+            track $index) {
+            <tr>
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              <td>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </td>
+              <td>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </td>
+              <td>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </td>
+              <td>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </td>
+              <td>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </td>
+              <td>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </td>
+            </tr>
+            } } @else { @for (instance of instances(); track $index) {
+            <tr>
+              <th>
+                <a
+                  [routerLink]="instance.id"
+                  class="link link-underline-hover text-sm"
+                >
+                  {{ instance.id }}
+                </a>
+              </th>
+              <td>{{ instance.main_ip }}</td>
+              <td>
+                {{ instance.location.city }}, {{ instance.location.country }}
+              </td>
+              <td>{{ instance.status | titlecase }}</td>
+              <td>{{ instance.power_status | titlecase }}</td>
+              <td>{{ instance.server_status | titlecase }}</td>
+              <td>{{ instance.date_created | date }}</td>
+            </tr>
+            } }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="flex justify-center">
+      <div class="pagination">
+        <button class="btn">0</button>
+        <button class="btn btn-active">1</button>
+        <button class="btn">2</button>
+        <button class="btn">3</button>
+        <button class="btn">4</button>
+      </div>
+    </div>
+
+    @if (instances().length && instances().length! < limit() && !isEnd() &&
+    meta()?.links?.next) {
+    <!-- <button
+      type="button"
+      (click)="listMoreInstances()"
+    >
+      Load more
+    </button> -->
+    } @if (!isEnd() && meta()?.links?.next) {
+    <!-- <ion-infinite-scroll
+        class="ion-margin-top"
+        [disabled]="!instances().length || !meta()?.links?.next"
+        (ionInfinite)="listMoreInstances($event)"
+        >
+        <ion-infinite-scroll-content />
+      </ion-infinite-scroll> -->
+    }
+  </main>
+  <app-footer class="mt-auto" />
+</div>
+
+<!-- Reinstall Instances -->
+<input class="modal-state" id="instances-reinstall" type="checkbox" />
+<app-instances-reinstall class="modal min-w-screen" />

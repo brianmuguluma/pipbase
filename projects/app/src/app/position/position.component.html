@@ -1,0 +1,44 @@
+<ion-list lines="none" class="divide-y divide-gray-100 dark:divide-white/5">
+  <!-- PL -->
+  <ion-item>
+    <ion-label class="ion-no-margin py-6">
+      <ion-text color="dark" class="font-medium leading-6"> Realized </ion-text>
+      <ion-note
+        color="medium"
+        class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+      >
+        {{ position().pl | currency: app.account()?.currency }}
+      </ion-note>
+    </ion-label>
+  </ion-item>
+
+  <!-- Unrealized -->
+  <ion-item>
+    <ion-label class="ion-no-margin py-6">
+      <ion-text color="dark" class="font-medium leading-6">
+        Unrealized
+      </ion-text>
+      <ion-note
+        color="medium"
+        class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+      >
+        {{ position().unrealizedPL | currency: app.account()?.currency }}
+      </ion-note>
+    </ion-label>
+  </ion-item>
+
+  <!-- Margin Used -->
+  <ion-item>
+    <ion-label class="ion-no-margin py-6">
+      <ion-text color="dark" class="font-medium leading-6">
+        Margin Used
+      </ion-text>
+      <ion-note
+        color="medium"
+        class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+      >
+        {{ (position().marginUsed | currency: app.account()?.currency) || "-" }}
+      </ion-note>
+    </ion-label>
+  </ion-item>
+</ion-list>

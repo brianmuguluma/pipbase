@@ -1,0 +1,19 @@
+<li class="relative md:flex md:flex-1">
+  <!-- Upcoming Step -->
+  <a class="group flex items-center">
+    <span class="flex items-center px-6 py-4 text-sm font-medium">
+      <span
+        class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border-2 border-gray-300"
+      >
+        <span class="text-content2">{{ index() }}</span>
+      </span>
+      <span class="text-content2 ml-4 text-sm font-medium">
+        {{ step() }}
+      </span>
+    </span>
+  </a>
+  <!-- Arrow separator for lg screens and up -->
+  @if (displaySeperator()) {
+    <app-step-seperator />
+  }
+</li>

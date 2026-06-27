@@ -1,0 +1,265 @@
+<div class="divide-gray-4 divide-y">
+  <!-- Profile information -->
+  <div
+    class="mx-auto grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8"
+  >
+    <div>
+      <h2 class="text-base font-semibold leading-7">Personal Information</h2>
+      <p class="text-content2 mt-1 text-sm leading-6">
+        Update the personal information associated with your account.
+      </p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="update()" class="md:col-span-2">
+      <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6">
+        <div class="col-span-full flex items-center gap-x-8">
+          <span class="relative inline-block">
+            <div
+              class="aspect-square h-24 w-24 overflow-hidden rounded-lg object-scale-down"
+            >
+              <app-avatar [photo]="photo()" size="large" />
+            </div>
+
+            @if (photo()) {
+              <button
+                (click)="clearPhoto()"
+                class="btn btn-solid-error btn-sm btn-circle btn-error absolute right-0 top-0 -translate-y-1/2 translate-x-1/2"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  class="h-5 w-5"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5Zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5Z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </button>
+            }
+          </span>
+          <div>
+            <div class="space-x-3">
+              <button
+                type="button"
+                (click)="getPhoto()"
+                class="btn px-3 py-2 text-sm font-semibold"
+              >
+                Change photo
+              </button>
+              @if (auth.profile()?.photoURL && !photo()) {
+                <label
+                  for="delete-photo"
+                  class="btn btn-ghost px-3 py-2 text-sm font-semibold"
+                >
+                  Delete photo
+                </label>
+              }
+            </div>
+            <p class="text-content3 mt-2 text-xs leading-5">JPG, GIF or PNG.</p>
+          </div>
+        </div>
+
+        <div class="col-span-full">
+          <label for="name" class="block text-sm font-medium leading-6">
+            Display Name
+          </label>
+          <div class="mt-2">
+            <div class="mt-2">
+              <input
+                type="text"
+                name="name"
+                autocomplete="name"
+                class="input block min-w-full text-sm leading-6"
+                placeholder="Jane Doe"
+                formControlName="displayName"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="col-span-full">
+          <div class="col-span-full">
+            <label for="email" class="block text-sm font-medium leading-6">
+              Email address
+            </label>
+            <div class="mt-2">
+              <input
+                id="email"
+                name="email"
+                type="email"
+                [readOnly]="!isEmail()"
+                autocomplete="email"
+                class="input block min-w-full text-sm leading-6"
+                formControlName="email"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-8 flex">
+        <button type="submit" class="btn btn-primary px-3 py-2">Save</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Metadata -->
+  <div class="mx-auto max-w-7xl gap-x-8 gap-y-10 py-16 sm:px-6 lg:px-8">
+    <div>
+      <div class="px-4 sm:px-0">
+        <h3 class="text-base font-semibold leading-7">Metadata</h3>
+        <p class="text-content2 mt-1 max-w-2xl text-sm leading-6">
+          Additional metadata around your creation and sign-in times.
+        </p>
+      </div>
+      <div class="mt-6">
+        <dl class="divide-gray-4 divide-y">
+          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt class="text-sm font-medium leading-6">Creation time</dt>
+            <dd
+              class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ auth.profile()?.metadata?.creationTime }}
+            </dd>
+          </div>
+          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt class="text-sm font-medium leading-6">Last sign-in time</dt>
+            <dd
+              class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ auth.profile()?.metadata?.lastSignInTime }}
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+  <!-- Change password -->
+  @if (isEmail()) {
+    <div
+      class="mx-auto grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8"
+    >
+      <div>
+        <h2 class="text-base font-semibold leading-7">Change password</h2>
+        <p class="text-content2 mt-1 text-sm leading-6">
+          Update your password associated with your account. This is a security
+          sensitive operation that requires you to have recently signed in.
+        </p>
+      </div>
+      <form [formGroup]="form" (ngSubmit)="update()" class="md:col-span-2">
+        <div
+          class="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6"
+        >
+          <div class="col-span-full">
+            <label
+              for="new-password"
+              class="block text-sm font-medium leading-6"
+            >
+              New password
+            </label>
+            <div class="mt-2">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autocomplete="new-password"
+                class="input block min-w-full text-sm leading-6"
+                formControlName="password"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="mt-8 flex">
+          <button type="submit" class="btn btn-primary px-3 py-2">Save</button>
+        </div>
+      </form>
+    </div>
+  }
+
+  <!-- Delete account -->
+  <div
+    class="mx-auto grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8"
+  >
+    <div>
+      <h2 class="text-base font-semibold leading-7">Delete account</h2>
+      <p class="text-content2 mt-1 text-sm leading-6">
+        No longer want to use our service? You can delete your account here.
+        This action is not reversible. All information related to this account
+        will be deleted permanently.
+      </p>
+      <p class="text-content2 mt-4 text-sm leading-6">
+        This is a security sensitive operation that requires you to have
+        recently signed in.
+      </p>
+    </div>
+
+    <div class="flex items-start md:col-span-2">
+      <label for="delete-account" class="btn btn-solid-error px-3 py-2">
+        Yes, delete my account
+      </label>
+    </div>
+  </div>
+</div>
+
+<!-- Delete photo -->
+<input class="modal-state" id="delete-photo" type="checkbox" />
+<div class="modal">
+  <label class="modal-overlay" for="delete-photo"></label>
+  <div class="modal-content flex flex-col gap-5">
+    <label
+      for="delete-photo"
+      class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+    >
+      ✕
+    </label>
+    <h2 class="text-xl font-semibold leading-7">Delete Photo</h2>
+    <div>
+      <p class="text-content2 mt-1 text-sm leading-6">
+        Are you sure you want to delete your photo?
+      </p>
+    </div>
+    <div class="flex gap-3">
+      <button (click)="deletePhoto()" class="btn btn-error btn-block">
+        Delete
+      </button>
+
+      <label for="delete-photo" class="btn btn-block">Cancel</label>
+    </div>
+  </div>
+</div>
+
+<!-- Delete account -->
+<input class="modal-state" id="delete-account" type="checkbox" />
+<div class="modal">
+  <label class="modal-overlay" for="delete-account"></label>
+  <div class="modal-content flex flex-col gap-5">
+    <label
+      for="delete-account"
+      class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+    >
+      ✕
+    </label>
+    <h2 class="text-xl font-semibold leading-7">Delete Account</h2>
+    <div>
+      <p class="text-content2 mt-1 text-sm leading-6">
+        No longer want to use our service? You can delete your account here.
+        This action is not reversible. All information related to this account
+        will be deleted permanently.
+      </p>
+      <p class="text-content2 mt-4 text-sm leading-6">
+        This is a security sensitive operation that requires you to have
+        recently signed in.
+      </p>
+    </div>
+    <div class="flex gap-3">
+      <button (click)="deleteAccount()" class="btn btn-error btn-block">
+        Delete
+      </button>
+
+      <label for="delete-account" class="btn btn-block">Cancel</label>
+    </div>
+  </div>
+</div>

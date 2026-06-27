@@ -1,0 +1,1004 @@
+<!-- Spinner -->
+@if (transaction() === undefined && !error()) {
+<app-spinner />
+}
+
+<!-- Page not found -->
+@if (!transaction() && error()) {
+<app-page-not-found [status]="status()" [error]="error()" />
+}
+
+<!-- Transaction -->
+@if (transaction()) {
+<main>
+  <header class="relative isolate">
+    <app-header />
+    <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <app-breadcrumbs
+        [breadcrumbs]="[{ title: 'Transactions', route: '/transactions' }, { title: id()!, route: '/transactions/' + id()! }]"
+      />
+      <div class="mt-8">
+        <div>
+          <h3 class="page-heading">Transaction</h3>
+        </div>
+      </div>
+      <div
+        class="mx-auto flex max-w-2xl items-center justify-between gap-x-8 lg:mx-0 lg:max-w-none"
+      ></div>
+    </div>
+  </header>
+  <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-16">
+    <div
+      class="mx-auto grid max-w-2xl grid-cols-1 grid-rows-1 items-start gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-3"
+    >
+      <!-- Links -->
+      @if (transaction()?.orderID || transaction()?.replacesOrderID ||
+      transaction()?.replacedByOrderID || transaction()?.clientOrderID ||
+      transaction()?.tradeID || (transaction()?.tradeOpened?.tradeID) ||
+      (transaction()?.tradeReduced && transaction()?.tradeReduced.tradeID) ||
+      transaction()?.tradesClosed?.length === 1 || transaction()?.tradeClose ||
+      transaction()?.closedTradeID || transaction()?.tradeCloseTransactionID) {
+      <div class="space-y-6 lg:col-start-3">
+        <h2 class="text-sm font-semibold leading-6">Links</h2>
+        <nav class="menu mt-2">
+          <ul role="list" class="menu-section">
+            <!-- Order ID -->
+            @if (transaction()?.orderID) {
+            <a
+              [routerLink]="['/orders', transaction()?.orderID]"
+              class="menu-item justify-between"
+            >
+              <span>Order</span>
+              <svg
+                class="fill-content3 h-5 w-5 flex-none"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </a>
+            }
+            <!-- Replaces Order ID -->
+            @if (transaction()?.replacesOrderID) {
+            <a
+              [routerLink]="['/orders', transaction()?.replacesOrderID]"
+              class="menu-item justify-between"
+            >
+              <span>Replaces Order</span>
+              <svg
+                class="fill-content3 h-5 w-5 flex-none"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </a>
+            }
+            <!-- Replaced By Order ID -->
+            @if (transaction()?.replacedByOrderID) {
+            <a
+              [routerLink]="['/orders', transaction()?.replacedByOrderID]"
+              class="menu-item justify-between"
+            >
+              <span>Replaced By</span>
+              <svg
+                class="fill-content3 h-5 w-5 flex-none"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </a>
+            }
+            <!-- Client Order ID -->
+            @if (transaction()?.clientOrderID) {
+            <a
+              [routerLink]="['/orders', transaction()?.clientOrderID]"
+              class="menu-item justify-between"
+            >
+              <span>Client Order</span>
+              <svg
+                class="fill-content3 h-5 w-5 flex-none"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </a>
+            }
+            <!-- Trade ID -->
+            @if (transaction()?.tradeID) {
+            <a
+              [routerLink]="['/trades', transaction()?.tradeID]"
+              class="menu-item justify-between"
+            >
+              <span>Trade</span>
+              <svg
+                class="fill-content3 h-5 w-5 flex-none"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </a>
+            }
+            <!-- Trade Opened ID -->
+            @if (transaction()?.tradeOpened) {
+            <a
+              [routerLink]="['/trades', transaction()?.tradeOpened?.tradeID]"
+              class="menu-item justify-between"
+            >
+              <span>Trade Opened</span>
+              <svg
+                class="fill-content3 h-5 w-5 flex-none"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </a>
+            }
+            <!-- Trade Reduced -->
+            @if (transaction()?.tradeReduced) {
+            <a
+              [routerLink]="['/trades', transaction()?.tradeReduced?.tradeID]"
+              class="menu-item justify-between"
+            >
+              <span>Trade Reduced</span>
+              <svg
+                class="fill-content3 h-5 w-5 flex-none"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </a>
+            }
+            <!-- Trade Close -->
+            @if (transaction()?.tradeClose) {
+            <a
+              [routerLink]="['/trades', transaction()?.tradeClose?.tradeID]"
+              class="menu-item justify-between"
+            >
+              <span>Trade Close</span>
+              <svg
+                class="fill-content3 h-5 w-5 flex-none"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </a>
+            }
+            <!-- Trade Closed -->
+            @if (transaction()?.tradesClosed?.length === 1) {
+            <a
+              [routerLink]="['/trades', transaction()?.tradesClosed?.[0]?.tradeID]"
+              class="menu-item justify-between"
+            >
+              <span>Trade Closed</span>
+              <svg
+                class="fill-content3 h-5 w-5 flex-none"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </a>
+            }
+            <!-- Closed Trade -->
+            @if (transaction()?.closedTradeID) {
+            <a
+              [routerLink]="['/trades', transaction()?.closedTradeID]"
+              class="menu-item justify-between"
+            >
+              <span>Closed Trade</span>
+              <svg
+                class="fill-content3 h-5 w-5 flex-none"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </a>
+            }
+            <!-- Trade Close Transaction -->
+            @if (transaction()?.tradeCloseTransactionID) {
+            <a
+              [routerLink]="['/transactions', transaction()?.tradeCloseTransactionID]"
+              class="menu-item justify-between"
+            >
+              <span>Trade Close Transaction</span>
+              <svg
+                class="fill-content3 h-5 w-5 flex-none"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </a>
+            }
+          </ul>
+        </nav>
+      </div>
+      }
+      <!-- Trades closed -->
+      @if (transaction()?.tradesClosed?.length > 1) {
+      <div class="lg:col-start-3 lg:row-end-1">
+        <h2 class="text-sm font-semibold leading-6">Trades closed</h2>
+        <ul role="list" class="divide-y divide-gray-100 dark:divide-white/5">
+          @for (trade of transaction()?.tradesClosed; track trade.id) {
+          <a
+            [routerLink]="['/trades', trade?.tradeID]"
+            class="menu-item justify-between"
+          >
+            <span>{{ trade.tradeID }}</span>
+            <svg
+              class="fill-content3 h-5 w-5 flex-none"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </a>
+          }
+        </ul>
+      </div>
+      }
+      <!-- Reasons -->
+      @if (transaction()?.reason || transaction()?.rejectReason) {
+      <div class="lg:col-start-3 lg:row-end-1">
+        <!-- Transaction Reason -->
+        <h2 class="sr-only">Reason</h2>
+        @if (transaction()?.reason) {
+        <div
+          class="bg-backgroundSecondary ring-border rounded-lg shadow-sm ring-1"
+        >
+          <dl class="flex flex-wrap">
+            <div class="flex-auto pl-6 pt-6">
+              <dt class="text-sm font-semibold leading-6">Reason</dt>
+            </div>
+            <div
+              class="border-border my-6 flex w-full flex-none gap-x-4 border-t px-6 pt-6"
+            >
+              <dd class="text-content2 text-sm leading-6">
+                {{ transaction()?.reason | reason: transaction()?.type | async
+                }}
+              </dd>
+            </div>
+          </dl>
+        </div>
+        }
+        <!-- Transaction Rejection Reason -->
+        <h2 class="sr-only">Rejection Reason</h2>
+        @if (transaction()?.rejectReason) {
+        <div
+          class="bg-backgroundSecondary ring-border rounded-lg shadow-sm ring-1"
+          [ngClass]="transaction()?.reason ? 'mt-6' : ''"
+        >
+          <dl class="flex flex-wrap">
+            <div class="flex-auto pl-6 pt-6">
+              <dt class="text-sm font-semibold leading-6">Rejection Reason</dt>
+            </div>
+            <div
+              class="border-border my-6 flex w-full flex-none gap-x-4 border-t px-6 pt-6"
+            >
+              <dd class="text-content2 text-sm leading-6">
+                {{ (transaction()?.rejectReason | reason:transaction()?.type |
+                async) || transaction()?.rejectReason | noCase | titlecase }}
+              </dd>
+            </div>
+          </dl>
+        </div>
+        }
+      </div>
+      }
+      <!-- Details -->
+      <div
+        class="sm:ring-border -mx-4 sm:mx-0 sm:rounded-lg sm:px-8 sm:py-8 sm:pb-14 sm:shadow-sm sm:ring-1 lg:col-span-2 lg:row-span-2 lg:row-end-2 xl:px-16 xl:pb-20 xl:pt-16"
+      >
+        <div>
+          <div class="px-4 sm:px-0">
+            <h3 class="text-base font-semibold leading-7">Details</h3>
+            @if (transaction()?.instrument) {
+            <p class="text-content2 mt-1 max-w-2xl text-sm leading-6">
+              {{ instrument()?.displayName || transaction()?.instrument | slash
+              }}
+            </p>
+            }
+          </div>
+          <div class="border-border mt-6 border-t">
+            <dl class="divide-gray-4 divide-y">
+              <!-- Transaction ID -->
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt
+                  class="flex items-center justify-between text-sm font-medium leading-6"
+                >
+                  ID
+                  <app-tooltip
+                    [tip]="glossary().transaction.id"
+                    class="relative"
+                  />
+                </dt>
+                <dd
+                  class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                >
+                  {{ transaction()?.id }}
+                </dd>
+              </div>
+
+              <!-- Account Number -->
+              @if (transaction()?.accountNumber) {
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt
+                  class="flex items-center justify-between text-sm font-medium leading-6"
+                >
+                  Account Number
+                  <app-tooltip
+                    [tip]="glossary().transaction.accountNumber"
+                    class="relative"
+                  />
+                </dt>
+                <dd
+                  class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                >
+                  {{ transaction()?.accountNumber }}
+                </dd>
+              </div>
+              }
+
+              <!-- Request ID -->
+              @if (transaction()?.requestID) {
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt
+                  class="flex items-center justify-between text-sm font-medium leading-6"
+                >
+                  Request ID
+                  <app-tooltip
+                    [tip]="glossary().transaction.requestID"
+                    class="relative"
+                  />
+                </dt>
+                <dd
+                  class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                >
+                  {{ transaction()?.requestID }}
+                </dd>
+              </div>
+              }
+
+              <!-- Funding Reason -->
+              @if (transaction()?.fundingReason) {
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt
+                  class="flex items-center justify-between text-sm font-medium leading-6"
+                >
+                  Funding Reason
+                  <app-tooltip
+                    [tip]="glossary().transaction.fundingReason"
+                    class="relative"
+                  />
+                </dt>
+                <dd
+                  class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                >
+                  {{ transaction()?.fundingReason | noCase | titlecase }}
+                </dd>
+              </div>
+              }
+
+              <!-- Alias -->
+              @if (transaction()?.alias) {
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt
+                  class="flex items-center justify-between text-sm font-medium leading-6"
+                >
+                  Alias
+                  <app-tooltip
+                    [tip]="glossary().transaction.alias"
+                    class="relative"
+                  />
+                </dt>
+                <dd
+                  class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                >
+                  {{ transaction()?.alias }}
+                </dd>
+              </div>
+              }
+
+              <!-- Time -->
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt
+                  class="flex items-center justify-between text-sm font-medium leading-6"
+                >
+                  Time
+                  <app-tooltip
+                    [tip]="glossary().transaction.time"
+                    class="relative"
+                  />
+                </dt>
+                <dd
+                  class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                >
+                  {{ transaction()?.time | date: 'medium' }}
+                </dd>
+              </div>
+
+              <!-- Type -->
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt
+                  class="flex items-center justify-between text-sm font-medium leading-6"
+                >
+                  Type
+                  <app-tooltip
+                    [tip]="glossary().transaction.type"
+                    class="relative"
+                  />
+                </dt>
+                <dd
+                  class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                >
+                  {{ transaction()?.type | noCase | titlecase }}
+                </dd>
+              </div>
+
+              <!-- Instrument -->
+              @if (transaction()?.instrument) {
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt
+                  class="flex items-center justify-between text-sm font-medium leading-6"
+                >
+                  Instrument
+                  <app-tooltip
+                    [tip]="glossary().transaction.instrument"
+                    class="relative"
+                  />
+                </dt>
+                <dd
+                  class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                >
+                  {{ transaction()?.instrument | slash }}
+                </dd>
+              </div>
+              }
+
+              <!-- Price -->
+              @if (transaction()?.price) {
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt
+                  class="flex items-center justify-between text-sm font-medium leading-6"
+                >
+                  Price
+                  <app-tooltip
+                    [tip]="glossary().transaction.price"
+                    class="relative"
+                  />
+                </dt>
+                <dd
+                  class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                >
+                  {{ transaction()?.price }}
+                </dd>
+              </div>
+              }
+
+              <!-- Distance -->
+              @if (transaction()?.distance) {
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt
+                  class="flex items-center justify-between text-sm font-medium leading-6"
+                >
+                  Distance
+                  <app-tooltip
+                    [tip]="glossary().transaction.distance"
+                    class="relative"
+                  />
+                </dt>
+                <dd
+                  class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                >
+                  {{ transaction()?.distance }}
+                </dd>
+              </div>
+              }
+
+              <!-- Balance -->
+              @if (transaction()?.accountBalance) {
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt
+                  class="flex items-center justify-between text-sm font-medium leading-6"
+                >
+                  Balance
+                  <app-tooltip
+                    [tip]="glossary().transaction.accountBalance"
+                    class="relative"
+                  />
+                </dt>
+                <dd
+                  class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                >
+                  {{ transaction()?.accountBalance | currency :
+                  app.account()?.currency }}
+                </dd>
+              </div>
+              }
+
+              <!-- Financing -->
+              @if (transaction()?.financing) {
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt
+                  class="flex items-center justify-between text-sm font-medium leading-6"
+                >
+                  Financing
+                  <app-tooltip
+                    [tip]="glossary().transaction.financing"
+                    class="relative"
+                  />
+                </dt>
+                <dd
+                  class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                >
+                  {{ transaction()?.financing | currency :
+                  app.account()?.currency }}
+                </dd>
+              </div>
+              }
+
+              <!-- Margin Rate -->
+              @if (transaction()?.marginRate) {
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt
+                  class="flex items-center justify-between text-sm font-medium leading-6"
+                >
+                  Margin Rate
+                  <app-tooltip
+                    [tip]="glossary().transaction.marginRate"
+                    class="relative"
+                  />
+                </dt>
+                <dd
+                  class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                >
+                  {{ (1 / (app.account()?.marginRate | toNumber) |
+                  number:'1.0-0') }}:1
+                </dd>
+              </div>
+              }
+
+              <!-- Amount -->
+              @if (transaction()?.amount) {
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt
+                  class="flex items-center justify-between text-sm font-medium leading-6"
+                >
+                  Amount
+                  <app-tooltip
+                    [tip]="glossary().transaction.amount"
+                    class="relative"
+                  />
+                </dt>
+                <dd
+                  class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                >
+                  {{ transaction()?.amount | currency : app.account()?.currency
+                  }}
+                </dd>
+              </div>
+              }
+
+              <!-- Units -->
+              @if (transaction()?.units) {
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt
+                  class="flex items-center justify-between text-sm font-medium leading-6"
+                >
+                  Units
+                  <app-tooltip
+                    [tip]="glossary().transaction.units"
+                    class="relative"
+                  />
+                </dt>
+                <dd
+                  class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                >
+                  {{ transaction()?.units | number }}
+                </dd>
+              </div>
+              }
+
+              <!-- Time In Force -->
+              @if (transaction()?.timeInForce) {
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt
+                  class="flex items-center justify-between text-sm font-medium leading-6"
+                >
+                  Time In Force
+                  <app-tooltip
+                    [tip]="glossary().transaction.timeInForce"
+                    class="relative"
+                  />
+                </dt>
+                <dd
+                  class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                >
+                  {{ transaction()?.timeInForce | timeInForce }}
+                </dd>
+              </div>
+              }
+
+              <!-- Extension Number -->
+              @if (transaction()?.extensionNumber) {
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt
+                  class="flex items-center justify-between text-sm font-medium leading-6"
+                >
+                  Extension Number
+                  <app-tooltip
+                    [tip]="glossary().transaction.extensionNumber"
+                    class="relative"
+                  />
+                </dt>
+                <dd
+                  class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                >
+                  {{ transaction()?.extensionNumber }}
+                </dd>
+              </div>
+              }
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Position Financing -->
+    @for (position of transaction()?.positionFinancings; track $index) {
+    <div class="mt-16 space-y-8">
+      <div class="sm:flex sm:items-center">
+        <div class="sm:flex-auto">
+          <h1 class="text-base font-semibold leading-6">
+            {{ position?.instrument | slash }}
+          </h1>
+          <p class="text-content2 mt-2 text-sm">
+            {{ position?.accountFinancingMode | noCase | titlecase }}
+          </p>
+        </div>
+      </div>
+      <div class="-mx-4 mt-8 flow-root space-y-8 sm:mx-0">
+        <table class="min-w-full">
+          <colgroup>
+            <col class="w-full sm:w-1/2" />
+            <col class="sm:w-1/6" />
+            <col class="sm:w-1/6" />
+            <col class="sm:w-1/6" />
+          </colgroup>
+          <thead class="border-b border-gray-300 dark:border-white/10">
+            <tr>
+              <th
+                scope="col"
+                class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold sm:pl-0"
+              >
+                Trade ID
+              </th>
+              <th
+                scope="col"
+                class="hidden px-3 py-3.5 text-right text-sm font-semibold sm:table-cell"
+              ></th>
+              <th
+                scope="col"
+                class="hidden px-3 py-3.5 text-right text-sm font-semibold sm:table-cell"
+              >
+                Rate
+              </th>
+              <th
+                scope="col"
+                class="py-3.5 pl-3 pr-4 text-right text-sm font-semibold sm:pr-0"
+              >
+                Financing
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (trade of position?.openTradeFinancings; track $index) {
+            <tr class="border-b border-gray-200 dark:border-white/5">
+              <td class="max-w-0 py-5 pl-4 pr-3 text-sm sm:pl-0">
+                <div class="font-medium">
+                  <a [routerLink]="['/trades', trade.tradeID]">
+                    {{ trade.tradeID }}
+                  </a>
+                </div>
+              </td>
+              <td
+                class="text-content2 hidden px-3 py-5 text-right text-sm sm:table-cell"
+              ></td>
+              <td
+                class="text-content2 hidden px-3 py-5 text-right text-sm sm:table-cell"
+              >
+                {{ trade.financingRate | currency : app.account()?.currency }}
+              </td>
+              <td
+                class="text-content2 py-5 pl-3 pr-4 text-right text-sm sm:pr-0"
+              >
+                {{ trade.financing | currency : app.account()?.currency }}
+              </td>
+            </tr>
+            }
+          </tbody>
+          <tfoot>
+            <tr>
+              <th
+                scope="row"
+                colspan="3"
+                class="hidden pl-4 pr-3 pt-4 text-right text-sm font-semibold sm:table-cell sm:pl-0"
+              >
+                Total
+              </th>
+              <th
+                scope="row"
+                class="pl-4 pr-3 pt-4 text-left text-sm font-semibold sm:hidden"
+              >
+                Total
+              </th>
+              <td
+                class="pl-3 pr-4 pt-4 text-right text-sm font-semibold sm:pr-0"
+              >
+                {{ position.financing | currency : app.account()?.currency }}
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+    }
+    <!-- Dependants -->
+    @if (transaction()?.stopLossOnFill || transaction()?.takeProfitOnFill ||
+    transaction()?.trailingStopLossOnFill ||
+    transaction()?.guaranteedStopLossOnFill) {
+    <div class="mt-16">
+      <h2 class="text-base font-semibold leading-7">Dependants</h2>
+      <ul
+        role="list"
+        class="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8"
+      >
+        @if (transaction()?.stopLossOnFill) {
+        <li
+          class="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10"
+        >
+          <div
+            class="bg-backgroundSecondary flex items-center gap-x-4 border-b border-gray-900/5"
+          >
+            <img
+              src="https://media.licdn.com/dms/image/D4E0BAQGadGanQHcgow/company-logo_200_200/0/1666007622659?e=2147483647&v=beta&t=EmfaRyDU_dICcIfOZuVC-hTf2yDnJTUaUgzGBXD4CyU"
+              alt="SavvyCal"
+              class="h-12 w-12 flex-none overflow-hidden rounded-lg bg-white object-cover ring-1 ring-gray-900/10 dark:ring-white/10"
+            />
+            <div class="text-sm font-medium leading-6">Stop Loss</div>
+            <div class="relative ml-auto">
+              <button
+                type="button"
+                class="text-content2 hover:text-content2 -m-2.5 block p-2.5"
+                id="options-menu-1-button"
+                aria-expanded="false"
+                aria-haspopup="true"
+              >
+                <span class="sr-only">Open options</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  class="h-5 w-5"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <dl
+            class="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6 dark:divide-white/10"
+          >
+            <div class="flex justify-between gap-x-4 py-3">
+              <dt class="text-content2">Price</dt>
+              <dd class="text-content2">
+                {{ transaction()?.stopLossOnFill?.price }}
+              </dd>
+            </div>
+            <div class="flex justify-between gap-x-4 py-3">
+              <dt class="text-content2 line-clamp-1">Time In Force</dt>
+              <dd class="flex items-start gap-x-2">
+                <div class="line-clamp-1 truncate font-medium">
+                  {{ transaction()?.stopLossOnFill?.timeInForce | timeInForce }}
+                </div>
+              </dd>
+            </div>
+          </dl>
+        </li>
+        } @if (transaction()?.trailingStopLossOnFill) {
+        <li
+          class="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10"
+        >
+          <div
+            class="bg-backgroundSecondary flex items-center gap-x-4 border-b border-gray-900/5"
+          >
+            <img
+              src="https://media.licdn.com/dms/image/D4E0BAQGadGanQHcgow/company-logo_200_200/0/1666007622659?e=2147483647&v=beta&t=EmfaRyDU_dICcIfOZuVC-hTf2yDnJTUaUgzGBXD4CyU"
+              alt="Reform"
+              class="h-12 w-12 flex-none overflow-hidden rounded-lg bg-white object-cover ring-1 ring-gray-900/10 dark:ring-white/10"
+            />
+            <div class="text-sm font-medium leading-6">Trailing Stop Loss</div>
+            <div class="relative ml-auto">
+              <button
+                type="button"
+                class="text-content2 hover:text-content2 -m-2.5 block p-2.5"
+                id="options-menu-2-button"
+                aria-expanded="false"
+                aria-haspopup="true"
+              >
+                <span class="sr-only">Open options</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  class="h-5 w-5"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <dl
+            class="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6 dark:divide-white/10"
+          >
+            <div class="flex justify-between gap-x-4 py-3">
+              <dt class="text-content2">Last invoice</dt>
+              <dd class="text-content2">
+                <time datetime="2023-01-23">January 23, 2023</time>
+              </dd>
+            </div>
+            <div class="flex justify-between gap-x-4 py-3">
+              <dt class="text-content2">Amount</dt>
+              <dd class="flex items-start gap-x-2">
+                <div class="line-clamp-1 truncate font-medium">$7,600.00</div>
+                <div
+                  class="rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"
+                >
+                  Paid
+                </div>
+              </dd>
+            </div>
+          </dl>
+        </li>
+        } @if (transaction()?.takeProfitOnFill) {
+        <li
+          class="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10"
+        >
+          <div
+            class="bg-backgroundSecondary flex items-center gap-x-4 border-b border-gray-900/5"
+          >
+            <img
+              src="https://media.licdn.com/dms/image/D4E0BAQGadGanQHcgow/company-logo_200_200/0/1666007622659?e=2147483647&v=beta&t=EmfaRyDU_dICcIfOZuVC-hTf2yDnJTUaUgzGBXD4CyU"
+              alt="Tuple"
+              class="h-12 w-12 flex-none overflow-hidden rounded-lg bg-white object-cover ring-1 ring-gray-900/10 dark:ring-white/10"
+            />
+            <div class="text-sm font-medium leading-6">Take Profit</div>
+            <div class="relative ml-auto">
+              <button
+                type="button"
+                class="text-content2 hover:text-content2 -m-2.5 block p-2.5"
+                id="options-menu-0-button"
+                aria-expanded="false"
+                aria-haspopup="true"
+              >
+                <span class="sr-only">Open options</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  class="h-5 w-5"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <dl
+            class="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6 dark:divide-white/10"
+          >
+            <div class="flex justify-between gap-x-4 py-3">
+              <dt class="text-content2">Price</dt>
+              <dd class="text-content2">
+                {{ transaction()?.takeProfitOnFill?.price }}
+              </dd>
+            </div>
+            <div class="flex justify-between gap-x-4 py-3">
+              <dt class="text-content2 line-clamp-1">Time In Force</dt>
+              <dd class="flex items-start gap-x-2">
+                <div class="line-clamp-1 truncate font-medium">
+                  {{ transaction()?.takeProfitOnFill?.timeInForce | timeInForce
+                  }}
+                </div>
+              </dd>
+            </div>
+          </dl>
+        </li>
+        }
+      </ul>
+    </div>
+    }
+  </div>
+</main>
+} @if (transaction()) {
+<app-footer />
+}

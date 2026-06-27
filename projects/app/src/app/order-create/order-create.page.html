@@ -1,0 +1,234 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>New Order</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()"> Cancel </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <form [formGroup]="form()" (ngSubmit)="sendSignal()">
+    <div class="flex flex-1 flex-col justify-between">
+      <div class="divide-y divide-gray-200">
+        <div class="space-y-6 pb-5 pt-6">
+          <div class="px-4 sm:px-6">
+            <h2 class="text-base font-semibold leading-7">
+              Create a New Order
+            </h2>
+            <p class="text-content2 mt-1 text-sm leading-6">
+              Create a new order for all running instances.
+            </p>
+          </div>
+
+          <!-- Instrument -->
+
+          <ion-list lines="none">
+            <ion-item>
+              <ion-select
+                formControlName="instrument"
+                placeholder="Select an Instrument"
+                label="Instrument"
+                justify="space-between"
+              >
+                @for (pair of instruments(); track pair) {
+                <ion-select-option [value]="pair.name">
+                  {{ pair.displayName }}
+                </ion-select-option>
+                }
+              </ion-select>
+            </ion-item>
+          </ion-list>
+
+          <!-- Side -->
+          <fieldset>
+            <legend class="px-4 text-sm font-semibold leading-6 sm:px-6">
+              Side
+            </legend>
+            <ion-list class="mt-2" lines="none">
+              <ion-radio-group formControlName="side">
+                <ion-item>
+                  <ion-radio
+                    value="long"
+                    class="ion-no-margin flex justify-between gap-x-6 py-5"
+                  >
+                    Buy
+                  </ion-radio>
+                </ion-item>
+                <ion-item>
+                  <ion-radio
+                    value="short"
+                    class="ion-no-margin flex justify-between gap-x-6 py-5"
+                  >
+                    Sell
+                  </ion-radio>
+                </ion-item>
+              </ion-radio-group>
+            </ion-list>
+          </fieldset>
+
+          <!-- Percentage -->
+          <div class="px-4 sm:px-6">
+            <label for="percentage" class="block text-sm font-medium leading-6">
+              Percentage
+            </label>
+            <div class="mt-2">
+              <input
+                type="number"
+                inputmode="decimal"
+                formControlName="percentage"
+                [min]="1"
+                [max]="99"
+                [minLength]="1"
+                [maxLength]="2"
+                name="percentage"
+                id="Percentage"
+                class="input"
+              />
+            </div>
+          </div>
+
+          <!-- Dependants -->
+          <div class="px-4 sm:px-6">
+            <!-- <p
+            class="block text-sm font-medium leading-6 "
+            >
+            Dependants
+          </p> -->
+
+            <h2 class="text-base font-semibold leading-7">Dependants</h2>
+            <p class="text-content2 mt-1 text-sm leading-6">
+              Create dependent Orders (Take Profit, Stop Loss and Trailing Stop
+              Loss) for this trade.
+            </p>
+
+            <dl
+              class="mt-2 space-y-6 divide-y divide-gray-100 text-sm leading-6 dark:divide-white/5"
+            >
+              <div class="pt-6">
+                <div>
+                  <div class="flex justify-between">
+                    <label
+                      for="takeProfit"
+                      class="block text-sm font-medium leading-6"
+                    >
+                      Take Profit
+                    </label>
+                    <span
+                      class="text-content2 text-sm leading-6"
+                      id="take-profit-optional"
+                    >
+                      Optional
+                    </span>
+                  </div>
+                  <div class="mt-2">
+                    <input
+                      type="number"
+                      inputmode="decimal"
+                      formControlName="takeProfit"
+                      name="takeProfit"
+                      id="takeProfit"
+                      class="input"
+                      placeholder="Price"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="pt-6">
+                <div>
+                  <div class="flex justify-between">
+                    <label
+                      for="stopLoss"
+                      class="block text-sm font-medium leading-6"
+                    >
+                      Stop Loss
+                    </label>
+                    <span
+                      class="text-content2 text-sm leading-6"
+                      id="stop-loss-optional"
+                    >
+                      Optional
+                    </span>
+                  </div>
+                  <div class="mt-2">
+                    <input
+                      type="number"
+                      inputmode="decimal"
+                      formControlName="stopLoss"
+                      name="stopLoss"
+                      id="stopLoss"
+                      class="input"
+                      placeholder="Price"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="pt-6">
+                <div>
+                  <div class="flex justify-between">
+                    <label
+                      for="trailingStopLoss"
+                      class="block text-sm font-medium leading-6"
+                    >
+                      Trailing Stop Loss
+                    </label>
+                    <span
+                      class="text-content2 text-sm leading-6"
+                      id="trailing-stop-loss-optional"
+                    >
+                      Optional
+                    </span>
+                  </div>
+                  <div class="mt-2">
+                    <input
+                      type="number"
+                      inputmode="decimal"
+                      formControlName="trailingStopLoss"
+                      name="trailingStopLoss"
+                      id="trailingStopLoss"
+                      class="input"
+                      placeholder="Distance"
+                    />
+                  </div>
+                </div>
+              </div>
+            </dl>
+          </div>
+
+          <!-- Notes -->
+          <div class="px-4 sm:px-6">
+            <div class="flex justify-between">
+              <label for="notes" class="block text-sm font-medium leading-6">
+                Notes
+              </label>
+              <span class="text-content2 text-sm leading-6" id="email-optional">
+                Optional
+              </span>
+            </div>
+            <div class="mt-2">
+              <textarea
+                id="notes"
+                name="notes"
+                formControlName="notes"
+                rows="4"
+                class="textarea"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ion-button
+      type="submit"
+      [disabled]="form().invalid || isPublishing()"
+      expand="block"
+      class="ion-margin"
+    >
+      @if (isPublishing()) {
+      <ion-spinner slot="start" />
+      } @if (!isPublishing()) {
+      <span>Create Order</span>
+      }
+    </ion-button>
+  </form>
+</ion-content>

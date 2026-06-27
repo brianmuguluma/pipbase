@@ -1,0 +1,88 @@
+<div class="lg:col-start-3">
+  <h2 class="text-sm font-semibold leading-6">Dependants</h2>
+  <nav class="menu mt-2">
+    <ul role="list" class="menu-section">
+      <!-- Stop Loss -->
+      @if (trade().stopLossOrder) {
+        <a
+          [routerLink]="['/orders', trade().stopLossOrder.id]"
+          class="menu-item justify-between"
+        >
+          <span class="truncate"> Stop Loss </span>
+          <div class="flex items-center gap-x-2">
+            <app-order-badge
+              class="contents"
+              [state]="trade().stopLossOrder.state"
+            />
+            <svg
+              class="fill-content3 h-5 w-5 flex-none"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+        </a>
+      }
+      <!-- Trailing Stop Loss -->
+      @if (trade().trailingStopLossOrder) {
+        <a
+          [routerLink]="['/orders', trade().trailingStopLossOrder.id]"
+          class="flex justify-between gap-x-2"
+        >
+          <span class="truncate"> Trailing Stop Loss </span>
+          <div class="flex items-center gap-x-2">
+            <app-order-badge
+              class="contents"
+              [state]="trade().trailingStopLossOrder.state"
+            />
+            <svg
+              class="fill-content3 h-5 w-5 flex-none"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+        </a>
+      }
+      <!-- Take Profit -->
+      @if (trade().takeProfitOrder) {
+        <a
+          [routerLink]="['/orders', trade().takeProfitOrder.id]"
+          class="flex justify-between gap-x-2"
+        >
+          <span class="truncate"> Take Profit </span>
+          <div class="flex items-center gap-x-2">
+            <app-order-badge
+              class="contents"
+              [state]="trade().takeProfitOrder.state"
+            />
+            <svg
+              class="fill-content3 h-5 w-5 flex-none"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+        </a>
+      }
+    </ul>
+  </nav>
+</div>

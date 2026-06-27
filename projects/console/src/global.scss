@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .skeleton {
+    @apply h-4 rounded;
+  }
+
+  .input {
+    @apply min-w-full;
+  }
+
+  .select {
+    @apply min-w-full text-sm;
+  }
+
+  .textarea {
+    @apply min-w-full;
+  }
+
+  .modal-content {
+    @apply min-w-full sm:min-w-[calc(100vw/2)] lg:min-w-[calc(100vw/3)];
+  }
+}

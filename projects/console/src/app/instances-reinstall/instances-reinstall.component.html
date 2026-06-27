@@ -1,0 +1,25 @@
+<label class="modal-overlay" for="instances-reinstall"></label>
+<div class="modal-content flex flex-col gap-5">
+  <label
+    for="instances-reinstall"
+    class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+  >
+    ✕
+  </label>
+  <h2 class="text-xl font-semibold leading-7">Restart Instances</h2>
+  <div>
+    <p class="text-content2 mt-1 text-sm leading-6">
+      Are you sure you want to restart all instances?
+    </p>
+    <p class="text-content2 mt-4 text-sm leading-6">
+      This will only effect running instances
+    </p>
+  </div>
+  <div class="flex gap-3">
+    <button (click)="sendSignal()" class="btn btn-block btn-error">
+      Restart
+    </button>
+
+    <label for="instances-reinstall" class="btn btn-block">Cancel</label>
+  </div>
+</div>

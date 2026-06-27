@@ -1,0 +1,66 @@
+<ion-list lines="none" class="divide-y divide-gray-100 dark:divide-white/5">
+  <!-- Trades -->
+  <ion-item>
+    <ion-label class="ion-no-margin py-6">
+      <ion-text color="dark" class="font-medium leading-6"> Trades </ion-text>
+      <ion-note
+        color="medium"
+        class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+      >
+        {{ trades().length || "-" }}
+      </ion-note>
+    </ion-label>
+  </ion-item>
+
+  <!-- Realized -->
+  <ion-item>
+    <ion-label class="ion-no-margin py-6">
+      <ion-text color="dark" class="font-medium leading-6"> Realized </ion-text>
+      <ion-note
+        color="medium"
+        class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+      >
+        {{ (realized() | currency: app.account()?.currency) || "-" }}
+      </ion-note>
+    </ion-label>
+  </ion-item>
+
+  <!-- Average -->
+  <ion-item>
+    <ion-label class="ion-no-margin py-6">
+      <ion-text color="dark" class="font-medium leading-6"> Average </ion-text>
+      <ion-note
+        color="medium"
+        class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+      >
+        {{ (average() | currency: app.account()?.currency) || "-" }}
+      </ion-note>
+    </ion-label>
+  </ion-item>
+
+  <!-- Max -->
+  <ion-item>
+    <ion-label class="ion-no-margin py-6">
+      <ion-text color="dark" class="font-medium leading-6"> Max </ion-text>
+      <ion-note
+        color="medium"
+        class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+      >
+        {{ (max() | currency: app.account()?.currency) || "-" }}
+      </ion-note>
+    </ion-label>
+  </ion-item>
+
+  <!-- Min -->
+  <ion-item>
+    <ion-label class="ion-no-margin py-6">
+      <ion-text color="dark" class="font-medium leading-6"> Min </ion-text>
+      <ion-note
+        color="medium"
+        class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+      >
+        {{ (min() | currency: app.account()?.currency) || "-" }}
+      </ion-note>
+    </ion-label>
+  </ion-item>
+</ion-list>

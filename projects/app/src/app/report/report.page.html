@@ -1,0 +1,161 @@
+<ion-header collapse="fade" translucent>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/reports" />
+    </ion-buttons>
+    <ion-title>Report</ion-title>
+    <ion-buttons slot="end">
+      <ion-button [disabled]="!isBeginningMonth()">
+        <ion-icon slot="icon-only" name="chevron-down" />
+      </ion-button>
+      <ion-button [disabled]="isThisMonth()">
+        <ion-icon slot="icon-only" name="chevron-up" />
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  @if (dateRange()) {
+  <ion-toolbar>
+    <ion-title size="small"> {{ dateRange() }} </ion-title>
+  </ion-toolbar>
+  }
+  <ion-toolbar>
+    <ion-segment (ionChange)="setWeek($any($event))" [value]="0" scrollable>
+      @for (week of weeks(); track week; let index = $index) {
+      <ion-segment-button
+        [value]="index"
+        [disabled]="isThisMonth() && index + 1 > weekOfMonth()"
+      >
+        <ion-label>Week {{ index + 1 }}</ion-label>
+      </ion-segment-button>
+      }
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($any($event))">
+    <ion-refresher-content />
+  </ion-refresher>
+
+  <!-- Empty -->
+  @if ((response() && !response()?.count) || isBeforeCreation()) {
+  <app-empty text="No activity found for this period" />
+  } @if (!response() && !isBeforeCreation()) {
+  <app-spinner />
+  }
+
+  <ion-card color="undefined" class="ion-no-margin shadow-none">
+    <ion-card-content>
+      <canvas #canvas></canvas>
+    </ion-card-content>
+  </ion-card>
+  @if (transactions()?.length) {
+  <section>
+    <dl
+      class="mx-auto grid grid-cols-1 gap-px bg-gray-900/5 sm:grid-cols-2 lg:grid-cols-4 dark:bg-white/5"
+    >
+      <div
+        class="ion-background-color flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 px-4 py-10 sm:px-6 xl:px-8"
+      >
+        <dt class="text-sm font-medium leading-6">
+          <ion-text color="medium">Balance</ion-text>
+        </dt>
+        <dd class="text-content2 text-xs font-medium">
+          <ion-text [color]="change()! >= 0 ? 'success' : 'danger'">
+            @if (change()! >= 0) {
+            <span>+</span>
+            } {{ change() | percent : '1.0-2' }}
+          </ion-text>
+        </dd>
+        <dd
+          class="w-full flex-none text-3xl font-medium leading-10 tracking-tight"
+        >
+          {{ (endBalance() | currency : app.account()?.currency) || '-' }}
+          <ion-text color="medium" class="truncate text-sm">
+            from {{ (startBalance() | currency : app.account()?.currency) || '-'
+            }}
+          </ion-text>
+        </dd>
+      </div>
+      <div
+        class="ion-background-color flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 px-4 py-10 sm:px-6 xl:px-8"
+      >
+        <dt class="text-sm font-medium leading-6">
+          <ion-text color="medium">Realized</ion-text>
+        </dt>
+        <dd
+          class="w-full flex-none text-3xl font-medium leading-10 tracking-tight"
+        >
+          {{ (realized() | currency : app.account()?.currency) || '-' }} @if
+          (realized()) {
+          <ion-text color="medium" class="truncate text-sm">
+            from {{ (margin() | currency : app.account()?.currency) || '-' }}
+          </ion-text>
+          }
+        </dd>
+      </div>
+      <div
+        class="ion-background-color flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 px-4 py-10 sm:px-6 xl:px-8"
+      >
+        <dt class="text-sm font-medium leading-6">
+          <ion-text color="medium">Win Rate</ion-text>
+        </dt>
+        <dd
+          class="w-full flex-none text-3xl font-medium leading-10 tracking-tight"
+        >
+          {{ (winRate() | percent) || '-' }} @if (winRate()) {
+          <ion-text color="medium" class="truncate text-sm">
+            from {{ trades().length | number }} trades.
+          </ion-text>
+          }
+        </dd>
+      </div>
+      <div
+        class="ion-background-color flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 px-4 py-10 sm:px-6 xl:px-8"
+      >
+        <dt class="text-sm font-medium leading-6">
+          <ion-text color="medium">Financing</ion-text>
+        </dt>
+        <dd
+          class="w-full flex-none text-3xl font-medium leading-10 tracking-tight"
+        >
+          {{ (financing() | currency : app.account()?.currency) || '-' }}
+        </dd>
+      </div>
+      <div
+        class="ion-background-color flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 px-4 py-10 sm:px-6 xl:px-8"
+      >
+        <dt class="text-sm font-medium leading-6">
+          <ion-text color="medium">Deposits</ion-text>
+        </dt>
+        <dd
+          class="w-full flex-none text-3xl font-medium leading-10 tracking-tight"
+        >
+          {{ (deposits() | currency : app.account()?.currency) || '-' }}
+        </dd>
+      </div>
+      <div
+        class="ion-background-color flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 px-4 py-10 sm:px-6 xl:px-8"
+      >
+        <dt class="text-sm font-medium leading-6">
+          <ion-text color="medium">Withdrawals</ion-text>
+        </dt>
+        <dd
+          class="w-full flex-none text-3xl font-medium leading-10 tracking-tight"
+        >
+          {{ (withdrawals() | currency : app.account()?.currency) || '-' }}
+        </dd>
+      </div>
+    </dl>
+    <!-- Positions -->
+    @if (trades().length) {
+    <app-positions-report
+      [transactions]="transactions()!"
+      [tradeInputs]="trades()"
+    />
+    }
+    <!-- Trades -->
+    <!-- <app-trades-report [transactions]="transactions()" /> -->
+  </section>
+  }
+</ion-content>

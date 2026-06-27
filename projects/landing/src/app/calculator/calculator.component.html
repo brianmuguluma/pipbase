@@ -1,0 +1,81 @@
+<div class="overflow-hidden py-24 sm:py-32">
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl">
+      <h2 class="text-primary text-base font-semibold leading-8">
+        Compound Interest Calculator
+      </h2>
+      <p class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
+        Trusted by thousands of creators&nbsp;worldwide
+      </p>
+      <p class="text-content2 mt-6 text-lg leading-8">
+        See how much daily interest/earnings you might receive on your
+        investment over a fixed number of days, months and years. You may find
+        this useful for day trading or trading bitcoin or other
+        cryptocurrencies.
+      </p>
+      <div class="mt-6">
+        <label for="principal" class="block text-sm font-medium leading-6">
+          Principal
+        </label>
+        <div class="mt-2">
+          <input
+            type="number"
+            inputmode="decimal"
+            [min]="0"
+            name="principal"
+            [(ngModel)]="principal"
+            class="input block w-full rounded-md"
+            placeholder="Initial investment"
+          />
+        </div>
+
+        <div class="mt-6">
+          <label for="months" class="block text-sm font-medium leading-6">
+            Months
+          </label>
+          <select
+            id="months"
+            name="months"
+            (change)="updateMonths($event.target)"
+            class="select mt-2 w-full rounded-md"
+          >
+            @for (i of [].constructor(60); track $index) {
+              <option [value]="$index + 1" [selected]="$index + 1 === months()">
+                {{ $index + 1 }} months
+              </option>
+            }
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <dl
+      class="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-10 sm:mt-20 sm:grid-cols-2 sm:gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-4"
+    >
+      <div class="border-border flex flex-col gap-y-3 border-l pl-6">
+        <dt class="text-content2 text-sm leading-6">Principal</dt>
+        <dd class="order-first truncate text-3xl font-semibold tracking-tight">
+          {{ principal() || 0 | absolute | currency: "GBP" }}
+        </dd>
+      </div>
+      <div class="border-border flex flex-col gap-y-3 border-l pl-6">
+        <dt class="text-content2 text-sm leading-6">Value</dt>
+        <dd class="order-first truncate text-3xl font-semibold tracking-tight">
+          {{ value() || 0 | currency: "GBP" }}
+        </dd>
+      </div>
+      <div class="border-border flex flex-col gap-y-3 border-l pl-6">
+        <dt class="text-content2 text-sm leading-6">Earnings</dt>
+        <dd class="order-first truncate text-3xl font-semibold tracking-tight">
+          {{ earnings() || 0 | currency: "GBP" }}
+        </dd>
+      </div>
+      <div class="border-border flex flex-col gap-y-3 border-l pl-6">
+        <dt class="text-content2 text-sm leading-6">Change</dt>
+        <dd class="order-first truncate text-3xl font-semibold tracking-tight">
+          {{ change() || 0 | percent }}
+        </dd>
+      </div>
+    </dl>
+  </div>
+</div>

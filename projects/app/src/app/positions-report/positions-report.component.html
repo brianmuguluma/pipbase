@@ -1,0 +1,24 @@
+<section>
+  <div class="ion-padding pb-5">
+    <h3 class="text-base font-semibold leading-6">
+      <ion-text color="dark"> Positions </ion-text>
+    </h3>
+    <!-- <p class="mt-2 max-w-4xl text-sm">
+    <ion-text color="medium"> Trades closed per position </ion-text>
+  </p> -->
+  </div>
+</section>
+<ion-accordion-group expand="inset">
+  @for (name of instruments(); track name) {
+    <ion-accordion [value]="name">
+      <ion-item slot="header" color="light">
+        <ion-label>{{ name | slash }}</ion-label>
+      </ion-item>
+      <app-position-accordion
+        slot="content"
+        [name]="name"
+        [tradeInputs]="tradeInputs()"
+      />
+    </ion-accordion>
+  }
+</ion-accordion-group>

@@ -1,0 +1,9 @@
+@if (auth.profile()?.photoURL) {
+  <app-avatar-photo />
+}
+@if (!auth.profile()?.photoURL && auth.profile()?.displayName) {
+  <app-avatar-initial [size]="size()" />
+}
+@if (!auth.profile()?.photoURL && !auth.profile()?.displayName) {
+  <app-avatar-icon />
+}

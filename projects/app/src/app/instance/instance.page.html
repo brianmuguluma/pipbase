@@ -1,0 +1,39 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/instances" />
+    </ion-buttons>
+    <ion-title>Instance</ion-title>
+    @if (instance()?.kvm) {
+    <ion-buttons slot="end">
+      <ion-button (click)="openBrowser()">
+        <ion-icon name="terminal" />
+      </ion-button>
+    </ion-buttons>
+    }
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($any($event))">
+    <ion-refresher-content />
+  </ion-refresher>
+
+  <!-- Spinner -->
+  @if (!instance()) {
+  <app-spinner />
+  }
+
+  <!-- Page not found -->
+  <!-- <app-error *ngIf="instance() && !instance()?.instances?.length" /> -->
+
+  <!-- Details -->
+  @if (instance()) {
+  <app-instance-details [instance]="instance()!" />
+  }
+
+  <!-- User -->
+  @if (instance()) {
+  <app-user-card [user]="user()!" />
+  }
+</ion-content>

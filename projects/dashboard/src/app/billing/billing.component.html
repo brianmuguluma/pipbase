@@ -1,0 +1,52 @@
+<div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+  @if (!prices()?.length) {
+    <app-spinner />
+  }
+
+  @if (prices()?.length) {
+    <div>
+      <div class="sm:flex sm:items-center">
+        <div class="sm:flex-auto">
+          <h1 class="text-base font-semibold leading-6">Plans</h1>
+          @if (!subscriptions()?.length) {
+            <p class="text-content2 mt-2 text-sm">
+              You are currently not subscribed to a plan.
+            </p>
+          }
+          @if (subscriptions()?.length) {
+            <p class="text-content2 mt-2 text-sm">
+              Your are on the
+              <strong class="text-content1 font-semibold">
+                {{ subscriptions()?.[0]?.plan?.nickname }}
+              </strong>
+              plan. The next payment of
+              {{
+                subscriptions()?.[0]?.plan?.amount! / 100
+                  | currency
+                    : (subscriptions()?.[0]?.plan?.currency! | uppercase)
+              }}
+              will be due on
+              {{
+                subscriptions()?.[0]?.current_period_end! * 1000
+                  | date: "longDate"
+              }}.
+            </p>
+          }
+        </div>
+        <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+          <button
+            [disabled]="isGeneratingPortalLink()"
+            (click)="createPortalLink()"
+            class="btn btn-primary flex items-center justify-around px-3 py-2"
+            [ngClass]="isGeneratingPortalLink() ? 'btn-loading' : ''"
+          >
+            Manage billing
+          </button>
+        </div>
+      </div>
+      @if (!subscriptions()?.length) {
+        <app-plans [plans]="plans()!" />
+      }
+    </div>
+  }
+</div>

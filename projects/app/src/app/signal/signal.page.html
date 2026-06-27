@@ -1,0 +1,136 @@
+<ion-header collapse="fade" [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/signals" />
+    </ion-buttons>
+    <ion-title>Signal</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($any($event))">
+    <ion-refresher-content />
+  </ion-refresher>
+
+  @if (signal() === undefined) {
+  <app-spinner />
+  }
+
+  <!-- Signal -->
+  @if (signal()) {
+  <section>
+    <!-- Details -->
+    <ion-list lines="none" class="divide-y divide-gray-100 dark:divide-white/5">
+      <!-- Command -->
+      @if (signal()?.command) {
+      <ion-item>
+        <ion-label class="ion-no-margin py-6">
+          <ion-text color="dark" class="font-medium leading-6">
+            Command
+          </ion-text>
+          <ion-text
+            color="medium"
+            class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ signal()?.command || '-' | noCase | titlecase }}
+          </ion-text>
+        </ion-label>
+      </ion-item>
+      }
+
+      <!-- Time -->
+      @if (signal()?.createdAt) {
+      <ion-item>
+        <ion-label class="ion-no-margin py-6">
+          <ion-text color="dark" class="font-medium leading-6"> Time </ion-text>
+          <ion-text
+            color="medium"
+            class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ signal()?.createdAt?.seconds * 1000 | date }}
+          </ion-text>
+        </ion-label>
+      </ion-item>
+      }
+
+      <!-- Acknowledged -->
+      @if (signal()?.acknowledged) {
+      <ion-item>
+        <ion-label class="ion-no-margin py-6">
+          <ion-text color="dark" class="font-medium leading-6">
+            Acknowledged
+          </ion-text>
+          <ion-text
+            color="medium"
+            class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ signal()?.acknowledged | number }}
+          </ion-text>
+        </ion-label>
+      </ion-item>
+      }
+
+      <!-- Instrument -->
+      @if (signal()?.instrument) {
+      <ion-item>
+        <ion-label class="ion-no-margin py-6">
+          <ion-text color="dark" class="font-medium leading-6">
+            Instrument
+          </ion-text>
+          <ion-text
+            color="medium"
+            class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ signal()?.instrument | slash }}
+          </ion-text>
+        </ion-label>
+      </ion-item>
+      }
+
+      <!-- Percentage -->
+      @if (signal()?.percentage) {
+      <ion-item>
+        <ion-label class="ion-no-margin py-6">
+          <ion-text color="dark" class="font-medium leading-6">
+            Percentage
+          </ion-text>
+          <ion-text
+            color="medium"
+            class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ signal()?.percentage | percent }}
+          </ion-text>
+        </ion-label>
+      </ion-item>
+      }
+
+      <!-- Side -->
+      @if (signal()?.side) {
+      <ion-item>
+        <ion-label class="ion-no-margin py-6">
+          <ion-text color="dark" class="font-medium leading-6"> Side </ion-text>
+          <ion-text
+            color="medium"
+            class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ signal()?.side }}
+          </ion-text>
+        </ion-label>
+      </ion-item>
+      }
+    </ion-list>
+
+    <!-- Notes -->
+    @if (signal()?.notes) {
+    <ion-card color="light" class="shadow-none">
+      <ion-card-content> {{ signal()?.notes }} </ion-card-content>
+    </ion-card>
+    }
+
+    <!-- User -->
+    @if (signal()?.user) {
+    <app-user-card [user]="user()" />
+    }
+  </section>
+  }
+</ion-content>

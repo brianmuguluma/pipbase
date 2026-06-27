@@ -1,0 +1,20 @@
+<ion-app>
+  <ion-split-pane [disabled]="!authService.user()" contentId="main" when="xl">
+    <ion-menu [swipeGesture]="authService.isAdmin()" contentId="main">
+      <ion-header [translucent]="true">
+        <ion-toolbar>
+          <ion-title>Pipbase</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content [fullscreen]="true" [scrollY]="false">
+        <ion-header collapse="condense">
+          <ion-toolbar>
+            <ion-title size="large">Pipbase</ion-title>
+          </ion-toolbar>
+        </ion-header>
+        <app-menu />
+      </ion-content>
+    </ion-menu>
+    <ion-router-outlet id="main" />
+  </ion-split-pane>
+</ion-app>

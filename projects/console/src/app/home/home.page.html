@@ -1,0 +1,78 @@
+<app-navbar />
+<div class="min-h-full">
+  <main class="pb-8">
+    <div class="border-border bg-backgroundSecondary border-b">
+      <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <h3 class="text-base font-semibold leading-6">Overview</h3>
+        <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
+          <a routerLink="/users">
+            <div
+              class="border-border bg-backgroundPrimary overflow-hidden rounded-lg border px-4 py-5 sm:p-6"
+            >
+              <dt class="text-content2 truncate text-sm font-medium">Users</dt>
+              <dd class="mt-1 text-3xl font-semibold tracking-tight">
+                {{ userCount() }}
+              </dd>
+            </div>
+          </a>
+          <div
+            class="border-border bg-backgroundPrimary overflow-hidden rounded-lg border px-4 py-5 sm:p-6"
+          >
+            <dt class="text-content2 truncate text-sm font-medium">Premium</dt>
+            <dd class="mt-1 text-3xl font-semibold tracking-tight">
+              {{ activeSubscriptions() }}
+            </dd>
+          </div>
+          <div
+            class="border-border bg-backgroundPrimary overflow-hidden rounded-lg border px-4 py-5 sm:p-6"
+          >
+            <dt class="text-content2 truncate text-sm font-medium">
+              Subscribers
+            </dt>
+            <dd class="mt-1 text-3xl font-semibold tracking-tight">
+              {{ app.occupancy()?.subscribers }}
+            </dd>
+          </div>
+          <!-- <div
+                  class="overflow-hidden rounded-lg border border-border bg-backgroundPrimary px-4 py-5  sm:p-6"
+                >
+                  <dt
+                    class="truncate text-sm font-medium text-content2"
+                  >
+                    Avg. Click Rate
+                  </dt>
+                  <dd
+                    class="mt-1 text-3xl font-semibold tracking-tight "
+                  >
+                    24.57%
+                  </dd>
+                </div> -->
+        </dl>
+      </div>
+    </div>
+    <div class="mx-auto mt-12 max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+      <h1 class="sr-only">Profile</h1>
+      <!-- Main 3 column grid -->
+      <div class="grid grid-cols-1 items-start gap-4 lg:grid-cols-3 lg:gap-8">
+        <!-- Left column -->
+        <div class="grid grid-cols-1 gap-4 lg:col-span-2">
+          <!-- Welcome panel -->
+          <app-welcome-panel />
+
+          <!-- Actions panel -->
+          <app-actions-panel />
+        </div>
+
+        <!-- Right column -->
+        <div class="grid grid-cols-1 gap-4">
+          <!-- Signals -->
+          <app-signals-card />
+
+          <!-- Recent Users -->
+          <app-users-card />
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<app-footer />

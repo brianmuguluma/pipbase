@@ -1,0 +1,71 @@
+<!--  -->
+<div class="ion-margin-top flex flex-col items-center justify-around">
+  <ion-card-title class="mt-1">
+    {{
+      closedTrade()?.realizedPL ||
+        calculatedTradeState()?.unrealizedPL ||
+        trade().unrealizedPL ||
+        trade().realizedPL | currency: app.account()?.currency
+    }}
+  </ion-card-title>
+  <ion-card-subtitle class="mt-2 flex items-center">
+    {{ trade().price | slice: 0 : -1 }}
+    <sup>{{ trade().price | slice: -1 }}</sup>
+    @if (trade().averageClosePrice || candlestick()) {
+      <div>
+        &nbsp;
+        <ion-icon name="arrow-forward" />
+        &nbsp;
+      </div>
+    }
+    @if (!isOpen()) {
+      <span class="flex items-center">
+        {{ trade().averageClosePrice | slice: 0 : -1 }}
+        <sup>{{ trade().averageClosePrice | slice: -1 }}</sup>
+      </span>
+    }
+    @if (trade().state !== "CLOSED" && candlestick()) {
+      <span class="flex items-center">
+        {{ candlestick()?.mid?.c | slice: 0 : -1 }}
+        <sup>{{ candlestick()?.mid?.c | slice: -1 }}</sup>
+      </span>
+    }
+  </ion-card-subtitle>
+  <ion-button
+    (click)="presentPopover($event)"
+    color="light"
+    size="small"
+    class="ion-margin-vertical mx-auto"
+  >
+    <ion-icon slot="start" name="time-outline" />
+    {{ interval() }}
+  </ion-button>
+</div>
+<!-- Snapshot -->
+<div
+  [ngClass]="!isEmpty() && candleStatus() === 200 ? 'block' : 'h-0'"
+  class="relative"
+>
+  <div [id]="tradingViewID()" [ngStyle]="{ height: 'calc(100vh / 3)' }"></div>
+  <!-- Spinner -->
+  @if (!chart() && !candles().length && !isEmpty() && candleStatus() === 200) {
+    <div
+      [id]="tradingViewID()"
+      class="absolute inset-0 grid place-items-center"
+    >
+      <ion-spinner class="m-auto"></ion-spinner>
+    </div>
+  }
+</div>
+<!-- Chart unavailable -->
+@if (!candles().length && isEmpty() && candleStatus() !== 200) {
+  <ion-card class="mt-0 shadow-none">
+    <ion-item color="warning" lines="none">
+      <ion-icon slot="start" name="warning-outline" />
+      <ion-label>
+        <ion-text class="block font-medium">Chart unavailable.</ion-text>
+        <ion-text>Select another timeframe to view.</ion-text>
+      </ion-label>
+    </ion-item>
+  </ion-card>
+}

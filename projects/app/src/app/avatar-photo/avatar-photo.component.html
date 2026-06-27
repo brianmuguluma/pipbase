@@ -1,0 +1,6 @@
+<ion-img
+  class="h-full w-full object-cover"
+  [src]="user()?.photoURL || auth.profile()?.photoURL"
+  [alt]="(user() ? user()?.displayName : auth.profile()?.displayName) || 'User'"
+  loading="lazy"
+/>

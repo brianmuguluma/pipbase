@@ -1,0 +1,504 @@
+<!-- Spinner -->
+@if (order() === undefined && !error()) {
+<app-spinner />
+}
+
+<!-- Page not found -->
+@if (!order() && error()) {
+<app-page-not-found [status]="status()" [error]="error()" />
+} @if (order()) {
+<main>
+  <header class="relative isolate">
+    <app-header />
+    <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <app-breadcrumbs
+        [breadcrumbs]="[{ title: 'Orders', route: '/orders' }, { title: id()!, route: '/orders/' + id()! }]"
+      />
+      <div class="mt-8">
+        <div>
+          <h3 class="page-heading">Order</h3>
+        </div>
+      </div>
+      <div
+        class="mx-auto flex max-w-2xl items-center justify-between gap-x-8 lg:mx-0 lg:max-w-none"
+      ></div>
+    </div>
+  </header>
+  <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-16">
+    <div
+      class="mx-auto grid max-w-2xl grid-cols-1 grid-rows-1 items-start gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-3"
+    >
+      <!-- Links -->
+      @if (order()?.fillingTransactionID || order()?.cancellingTransactionID ||
+      order()?.tradeID || order()?.tradeOpenedID) {
+      <div class="lg:col-start-3">
+        <!-- Links -->
+        <h2 class="text-sm font-semibold leading-6">Links</h2>
+        <nav class="menu mt-2">
+          <ul role="list" class="menu-section">
+            <!-- Transaction -->
+            @if (order()?.fillingTransactionID ||
+            order()?.cancellingTransactionID) {
+            <a
+              [routerLink]="['/transactions', order()?.state === 'FILLED' ? order()?.fillingTransactionID : order()?.cancellingTransactionID]"
+              class="menu-item justify-between"
+            >
+              <span>Transaction</span>
+              <svg
+                class="fill-content3 h-5 w-5 flex-none"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </a>
+            }
+            <!-- Trade -->
+            @if (order()?.tradeID) {
+            <a
+              [routerLink]="['/trades', order()?.tradeID]"
+              class="menu-item justify-between"
+            >
+              <span>Trade</span>
+              <svg
+                class="fill-content3 h-5 w-5 flex-none"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </a>
+            }
+            <!-- Trade Opened -->
+            @if (order()?.tradeOpenedID) {
+            <a
+              [routerLink]="['/trades', order()?.tradeOpenedID]"
+              class="menu-item justify-between"
+            >
+              <span>Trade opened</span>
+              <svg
+                class="fill-content3 h-5 w-5 flex-none"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </a>
+            }
+          </ul>
+        </nav>
+      </div>
+      }
+      <!-- Details -->
+      <div
+        class="sm:ring-border -mx-4 py-8 sm:mx-0 sm:rounded-lg sm:px-8 sm:pb-14 sm:shadow-sm sm:ring-1 lg:col-span-2 lg:row-span-2 lg:row-end-2 xl:px-16 xl:pb-20 xl:pt-16"
+      >
+        <div>
+          <div class="px-4 sm:px-0">
+            <h3 class="text-base font-semibold leading-7">Details</h3>
+            <p class="text-content2 mt-1 max-w-2xl text-sm leading-6">
+              {{ instrument()?.displayName || order()?.instrument | slash }}
+            </p>
+          </div>
+          <div class="border-border mt-6 border-t">
+            <dl class="divide-gray-4 divide-y">
+              <!-- ID -->
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt
+                  class="flex items-center justify-between text-sm font-medium leading-6"
+                >
+                  ID
+                  <app-tooltip [tip]="glossary().order.id" class="relative" />
+                </dt>
+                <dd
+                  class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                >
+                  {{ order()?.id }}
+                </dd>
+              </div>
+              <!-- Created -->
+              @if (order()?.createTime) {
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt
+                  class="flex items-center justify-between text-sm font-medium leading-6"
+                >
+                  Created
+                  <app-tooltip
+                    [tip]="glossary().order.createTime"
+                    class="relative"
+                  />
+                </dt>
+                <dd
+                  class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                >
+                  {{ order()?.createTime | date:'medium' }}
+                </dd>
+              </div>
+              }
+              <!-- Filled -->
+              @if (order()?.filledTime) {
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt
+                  class="flex items-center justify-between text-sm font-medium leading-6"
+                >
+                  Filled
+                  <app-tooltip
+                    [tip]="glossary().order.filledTime"
+                    class="relative"
+                  />
+                </dt>
+                <dd
+                  class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                >
+                  {{ order()?.filledTime | date:'medium' }}
+                </dd>
+              </div>
+              }
+              <!-- Cancelled -->
+              @if (order()?.cancelledTime) {
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt
+                  class="flex items-center justify-between text-sm font-medium leading-6"
+                >
+                  Cancelled
+                  <app-tooltip
+                    [tip]="glossary().order.cancelledTime"
+                    class="relative"
+                  />
+                </dt>
+                <dd
+                  class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                >
+                  {{ order()?.cancelledTime | date:'medium' }}
+                </dd>
+              </div>
+              }
+              <!-- Instrument -->
+              @if (order()?.instrument) {
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt
+                  class="flex items-center justify-between text-sm font-medium leading-6"
+                >
+                  Instrument
+                  <app-tooltip
+                    [tip]="glossary().order.instrument"
+                    class="relative"
+                  />
+                </dt>
+                <dd
+                  class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                >
+                  {{ order()?.instrument | slash }}
+                </dd>
+              </div>
+              }
+              <!-- State -->
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt
+                  class="flex items-center justify-between text-sm font-medium leading-6"
+                >
+                  State
+                  <app-tooltip
+                    [tip]="glossary().order.state"
+                    class="relative"
+                  />
+                </dt>
+                <dd
+                  class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                >
+                  <app-order-badge [state]="order()?.state!" />
+                </dd>
+              </div>
+              <!-- Type -->
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt
+                  class="flex items-center justify-between text-sm font-medium leading-6"
+                >
+                  Type
+                  <app-tooltip [tip]="glossary().order.type" class="relative" />
+                </dt>
+                <dd
+                  class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                >
+                  {{ order()?.type | noCase | titlecase }}
+                </dd>
+              </div>
+              <!-- Units -->
+              @if (order()?.units) {
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt
+                  class="flex items-center justify-between text-sm font-medium leading-6"
+                >
+                  Units
+                  <app-tooltip
+                    [tip]="glossary().order.units"
+                    class="relative"
+                  />
+                </dt>
+                <dd
+                  class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                >
+                  {{ order()?.units | number }}
+                </dd>
+              </div>
+              }
+              <!-- Price -->
+              @if (order()?.price) {
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt
+                  class="flex items-center justify-between text-sm font-medium leading-6"
+                >
+                  Price
+                  <app-tooltip
+                    [tip]="glossary().order.price"
+                    class="relative"
+                  />
+                </dt>
+                <dd
+                  class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                >
+                  {{ order()?.price }}
+                </dd>
+              </div>
+              }
+              <!-- Time in Force -->
+              @if (order()?.timeInForce) {
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt
+                  class="flex items-center justify-between text-sm font-medium leading-6"
+                >
+                  Time in Force
+                  <app-tooltip
+                    [tip]="glossary().order.timeInForce"
+                    class="relative"
+                  />
+                </dt>
+                <dd
+                  class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                >
+                  {{ order()?.timeInForce | timeInForce }}
+                </dd>
+              </div>
+              }
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Dependants -->
+    @if (order()?.stopLossOnFill || order()?.takeProfitOnFill ||
+    order()?.trailingStopLossOnFill || order()?.guaranteedStopLossOnFill) {
+    <div class="mt-16">
+      <h2 class="text-base font-semibold leading-7">Dependants</h2>
+      <ul
+        role="list"
+        class="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8"
+      >
+        <!-- Stop Loss -->
+        @if (order()?.stopLossOnFill) {
+        <li
+          class="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10"
+        >
+          <div
+            class="bg-backgroundSecondary flex items-center justify-between gap-x-4 border-b border-gray-900/5 p-6"
+          >
+            <div class="text-sm font-medium leading-6">Stop Loss</div>
+            <label class="btn btn-circle btn-ghost h-6 w-6" for="stop-loss">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="h-6 w-6"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 0 1 .67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 1 1-.671-1.34l.041-.022ZM12 9a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </label>
+            <input class="modal-state" id="stop-loss" type="checkbox" />
+            <div class="modal">
+              <label class="modal-overlay" for="stop-loss"></label>
+              <div class="modal-content flex flex-col gap-5">
+                <label
+                  for="stop-loss"
+                  class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                >
+                  ✕
+                </label>
+                <h2 class="text-xl">Stop Loss</h2>
+                <p class="text-content2">
+                  {{ glossary().order.stopLossOnFill }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <dl
+            class="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6 dark:divide-white/10"
+          >
+            <div class="flex justify-between gap-x-4 py-3">
+              <dt class="text-content2">Price</dt>
+              <dd class="">{{ order()?.stopLossOnFill?.price }}</dd>
+            </div>
+            <div class="flex justify-between gap-x-4 py-3">
+              <dt class="text-content2 line-clamp-1">Time In Force</dt>
+              <dd class="flex items-start gap-x-2">
+                <div class="line-clamp-1 truncate font-medium">
+                  {{ order()?.stopLossOnFill?.timeInForce | timeInForce }}
+                </div>
+              </dd>
+            </div>
+          </dl>
+        </li>
+        }
+
+        <!-- Trailing Stop Loss -->
+        @if (order()?.trailingStopLossOnFill) {
+        <li
+          class="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10"
+        >
+          <div
+            class="bg-backgroundSecondary flex items-center justify-between gap-x-4 border-b border-gray-900/5 p-6"
+          >
+            <div class="text-sm font-medium leading-6">Trailing Stop Loss</div>
+            <label
+              class="btn btn-circle btn-ghost h-6 w-6"
+              for="trailing-stop-loss"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="h-6 w-6"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 0 1 .67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 1 1-.671-1.34l.041-.022ZM12 9a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </label>
+            <input
+              class="modal-state"
+              id="trailing-stop-loss"
+              type="checkbox"
+            />
+            <div class="modal">
+              <label class="modal-overlay" for="trailing-stop-loss"></label>
+              <div class="modal-content flex flex-col gap-5">
+                <label
+                  for="trailing-stop-loss"
+                  class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                >
+                  ✕
+                </label>
+                <h2 class="text-xl">Trailing Stop Loss</h2>
+                <p class="text-content2">
+                  {{ glossary().order.takeProfitOnFill }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <dl
+            class="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6 dark:divide-white/10"
+          >
+            <div class="flex justify-between gap-x-4 py-3">
+              <dt class="text-content2">Distance</dt>
+              <dd class="text-content2">
+                {{ order()?.trailingStopLossOnFill?.distance }}
+              </dd>
+            </div>
+            <div class="flex justify-between gap-x-4 py-3">
+              <dt class="text-content2">Time in Force</dt>
+              <dd class="flex items-start gap-x-2">
+                <div class="line-clamp-1 truncate font-medium">
+                  {{ order()?.trailingStopLossOnFill?.timeInForce }}
+                </div>
+              </dd>
+            </div>
+          </dl>
+        </li>
+        }
+
+        <!-- Take Profit -->
+        @if (order()?.takeProfitOnFill) {
+        <li
+          class="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10"
+        >
+          <div
+            class="bg-backgroundSecondary flex items-center justify-between gap-x-4 border-b border-gray-900/5 p-6"
+          >
+            <div class="text-sm font-medium leading-6">Take Profit</div>
+            <label class="btn btn-circle btn-ghost h-6 w-6" for="take-profit">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="h-6 w-6"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 0 1 .67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 1 1-.671-1.34l.041-.022ZM12 9a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </label>
+            <input class="modal-state" id="take-profit" type="checkbox" />
+            <div class="modal">
+              <label class="modal-overlay" for="take-profit"></label>
+              <div class="modal-content flex flex-col gap-5">
+                <label
+                  for="take-profit"
+                  class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                >
+                  ✕
+                </label>
+                <h2 class="text-xl">Take Profit</h2>
+                <p class="text-content2">
+                  {{ glossary().order.takeProfitOnFill }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <dl
+            class="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6 dark:divide-white/10"
+          >
+            <div class="flex justify-between gap-x-4 py-3">
+              <dt class="text-content2">Price</dt>
+              <dd class="">{{ order()?.takeProfitOnFill?.price }}</dd>
+            </div>
+            <div class="flex justify-between gap-x-4 py-3">
+              <dt class="text-content2 line-clamp-1">Time In Force</dt>
+              <dd class="flex items-start gap-x-2">
+                <div class="line-clamp-1 truncate font-medium">
+                  {{ order()?.takeProfitOnFill?.timeInForce | timeInForce }}
+                </div>
+              </dd>
+            </div>
+          </dl>
+        </li>
+        }
+      </ul>
+    </div>
+    }
+  </div>
+</main>
+} @if (order()) {
+<app-footer />
+}

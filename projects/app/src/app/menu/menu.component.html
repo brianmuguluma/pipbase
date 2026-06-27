@@ -1,0 +1,41 @@
+<ion-list lines="none" class="divide-y divide-gray-100 dark:divide-white/5">
+  <!-- Config -->
+  <div>
+    <ion-menu-toggle>
+      <ion-item [routerLink]="['/config']" button>
+        <ion-icon slot="start" name="options" />
+        <ion-label class="ion-no-margin py-6"> Config </ion-label>
+      </ion-item>
+    </ion-menu-toggle>
+  </div>
+
+  <!-- Users -->
+  <div>
+    <ion-menu-toggle>
+      <ion-item [routerLink]="['/users']" button>
+        <ion-icon slot="start" name="people-outline" />
+        <ion-label class="ion-no-margin py-6"> Users </ion-label>
+      </ion-item>
+    </ion-menu-toggle>
+  </div>
+
+  <!-- Instances -->
+  <div>
+    <ion-menu-toggle>
+      <ion-item [routerLink]="['/instances']" button>
+        <ion-icon slot="start" name="server-outline" />
+        <ion-label class="ion-no-margin py-6"> Instances </ion-label>
+      </ion-item>
+    </ion-menu-toggle>
+  </div>
+
+  <!-- Signals -->
+  <div>
+    <ion-menu-toggle>
+      <ion-item [routerLink]="['/signals']" button>
+        <ion-icon slot="start" name="radio" />
+        <ion-label class="ion-no-margin py-6"> Signals </ion-label>
+      </ion-item>
+    </ion-menu-toggle>
+  </div>
+</ion-list>

@@ -1,0 +1,561 @@
+<ion-header collapse="fade" translucent>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/exchange" />
+    </ion-buttons>
+    <ion-title> Transaction </ion-title>
+    <ion-buttons slot="end">
+      <ion-button
+        [disabled]="!transaction() || id() === '1'"
+        (click)="decrementTicket()"
+      >
+        <ion-icon slot="icon-only" name="chevron-down" />
+      </ion-button>
+      <ion-button
+        [disabled]="!transaction() || id() === app.poll()?.lastTransactionID"
+        (click)="incrementTicket()"
+      >
+        <ion-icon slot="icon-only" name="chevron-up" />
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  @if (transaction()?.instrument || instrument()) {
+  <ion-toolbar>
+    <ion-title size="small">
+      {{ instrument()?.displayName || transaction()?.instrument | slash }}
+    </ion-title>
+  </ion-toolbar>
+  }
+</ion-header>
+
+<ion-content fullscreen>
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($any($event))">
+    <ion-refresher-content />
+  </ion-refresher>
+
+  <!-- Spinner -->
+  @if (!transaction()) {
+  <app-spinner />
+  }
+
+  <!-- Transaction -->
+  @if (transaction()) {
+  <section>
+    <!-- Details -->
+    <section>
+      <ion-list
+        lines="none"
+        class="divide-y divide-gray-100 dark:divide-white/5"
+      >
+        <!-- ID -->
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6"> ID </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ transaction()?.id }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().transaction.id" />
+        </ion-item>
+        <!-- Account Number -->
+        @if (transaction()?.accountNumber) {
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Account Number
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ transaction()?.accountNumber }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().transaction.accountNumber" />
+        </ion-item>
+        }
+        <!-- Type -->
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Type
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ transaction()?.type | noCase | titlecase }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().transaction.type" />
+        </ion-item>
+        <!-- Funding Reason -->
+        @if (transaction()?.fundingReason) {
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Funding Reason
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ transaction()?.fundingReason | noCase | titlecase }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().transaction.fundingReason" />
+        </ion-item>
+        }
+        <!-- Alias -->
+        @if (transaction()?.alias) {
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Alias
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ transaction()?.alias }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().transaction.alias" />
+        </ion-item>
+        }
+        <!-- Margin rate -->
+        @if (transaction()?.marginRate) {
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Margin rate
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ (1 / (transaction()?.marginRate | toNumber) | number:'1.0-0')
+              }}:1
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().transaction.marginRate" />
+        </ion-item>
+        }
+        <!-- Time -->
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Time
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ transaction()?.time | date : 'medium' }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().transaction.time" />
+        </ion-item>
+        <!-- Instrument -->
+        @if (transaction()?.instrument) {
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Instrument
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ transaction()?.instrument | slash }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().transaction.instrument" />
+        </ion-item>
+        }
+        <!-- Distance -->
+        @if (transaction()?.distance) {
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Distance
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ transaction()?.distance }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().transaction.distance" />
+        </ion-item>
+        }
+        <!-- Account Balance -->
+        @if (transaction()?.accountBalance) {
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Account Balance
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ transaction()?.accountBalance | currency :
+              app.account()?.currency }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().transaction.accountBalance" />
+        </ion-item>
+        }
+        <!-- Amount -->
+        @if (transaction()?.amount) {
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Amount
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ transaction()?.amount | currency : app.account()?.currency }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().transaction.amount" />
+        </ion-item>
+        }
+        <!-- PL -->
+        @if (transaction()?.pl) {
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              P/L
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ transaction()?.pl | currency : app.account()?.currency }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().transaction.pl" />
+        </ion-item>
+        }
+        <!-- Units -->
+        @if (transaction()?.units) {
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Units
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ transaction()?.units | number }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().transaction.units" />
+        </ion-item>
+        }
+        <!-- Requested Units -->
+        @if (transaction()?.requestedUnits) {
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Requested Units
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ transaction()?.requestedUnits | number }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().transaction.units" />
+        </ion-item>
+        }
+        <!-- Half Spread Cost -->
+        @if (transaction()?.halfSpreadCost) {
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Half Spread Cost
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ transaction()?.halfSpreadCost | currency :
+              app.account()?.currency }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().transaction.halfSpreadCost" />
+        </ion-item>
+        }
+        <!-- Financing -->
+        @if (transaction()?.financing) {
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Financing
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ transaction()?.financing | currency : app.account()?.currency
+              }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().transaction.financing" />
+        </ion-item>
+        }
+        <!-- Commission -->
+        @if (transaction()?.commission) {
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Commission
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ transaction()?.commission | currency : app.account()?.currency
+              }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().transaction.commission" />
+        </ion-item>
+        }
+      </ion-list>
+    </section>
+
+    <!-- Reasons -->
+    @if (transaction()?.reason || transaction()?.rejectReason) {
+    <section>
+      <div class="mx-auto mt-12 max-w-7xl px-4 sm:px-6 lg:px-8">
+        <h3 class="text-base font-semibold leading-6">Reasons</h3>
+      </div>
+      <!-- Reason -->
+      @if (transaction()?.reason) {
+      <ion-card
+        [color]="app.prefersDark() ? undefined : 'light'"
+        class="shadow-none"
+      >
+        <ion-card-content>
+          <ion-text class="font-medium leading-6">
+            {{ transaction()?.reason | noCase | titlecase }}
+          </ion-text>
+          <ion-note
+            color="medium"
+            class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+          >
+            @if (transaction()?.reason | reason:transaction()?.type | async) {
+            <ion-text>
+              {{ transaction()?.reason | reason:transaction()?.type | async }}
+            </ion-text>
+            } @if ((transaction()?.reason | reason:transaction()?.type | async)
+            === undefined) {
+            <ion-text>
+              {{ transaction()?.reason | noCase | titlecase }}
+            </ion-text>
+            }
+          </ion-note>
+        </ion-card-content>
+      </ion-card>
+      }
+      <!-- Rejection -->
+      @if (transaction()?.rejectReason) {
+      <ion-card
+        [color]="app.prefersDark() ? undefined : 'light'"
+        class="shadow-none"
+      >
+        <ion-card-content>
+          <ion-text class="font-medium leading-6">
+            {{ transaction()?.rejectReason | noCase | titlecase }}
+          </ion-text>
+          <ion-note
+            color="medium"
+            class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ transaction()?.rejectReason | rejectReason }}
+          </ion-note>
+        </ion-card-content>
+      </ion-card>
+      }
+    </section>
+    }
+    <!-- <app-transaction-trades-closed
+      *ngIf="transaction()?.tradesClosed?.length > 1"
+      [trades]="transaction()?.tradesClosed"
+    ></app-transaction-trades-closed> -->
+    <!-- Dependants -->
+    @if (transaction()?.stopLossOnFill || transaction()?.takeProfitOnFill ||
+    transaction()?.trailingStopLossOnFill) {
+    <section>
+      <!-- Dependants -->
+      <div class="mx-auto mt-12 max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="border-b border-gray-200 pb-5 dark:border-white/10">
+          <h3 class="text-base font-semibold leading-6">Dependants</h3>
+        </div>
+      </div>
+      <ion-list
+        lines="none"
+        class="divide-y divide-gray-100 dark:divide-white/5"
+      >
+        <!-- Stop Loss -->
+        @if (transaction()?.stopLossOnFill &&
+        transaction()?.stopLossOnFill?.price) {
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Stop Loss
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ transaction()?.stopLossOnFill?.price }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().stopLossDetails.price" />
+        </ion-item>
+        }
+        <!-- Take Profit -->
+        @if (transaction()?.takeProfitOnFill &&
+        transaction()?.takeProfitOnFill?.price) {
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Stop Loss
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ transaction()?.takeProfitOnFill?.price }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().takeProfitDetails.price" />
+        </ion-item>
+        }
+        <!-- Trailing Stop Loss -->
+        @if (transaction()?.trailingStopLossOnFill &&
+        transaction()?.trailingStopLossOnFill?.price) {
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Stop Loss
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ transaction()?.trailingStopLossOnFill?.price }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip
+            slot="end"
+            [tip]="glossary().trailingStopLossDetails.distance"
+          />
+        </ion-item>
+        }
+      </ion-list>
+    </section>
+    }
+    <!-- Links -->
+    @if (transaction()?.orderID || transaction()?.replacesOrderID ||
+    transaction()?.replacedByOrderID || transaction()?.clientOrderID ||
+    transaction()?.tradeID || (transaction()?.tradeOpened?.tradeID) ||
+    (transaction()?.tradeReduced && transaction()?.tradeReduced.tradeID) ||
+    transaction()?.tradesClosed?.length === 1 || transaction()?.tradeClose ||
+    transaction()?.closedTradeID || transaction()?.tradeCloseTransactionID) {
+    <section class="pb-16">
+      <div class="mx-auto mt-12 max-w-7xl px-4 pb-5">
+        <h3 class="text-base font-semibold leading-6">Links</h3>
+      </div>
+      <section class="flex flex-wrap items-end gap-2 px-4">
+        <!-- Order ID -->
+        @if (transaction()?.orderID) {
+        <app-link [route]="['/orders', transaction()?.orderID]" label="Order" />
+        }
+        <!-- Replaces Order ID -->
+        @if (transaction()?.replacesOrderID) {
+        <app-link
+          [route]="['/orders', transaction()?.replacesOrderID]"
+          label="Order"
+        />
+        }
+        <!-- Replaced By Order ID -->
+        @if (transaction()?.replacedByOrderID) {
+        <app-link
+          [route]="['/orders', transaction()?.replacedByOrderID]"
+          label="Replacement"
+        />
+        }
+        <!-- Client Order ID -->
+        @if (transaction()?.clientOrderID) {
+        <app-link
+          [route]="['/orders', transaction()?.clientOrderID]"
+          label="Client Order"
+        />
+        }
+        <!-- Trade ID -->
+        @if (transaction()?.tradeID) {
+        <app-link [route]="['/trades', transaction()?.tradeID]" label="Trade" />
+        }
+        <!-- Trade Opened -->
+        @if (transaction()?.tradeOpened?.tradeID) {
+        <app-link
+          [route]="['/trades', transaction()?.tradeOpened?.tradeID]"
+          label="Trade"
+        />
+        }
+        <!-- Trade Reduced -->
+        @if (transaction()?.tradeReduced && transaction()?.tradeReduced.tradeID)
+        {
+        <app-link
+          [route]="['/trades', transaction()?.tradeReduced.tradeID]"
+          label="Trade"
+        />
+        }
+        <!-- Trade Close -->
+        @if (transaction()?.tradeClose) {
+        <app-link
+          [route]="['/trades', transaction()?.tradeClose?.tradeID]"
+          label="Trade"
+        />
+        }
+        <!-- Trade Closed -->
+        @if (transaction()?.tradesClosed?.length === 1) {
+        <app-link
+          [route]="['/trades', transaction()?.tradesClosed[0].tradeID]"
+          label="Trade"
+        />
+        }
+        <!-- Closed Trade -->
+        @if (transaction()?.closedTradeID) {
+        <app-link
+          [route]="['/trades', transaction()?.closedTradeID]"
+          label="Closed Trade"
+        />
+        }
+        <!-- Trade Closed Transaction -->
+        @if (transaction()?.tradeCloseTransactionID) {
+        <app-link
+          [route]="['/transactions', transaction()?.tradeCloseTransactionID]"
+          label="Trade Close Transaction"
+        />
+        }
+      </section>
+    </section>
+    }
+  </section>
+  }
+</ion-content>

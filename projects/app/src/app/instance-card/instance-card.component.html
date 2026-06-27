@@ -1,0 +1,38 @@
+<ion-card
+  [color]="app.prefersDark() ? undefined : 'light'"
+  class="shadow-none"
+  button
+>
+  <ion-item
+    [color]="app.prefersDark() ? undefined : 'light'"
+    lines="none"
+    [routerLink]="instance() ? ['/instances', instance()?.id] : undefined"
+  >
+    <ion-label class="ion-no-margin flex justify-between gap-x-6 py-5">
+      @if (instance()) {
+        <ion-text color="dark" class="font-semibold leading-6">
+          {{ instance()?.main_ip }}
+        </ion-text>
+        <ion-text color="dark" class="block truncate first-letter:capitalize">
+          {{ instance()?.power_status }} &middot;
+
+          <!-- If no region -->
+          @if (!region()) {
+            <span>-</span>
+          }
+
+          <!-- Region -->
+          @if (region()) {
+            <span> {{ region().city }}, {{ region().country }} </span>
+          }
+        </ion-text>
+        <ion-note class="block">
+          Created {{ instance()?.date_created | formatRelative }}
+        </ion-note>
+      } @else {
+        <ion-skeleton-text animated class="skeleton" style="width: 30%" />
+        <ion-skeleton-text animated class="skeleton" style="width: 50%" />
+      }
+    </ion-label>
+  </ion-item>
+</ion-card>

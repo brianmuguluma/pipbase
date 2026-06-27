@@ -1,0 +1,31 @@
+<li
+  class="flex items-center justify-between gap-x-6 py-5"
+  [ngClass]="!isLast ? 'border-border border-b' : ''"
+>
+  <div class="min-w-0">
+    <div class="flex items-start gap-x-3">
+      <p class="text-sm font-semibold leading-6">
+        {{ account().alias }}
+      </p>
+    </div>
+    <div class="text-content2 mt-1 flex items-center gap-x-2 text-xs leading-5">
+      <p class="whitespace-nowrap">
+        Created on {{ account().createdTime | date: "medium" }}
+      </p>
+      <svg viewBox="0 0 2 2" class="h-0.5 w-0.5 fill-current">
+        <circle cx="1" cy="1" r="1" />
+      </svg>
+      <p class="truncate">{{ account().id }}</p>
+    </div>
+  </div>
+  <div class="flex flex-none items-center gap-x-4">
+    <button
+      type="button"
+      [disabled]="account().id === auth.hasAccountId()"
+      (click)="selectAccount()"
+      class="btn px-2.5 py-1.5"
+    >
+      Select<span class="sr-only">, {{ account().id }}</span>
+    </button>
+  </div>
+</li>

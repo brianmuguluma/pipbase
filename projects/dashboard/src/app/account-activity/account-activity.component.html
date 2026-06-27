@@ -1,0 +1,116 @@
+<div class="lg:col-start-3">
+  <h2 class="text-sm font-semibold leading-6">Recent activity</h2>
+  <!-- Skeleton -->
+  @if (!response()) {
+    <ul role="list" class="mt-6 space-y-6">
+      @for (i of [].constructor(10); track $index; let last = $last) {
+        <li class="relative flex gap-x-4">
+          @if (!last) {
+            <div
+              class="absolute -bottom-6 left-0 top-0 flex w-6 justify-center"
+            >
+              <div class="bg-border w-px"></div>
+            </div>
+          }
+          <div
+            class="bg-backgroundPrimary relative flex h-6 w-6 flex-none items-center justify-center"
+          >
+            <div
+              class="bg-backgroundSecondary ring-border h-1.5 w-1.5 rounded-full ring-1"
+            ></div>
+          </div>
+          <p class="text-content2 flex-auto py-0.5 text-xs leading-5">
+            <span>
+              <div class="skeleton-pulse h-4 w-1/5 rounded"></div>
+            </span>
+            <span class="mt-2">
+              <div class="skeleton-pulse mt-2 h-4 w-1/2 rounded"></div>
+            </span>
+          </p>
+          <div class="skeleton-pulse h-4 w-10 rounded"></div>
+        </li>
+      }
+    </ul>
+  }
+  <!-- Empty -->
+  @if (response() && !response()?.pages?.length) {
+    <ul role="list" class="mt-6 space-y-6">
+      <li class="relative flex gap-x-4">
+        <div
+          class="bg-backgroundPrimary relative flex h-6 w-6 flex-none items-center justify-center"
+        >
+          <div
+            class="bg-backgroundSecondary ring-border h-1.5 w-1.5 rounded-full ring-1"
+          ></div>
+        </div>
+        <p class="text-content2 flex-auto py-0.5 text-xs font-medium leading-5">
+          No recent activity
+        </p>
+      </li>
+    </ul>
+  }
+  <!-- Activity feed -->
+  @if (transactions()?.length) {
+    <ul role="list" class="mt-6 space-y-6">
+      @for (
+        transaction of transactions();
+        track transaction.id;
+        let last = $last
+      ) {
+        <li class="relative flex gap-x-4">
+          @if (!last) {
+            <div
+              class="absolute -bottom-6 left-0 top-0 flex w-6 justify-center"
+            >
+              <div class="bg-border w-px"></div>
+            </div>
+          }
+          <div
+            class="bg-backgroundPrimary relative flex h-6 w-6 flex-none items-center justify-center"
+          >
+            <div
+              class="bg-backgroundSecondary ring-border h-1.5 w-1.5 rounded-full ring-1"
+            ></div>
+          </div>
+          <p class="text-content2 flex-auto py-0.5 text-xs leading-5">
+            <a
+              [routerLink]="['/transactions', transaction?.id]"
+              class="link link-underline-hover text-xs font-medium hover:underline"
+            >
+              {{ transaction?.type | noCase | titlecase }}
+            </a>
+            @if (transaction.reason && !transaction.rejectReason) {
+              <span class="line-clamp-1">
+                {{ transaction.reason | reason: transaction.type | async }}
+              </span>
+            }
+            @if (transaction.rejectReason) {
+              <span class="line-clamp-1">
+                {{
+                  transaction.rejectReason | reason: transaction.type | async
+                }}
+              </span>
+            }
+          </p>
+          <time
+            datetime="2023-01-23T10:32"
+            class="text-content2 flex-none py-0.5 text-xs leading-5"
+          >
+            {{ transaction.time | duration: undefined : true }} ago
+          </time>
+        </li>
+      }
+    </ul>
+  }
+  @if (transactions()?.length) {
+    <div class="mt-6 flex flex-col justify-stretch">
+      <button
+        [routerLink]="['/transactions']"
+        type="button"
+        class="btn inline-flex items-center justify-center px-3 py-2 text-sm font-semibold"
+      >
+        View all
+      </button>
+    </div>
+  }
+</div>

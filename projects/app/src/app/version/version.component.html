@@ -1,0 +1,5 @@
+@if (app.device() !== "web" && info()) {
+  <ion-note class="ion-padding-vertical ion-text-center block">
+    Version {{ info()?.version || "unavailable" }}
+  </ion-note>
+}

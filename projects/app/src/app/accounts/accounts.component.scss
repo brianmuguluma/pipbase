@@ -1,0 +1,20 @@
+ion-modal {
+  --height: auto;
+
+  align-items: end;
+}
+
+ion-picker {
+  margin-bottom: var(--ion-safe-area-bottom);
+}
+
+ion-item {
+  --ion-item-background: var(--ion-color-light);
+}
+
+/* This sets a different item background when dark mode is enabled on ios and md */
+@media (prefers-color-scheme: dark) {
+  ion-item {
+    --ion-item-background: #1c1c1d;
+  }
+}

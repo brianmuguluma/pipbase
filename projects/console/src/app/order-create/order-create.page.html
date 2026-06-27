@@ -1,0 +1,368 @@
+<label class="modal-overlay" for="order-create"></label>
+<div class="modal-content flex flex-col gap-5">
+  <label
+    for="order-create"
+    class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+  >
+    ✕
+  </label>
+  <h2 class="text-xl">New Order</h2>
+  <form
+    [formGroup]="form()"
+    (ngSubmit)="sendSignal()"
+    class="flex h-full flex-col"
+  >
+    <div class="h-0 flex-1 overflow-y-auto">
+      <div class="flex flex-1 flex-col justify-between">
+        <div class="divide-y divide-gray-200 px-px dark:divide-white/10">
+          <div class="space-y-6 pb-5 pt-6">
+            <!-- Order type -->
+            @if (false) {
+            <div>
+              <label
+                for="orderType"
+                class="block text-sm font-medium leading-6"
+              >
+                Type
+              </label>
+              <select
+                name="orderType"
+                (change)="selectType($event.target)"
+                class="select mt-2"
+              >
+                <option [value]="undefined" [disabled]="orderType()">
+                  Select a type
+                </option>
+                @for (type of orderTypes(); track type) {
+                <option [value]="type" [selected]="type === orderType()">
+                  {{ type | noCase | titlecase }}
+                </option>
+                }
+              </select>
+            </div>
+            }
+
+            <!-- Order form -->
+            <!-- @if (orderType()) { -->
+            <div class="space-y-6">
+              <!-- Instrument -->
+              <div>
+                <label
+                  for="instrument"
+                  class="block text-sm font-medium leading-6"
+                >
+                  Instrument
+                </label>
+                <select
+                  name="instrument"
+                  [value]=""
+                  (change)="selectInstrument($event.target)"
+                  class="select mt-2"
+                >
+                  <option [value]="undefined" [disabled]="instrument()">
+                    Select an instrument
+                  </option>
+                  @for (pair of instruments(); track pair) {
+                  <option
+                    [value]="pair.name"
+                    [selected]="pair.name === instrument()?.name"
+                  >
+                    {{ pair.displayName }}
+                  </option>
+                  }
+                </select>
+              </div>
+              <!-- Side -->
+              <fieldset>
+                <legend class="text-sm font-semibold leading-6">Side</legend>
+                <!-- <p class="mt-1 text-sm leading-6 text-content2">
+                These are delivered via SMS to your mobile phone.
+              </p> -->
+                <div class="mt-6 space-y-6">
+                  <div class="flex items-center gap-x-3">
+                    <input
+                      id="long"
+                      value="long"
+                      formControlName="side"
+                      type="radio"
+                      class="radio"
+                    />
+                    <label
+                      for="long"
+                      class="block text-sm font-medium leading-6"
+                    >
+                      Buy
+                    </label>
+                  </div>
+                  <div class="flex items-center gap-x-3">
+                    <input
+                      id="short"
+                      value="short"
+                      formControlName="side"
+                      type="radio"
+                      class="radio"
+                    />
+                    <label
+                      for="short"
+                      class="block text-sm font-medium leading-6"
+                    >
+                      Sell
+                    </label>
+                  </div>
+                </div>
+              </fieldset>
+              <!-- Percentage -->
+              <div>
+                <label
+                  for="percentage"
+                  class="block text-sm font-medium leading-6"
+                >
+                  Percentage
+                </label>
+                <div class="mt-2">
+                  <input
+                    type="number"
+                    inputmode="decimal"
+                    formControlName="percentage"
+                    [min]="1"
+                    [max]="99"
+                    [minLength]="1"
+                    [maxLength]="2"
+                    name="percentage"
+                    id="Percentage"
+                    class="input"
+                  />
+                </div>
+              </div>
+              <!-- Price -->
+              @if (isPriceRequired()) {
+              <div>
+                <div class="flex justify-between">
+                  <label
+                    for="price"
+                    class="block text-sm font-medium leading-6"
+                  >
+                    Price
+                  </label>
+                  <span class="text-content2 text-sm leading-6">
+                    Required
+                  </span>
+                </div>
+                <div class="mt-2">
+                  <input
+                    type="number"
+                    inputmode="decimal"
+                    formControlName="price"
+                    [minLength]="1"
+                    [maxLength]="2"
+                    name="price"
+                    id="price"
+                    class="input"
+                  />
+                </div>
+              </div>
+              }
+              <!-- Time in Force -->
+              @if (isExpirationRequired()) {
+              <div>
+                <div class="flex justify-between">
+                  <label
+                    for="timeInForce"
+                    class="block text-sm font-medium leading-6"
+                  >
+                    Time in Force
+                  </label>
+                  <span class="text-content2 text-sm leading-6">
+                    Optional
+                  </span>
+                </div>
+                <select
+                  id="timeInForce"
+                  name="timeInForce"
+                  (change)="selectTimeInForce($event.target)"
+                  class="select mt-2"
+                >
+                  <option [value]="undefined" [disabled]="timeInForce()">
+                    Select a time in force
+                  </option>
+                  @for (time of forces(); track time) {
+                  <option [value]="time" [selected]="time === timeInForce()">
+                    {{ time | timeInForce }}
+                  </option>
+                  }
+                </select>
+              </div>
+              }
+              <!-- Expiration -->
+              @if (orderType() !== 'MARKET' && timeInForce() === 'GTD') {
+              <div>
+                <label
+                  for="datetime"
+                  class="block text-sm font-medium leading-6"
+                >
+                  Expiration
+                </label>
+                <div class="mt-2 flex">
+                  <!-- <ion-datetime-button datetime="datetime" />
+                  <ion-popover
+                    [keepContentsMounted]="true"
+                    alignment="center"
+                    mode="ios"
+                    animated="false"
+                    >
+                    <ng-template>
+                      <ion-datetime
+                        id="datetime"
+                        formControlName="datetime"
+                        [showDefaultButtons]="true"
+                        [min]="min()"
+                        [value]="min()"
+                      ></ion-datetime>
+                    </ng-template>
+                  </ion-popover> -->
+                </div>
+              </div>
+              }
+              <!-- Dependants -->
+              <div>
+                <!-- <p
+              class="block text-sm font-medium leading-6 "
+              >
+              Dependants
+            </p> -->
+                <h2 class="text-base font-semibold leading-7">Dependants</h2>
+                <p class="text-content2 mt-1 text-sm leading-6">
+                  Create dependent Orders (Take Profit, Stop Loss and Trailing
+                  Stop Loss) for this trade.
+                </p>
+                <dl
+                  class="mt-2 space-y-6 divide-y divide-gray-100 text-sm leading-6 dark:divide-white/5"
+                >
+                  <div class="pt-6">
+                    <div>
+                      <div class="flex justify-between">
+                        <label
+                          for="takeProfit"
+                          class="block text-sm font-medium leading-6"
+                        >
+                          Take Profit
+                        </label>
+                        <span
+                          class="text-content2 text-sm leading-6"
+                          id="take-profit-optional"
+                        >
+                          Optional
+                        </span>
+                      </div>
+                      <div class="mt-2">
+                        <input
+                          type="number"
+                          inputmode="decimal"
+                          formControlName="takeProfit"
+                          name="takeProfit"
+                          id="takeProfit"
+                          class="input"
+                          placeholder="Price"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pt-6">
+                    <div>
+                      <div class="flex justify-between">
+                        <label
+                          for="stopLoss"
+                          class="block text-sm font-medium leading-6"
+                        >
+                          Stop Loss
+                        </label>
+                        <span
+                          class="text-content2 text-sm leading-6"
+                          id="stop-loss-optional"
+                        >
+                          Optional
+                        </span>
+                      </div>
+                      <div class="mt-2">
+                        <input
+                          type="number"
+                          inputmode="decimal"
+                          formControlName="stopLoss"
+                          name="stopLoss"
+                          id="stopLoss"
+                          class="input"
+                          placeholder="Price"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pt-6">
+                    <div>
+                      <div class="flex justify-between">
+                        <label
+                          for="trailingStopLoss"
+                          class="block text-sm font-medium leading-6"
+                        >
+                          Trailing Stop Loss
+                        </label>
+                        <span
+                          class="text-content2 text-sm leading-6"
+                          id="trailing-stop-loss-optional"
+                        >
+                          Optional
+                        </span>
+                      </div>
+                      <div class="mt-2">
+                        <input
+                          type="number"
+                          inputmode="decimal"
+                          formControlName="trailingStopLoss"
+                          name="trailingStopLoss"
+                          id="trailingStopLoss"
+                          class="input"
+                          placeholder="Distance"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </dl>
+              </div>
+              <!-- Notes -->
+              <div class="flex justify-between">
+                <label for="notes" class="block text-sm font-medium leading-6">
+                  Notes
+                </label>
+                <span
+                  class="text-content2 text-sm leading-6"
+                  id="email-optional"
+                >
+                  Optional
+                </span>
+              </div>
+              <div class="mt-2">
+                <textarea
+                  id="notes"
+                  name="notes"
+                  formControlName="notes"
+                  rows="4"
+                  class="textarea"
+                ></textarea>
+              </div>
+            </div>
+            <!-- } -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex gap-3">
+      <button
+        type="submit"
+        [disabled]="form().invalid || !instrument()"
+        class="btn btn-block btn-primary"
+      >
+        Send
+      </button>
+      <label for="order-create" class="btn btn-block">Cancel</label>
+    </div>
+  </form>
+</div>

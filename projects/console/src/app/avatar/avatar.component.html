@@ -1,0 +1,35 @@
+<!-- Admin -->
+@if (!user()) {
+  <!-- Photo -->
+  @if (auth.profile()?.photoURL) {
+    <app-avatar-photo />
+  }
+
+  <!-- Initial -->
+  @if (!auth.profile()?.photoURL && auth.profile()?.displayName) {
+    <app-avatar-initial [size]="size()" />
+  }
+
+  <!-- Icon -->
+  @if (!auth.profile()?.photoURL && !auth.profile()?.displayName) {
+    <app-avatar-icon />
+  }
+}
+
+<!-- User -->
+@if (user()) {
+  <!-- Photo -->
+  @if (user()?.photoURL) {
+    <app-avatar-photo [user]="user()" />
+  }
+
+  <!-- Initial -->
+  @if (!user()?.photoURL && user()?.displayName) {
+    <app-avatar-initial [user]="user()" [size]="size()" />
+  }
+
+  <!-- Icon -->
+  @if (!user()?.photoURL && !user()?.displayName) {
+    <app-avatar-icon [user]="user()" />
+  }
+}

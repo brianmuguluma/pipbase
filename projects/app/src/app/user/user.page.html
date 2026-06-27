@@ -1,0 +1,167 @@
+<ion-header collapse="fade" [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/users" />
+    </ion-buttons>
+    <ion-title>User</ion-title>
+    @if (user()?.stripeLink) {
+    <ion-buttons slot="end">
+      <ion-button (click)="openBrowser()">
+        <ion-icon
+          slot="icon-only"
+          src="../../assets/stripe.svg"
+          color="tertiary"
+        />
+      </ion-button>
+    </ion-buttons>
+    }
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($any($event))">
+    <ion-refresher-content />
+  </ion-refresher>
+
+  <!-- Spinner -->
+  @if (!userRecord()) {
+  <app-spinner />
+  }
+
+  <!-- Error -->
+  @if (userRecord() && !userRecord()?.uid) {
+  <app-error />
+  }
+
+  <!-- User -->
+  @if (userRecord()?.uid) {
+
+  <!-- Profile Overview -->
+  <div class="overflow-hidden">
+    <h2 class="sr-only" id="profile-overview-title">Profile Overview</h2>
+    <div class="p-6">
+      <div class="sm:flex sm:items-center sm:justify-between">
+        <div class="sm:flex sm:space-x-5">
+          <div class="flex-shrink-0">
+            <div class="mx-auto h-20 w-20 overflow-hidden rounded-full">
+              <app-avatar [user]="userRecord()" size="large" />
+            </div>
+          </div>
+          <div class="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
+            <ion-text color="dark">
+              <p class="text-xl font-bold">
+                {{ userRecord()?.displayName || '-' }}
+              </p>
+            </ion-text>
+            <ion-text color="medium">
+              <p class="text-sm font-medium">
+                {{ userRecord()?.email || '-' }}
+              </p>
+            </ion-text>
+          </div>
+        </div>
+        @if (userRecord()?.uid !== auth.profile()?.uid) {
+        <div class="mt-5 flex justify-center sm:mt-0">
+          <ion-button (click)="confirmUpdateUser()" color="light" size="small">
+            {{ userRecord()?.disabled ? 'Enable' : 'Disable' }}
+          </ion-button>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Details -->
+  <section>
+    <ion-list lines="none" class="divide-y divide-gray-100 dark:divide-white/5">
+      <!-- UID -->
+      <ion-item>
+        <ion-label class="ion-no-margin py-6">
+          <ion-text color="dark" class="font-medium leading-6"> UID </ion-text>
+          <ion-note
+            color="medium"
+            class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ userRecord()?.uid }}
+          </ion-note>
+        </ion-label>
+      </ion-item>
+      <!-- Display Name -->
+      <ion-item>
+        <ion-label class="ion-no-margin py-6">
+          <ion-text color="dark" class="font-medium leading-6">
+            Display Name
+          </ion-text>
+          <ion-note
+            color="medium"
+            class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ userRecord()?.displayName || '-' }}
+          </ion-note>
+        </ion-label>
+      </ion-item>
+      <!-- Email -->
+      <ion-item>
+        <ion-label class="ion-no-margin py-6">
+          <ion-text color="dark" class="font-medium leading-6">
+            Email
+          </ion-text>
+          <ion-note
+            color="medium"
+            class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ userRecord()?.email || '-' }}
+          </ion-note>
+        </ion-label>
+        <ion-icon slot="end" name="checkmark-circle" color="success" />
+      </ion-item>
+      <!-- Created -->
+      <ion-item>
+        <ion-label class="ion-no-margin py-6">
+          <ion-text color="dark" class="font-medium leading-6">
+            Created
+          </ion-text>
+          <ion-note
+            color="medium"
+            class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ userRecord()?.metadata?.creationTime }}
+          </ion-note>
+        </ion-label>
+      </ion-item>
+      <!-- Last Signed In -->
+      <ion-item>
+        <ion-label class="ion-no-margin py-6">
+          <ion-text color="dark" class="font-medium leading-6">
+            Last Signed In
+          </ion-text>
+          <ion-note
+            color="medium"
+            class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ userRecord()?.metadata?.lastSignInTime }}
+          </ion-note>
+        </ion-label>
+      </ion-item>
+      <!-- Last Active -->
+      <ion-item>
+        <ion-label class="ion-no-margin py-6">
+          <ion-text color="dark" class="font-medium leading-6">
+            Last Active
+          </ion-text>
+          <ion-note
+            color="medium"
+            class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ userRecord()?.metadata?.lastRefreshTime }}
+          </ion-note>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </section>
+
+  <!-- Instance -->
+  @if (instance()) {
+  <app-instance-card [instance]="instance()" />
+  } }
+</ion-content>

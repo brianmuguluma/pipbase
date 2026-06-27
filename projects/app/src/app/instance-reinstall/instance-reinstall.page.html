@@ -1,0 +1,62 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Update & Restart Instances</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()"> Cancel </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="h-full px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+    <div class="sm:flex sm:items-start">
+      <div>
+        <h3 class="text-base font-semibold leading-6" id="modal-title">
+          Restart instances
+        </h3>
+        <div class="mt-2">
+          <p class="text-content2 text-sm">
+            Are you sure you want to deactivate your account? All of your data
+            will be permanently removed. This action cannot be undone.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="space-y-6 pb-5 pt-6">
+      <!-- Notes -->
+      <div>
+        <div class="flex justify-between">
+          <label for="notes" class="block text-sm font-medium leading-6">
+            Notes
+          </label>
+          <span class="text-content2 text-sm leading-6" id="email-optional">
+            Optional
+          </span>
+        </div>
+        <div class="mt-2">
+          <textarea
+            [(ngModel)]="notes"
+            id="notes"
+            name="notes"
+            [rows]="4"
+            class="textarea"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button
+      (click)="sendSignal()"
+      expand="block"
+      color="danger"
+      class="ion-margin"
+    >
+      Restart
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

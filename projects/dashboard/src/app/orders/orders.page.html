@@ -1,0 +1,206 @@
+<main>
+  <header class="relative isolate">
+    <app-header />
+
+    <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <app-breadcrumbs
+        [breadcrumbs]="[{ title: 'Orders', route: '/orders', queryParams: queryParams() }]"
+      />
+
+      <div class="mt-8">
+        <div>
+          <h3 class="page-heading">Orders</h3>
+        </div>
+      </div>
+      <div
+        class="mx-auto flex max-w-2xl items-center justify-between gap-x-8 lg:mx-0 lg:max-w-none"
+      ></div>
+    </div>
+  </header>
+
+  <div class="py-10">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="sm:flex sm:items-center">
+        <div class="sm:flex-auto">
+          <h1 class="text-base font-semibold leading-6">
+            @if (!instrument()) {
+            <span>All Instruments</span>
+            } @if (instrument()) {
+            <span>{{ pair()?.displayName }}</span>
+            }
+          </h1>
+          <p class="text-content2 mt-2 text-sm">
+            A list of all the @if (state() !== 'ALL') {
+            <span>{{ state() | lowercase }}</span>
+            } orders in your account for @if (!instrument()) {
+            <span>all instruments</span>
+            }@if (instrument()) {
+            <span>{{ pair()?.displayName }}</span>
+            }.
+          </p>
+        </div>
+
+        <!-- Instrument -->
+        <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+          <label for="instrument" class="block text-sm font-medium leading-6">
+            Instrument
+          </label>
+          <select
+            id="instrument"
+            name="instrument"
+            (change)="setInstrument($event.target)"
+            class="select mt-2 block min-w-full text-sm"
+          >
+            <option [value]="undefined" [selected]="instrument() === undefined">
+              All
+            </option>
+            @for (instrument of instruments(); track instrument.name) {
+            <option
+              [value]="instrument.name"
+              [selected]="instrument.name === pair()?.name"
+            >
+              {{ instrument.displayName }}
+            </option>
+            }
+          </select>
+        </div>
+
+        <!-- State -->
+        <div class="pt-6 sm:hidden">
+          <label for="state" class="block text-sm font-medium leading-6">
+            State
+          </label>
+          <select
+            id="state"
+            name="state"
+            (change)="selectOrderState($event.target)"
+            class="select mt-2 block min-w-full text-sm"
+          >
+            @for (filter of orderStateFilters(); track $index) {
+            <option [value]="filter" [selected]="filter === state()">
+              {{ filter | titlecase }}
+            </option>
+            }
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- State tabs -->
+    <div
+      class="tabs mx-auto mt-10 hidden w-full max-w-7xl gap-1 px-4 sm:flex sm:px-6 lg:px-8"
+    >
+      @for (filter of orderStateFilters(); track $index) {
+      <a
+        [routerLink]="['/orders']"
+        [queryParams]="{ state: filter === 'ALL' ? null : filter }"
+        [queryParamsHandling]="queryParamsHandling()"
+        class="tab tab-pill"
+        [ngClass]="filter === state() || filter === 'ALL' && !state() ? 'tab-active' : ''"
+      >
+        {{ filter | titlecase }}
+      </a>
+      }
+    </div>
+
+    <!-- Empty -->
+    @if (!app.isReady() && !orders().length && isEmpty()) {
+    <app-empty />
+    }
+
+    <div
+      class="mx-auto mt-6 flex w-full max-w-7xl overflow-x-auto px-4 sm:block sm:px-6 lg:px-8"
+    >
+      <div class="flex w-full overflow-x-auto">
+        <table class="table">
+          <thead>
+            <tr>
+              @if (!orders().length) {
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              } @else {
+              <th>ID</th>
+              <th>Type</th>
+              <th>Instrument</th>
+              <th>Price</th>
+              <th>Units</th>
+              <th>State</th>
+              <th>Time</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @if (!orders().length) { @for (i of [].constructor(count()); track
+            $index) {
+            <tr>
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              <td>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </td>
+              <td>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </td>
+              <td>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </td>
+              <td>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </td>
+              <td>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </td>
+              <td>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </td>
+            </tr>
+            } } @else { @for (order of orders(); track $index) {
+            <tr>
+              <th>
+                <a [routerLink]="order.id" class="link text-sm">
+                  {{ order.id }}
+                </a>
+              </th>
+              <td>{{ order.type | noCase | titlecase }}</td>
+              <td>{{ (order.instrument | slash) || '-' }}</td>
+              <td>{{ order.price || '-' }}</td>
+              <td>{{ (order.units | number) || '-' }}</td>
+              <td><app-order-badge [state]="order.state" /></td>
+              <td>{{ order.createTime | duration : undefined : true }} ago</td>
+            </tr>
+            }}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- @if (orders().length && orders().length < count() && !isEnd()) {
+  <button (click)="getNextPage()" class="btn mx-auto block">Load more</button>
+  } -->
+
+  <!-- Infinite scroll -->
+  @if (!isEnd()) { }
+</main>
+
+@if (orders().length) { <app-footer /> }

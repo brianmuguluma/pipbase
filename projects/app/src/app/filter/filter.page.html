@@ -1,0 +1,33 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>Filters</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()"> Cancel </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list lines="none" class="divide-y divide-gray-100 dark:divide-white/5">
+    <ion-item (click)="dismissWithData(null)" button>
+      <ion-label class="ion-text-wrap ion-no-margin py-5">
+        <ion-text color="dark" class="font-semibold leading-6"> All </ion-text>
+        <ion-text class="block font-medium leading-6">
+          All transactions
+        </ion-text>
+      </ion-label>
+    </ion-item>
+    @for (filter of filters(); track filter) {
+    <ion-item (click)="dismissWithData(filter)" button>
+      <ion-label class="ion-text-wrap ion-no-margin py-5">
+        <ion-text color="dark" class="font-semibold leading-6">
+          {{ filter.key | noCase | titlecase }}
+        </ion-text>
+        <ion-text color="medium" class="block font-medium leading-6">
+          {{ filter.value }}
+        </ion-text>
+      </ion-label>
+    </ion-item>
+    }
+  </ion-list>
+</ion-content>

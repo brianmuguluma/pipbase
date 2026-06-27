@@ -1,0 +1,11 @@
+<dt class="sr-only">Status</dt>
+<span
+  class="badge ml-auto inline-flex items-center px-2 py-1 text-xs font-medium"
+  [ngClass]="
+    isPaperTrading()
+      ? 'badge-flat-warning badge-outline-warning'
+      : 'badge-flat-success badge-outline-success'
+  "
+>
+  {{ isPaperTrading() ? "Demo" : "Live" }}
+</span>

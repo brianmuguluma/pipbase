@@ -1,0 +1,126 @@
+<!-- Spinner -->
+@if (!app.account() || !app.poll()) {
+<app-spinner />
+}
+
+<!-- Positions -->
+@if (app.account() && app.poll()) {
+<main>
+  <header class="relative isolate">
+    <app-header />
+    <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <app-breadcrumbs
+        [breadcrumbs]="[{ title: 'Positions', route: '/positions', queryParams: queryParams() }]"
+      />
+      <div class="mt-8">
+        <div>
+          <h3 class="page-heading">Positions</h3>
+        </div>
+      </div>
+    </div>
+  </header>
+  <div class="py-10">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="sm:flex sm:items-center">
+        <div class="sm:flex-auto">
+          <h1 class="text-base font-semibold leading-6">
+            {{ positionStateFilter() | titlecase }} Positions
+          </h1>
+          <p class="text-content2 mt-2 text-sm">
+            A list of all @if (positionStateFilter() === 'OPEN') {
+            <span>the open</span>
+            } positions in your account.
+          </p>
+        </div>
+        <div class="pt-6 sm:hidden">
+          <label for="state" class="block text-sm font-medium leading-6">
+            State
+          </label>
+          <label for="state" class="sr-only">Select a state</label>
+          <select
+            id="state"
+            name="state"
+            (change)="selectPositionState($event.target)"
+            class="select mt-2 block min-w-full text-sm"
+          >
+            @for (state of positionStateFilters(); track $index) {
+            <option
+              [value]="state"
+              [selected]="state === positionStateFilter()"
+            >
+              {{ state | titlecase }}
+            </option>
+            }
+          </select>
+        </div>
+        <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+          <label for="sort" class="block text-sm font-medium leading-6">
+            Sort
+          </label>
+          <select
+            id="sort"
+            name="sort"
+            [disabled]="positionStateFilter() === 'OPEN'"
+            (change)="updateSortBy($event.target)"
+            class="select mt-2 block min-w-full pr-10 text-sm"
+          >
+            @for (i of iteratees(); track $index) {
+            <option [value]="i" [selected]="i === iteratee()">
+              {{ (i === 'pl' ? 'realized' : i) | titlecase }}
+            </option>
+            }
+          </select>
+        </div>
+      </div>
+    </div>
+    <!-- State -->
+    <div
+      class="tabs mx-auto mt-10 hidden w-full max-w-7xl gap-1 px-4 sm:flex sm:px-6 lg:px-8"
+    >
+      @for (state of positionStateFilters(); track $index) {
+      <a
+        (click)="updatePositionStateFilter(state)"
+        [routerLink]="['/positions']"
+        [queryParams]="{ state: state === 'ALL' ? null : state }"
+        [queryParamsHandling]="queryParamsHandling()"
+        class="tab tab-pill"
+        [ngClass]="state === positionStateFilter() ? 'tab-active' : ''"
+      >
+        {{ state | titlecase }}
+      </a>
+      }
+    </div>
+    <div class="mt-10 flow-root overflow-hidden">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <!-- All positions -->
+        @if (positionStateFilter() === 'ALL') {
+        <ul
+          role="list"
+          class="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8"
+        >
+          @for (position of positions(); track position.instrument) {
+          <app-position-item [position]="position" />
+          }
+        </ul>
+        }
+        <!-- Open positions -->
+        @if (positionStateFilter() === 'OPEN') {
+        <ul
+          role="list"
+          class="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8"
+        >
+          @for (position of openPositions(); track position.instrument) {
+          <app-position-item [calculatedPositionState]="position" />
+          }
+        </ul>
+        }
+      </div>
+      <!-- Empty -->
+      @if ((positionStateFilter() === 'ALL' && !positions().length) ||
+      (positionStateFilter() === 'OPEN' && !openPositions()?.length)) {
+      <app-empty />
+      }
+    </div>
+  </div>
+</main>
+} @if (app.account() && app.poll()) { <app-footer /> }

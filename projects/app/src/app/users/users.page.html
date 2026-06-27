@@ -1,0 +1,57 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/home" />
+    </ion-buttons>
+    <ion-title>Users</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="searchUsers()">
+        <ion-icon slot="icon-only" name="search" />
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [scrollY]="false" [fullscreen]="true">
+  <ion-refresher (ionRefresh)="refresh($any($event))" slot="fixed">
+    <ion-refresher-content />
+  </ion-refresher>
+
+  <cdk-virtual-scroll-viewport
+    [itemSize]="113"
+    [minBufferPx]="1000"
+    [maxBufferPx]="2000"
+    class="ion-content-scroll-host"
+  >
+    <!-- Skeleton -->
+    @if (!users().length) {
+    <ion-list lines="none" class="divide-y divide-gray-100 dark:divide-white/5">
+      @for (i of [].constructor(10); track i) {
+      <div>
+        <app-item-skeleton [avatar]="true" />
+      </div>
+      }
+    </ion-list>
+    }
+
+    <!-- Users -->
+    @if (users().length) {
+    <ion-list lines="none" class="divide-y divide-gray-100 dark:divide-white/5">
+      <div *cdkVirtualFor="let user of users()">
+        <app-user-item [user]="user" />
+      </div>
+    </ion-list>
+    }
+
+    <!-- Infinite Scroll -->
+    @if (!isEnd() && pageToken()) {
+    <ion-infinite-scroll
+      [disabled]="!users().length || !pageToken()"
+      (ionInfinite)="listMoreUsers($any($event))"
+      class="ion-margin-top"
+    >
+      <ion-infinite-scroll-content />
+    </ion-infinite-scroll>
+    }
+  </cdk-virtual-scroll-viewport>
+</ion-content>

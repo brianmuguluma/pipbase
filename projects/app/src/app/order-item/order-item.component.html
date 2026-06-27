@@ -1,0 +1,14 @@
+<ion-item [routerLink]="['/orders', order().id]" button>
+  <ion-label class="ion-no-margin flex justify-between gap-x-6 py-5">
+    <ion-text color="dark" class="font-semibold">
+      {{ order().type | noCase | titlecase }}
+    </ion-text>
+    <ion-text color="dark" class="block">
+      {{ order().state | titlecase }}
+    </ion-text>
+    <ion-note class="block first-letter:capitalize">
+      {{ order().createTime | formatRelative }}
+    </ion-note>
+  </ion-label>
+  <ion-note slot="end" class="text-sm">{{ order().id }}</ion-note>
+</ion-item>

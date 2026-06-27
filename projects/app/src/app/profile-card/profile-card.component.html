@@ -1,0 +1,32 @@
+<ion-card
+  (click)="getProfile()"
+  [color]="app.prefersDark() ? undefined : 'light'"
+  class="shadow-none"
+  [button]="auth.profile()"
+>
+  <ion-item [color]="app.prefersDark() ? undefined : 'light'" lines="none">
+    @if (auth.profile()) {
+      <ion-avatar slot="start" class="overflow-hidden rounded-full">
+        <app-avatar [user]="$any(auth.profile())" />
+      </ion-avatar>
+      <ion-label
+        class="ion-no-margin flex justify-between gap-x-6 bg-transparent py-5"
+      >
+        <ion-text color="dark" class="font-semibold leading-6">
+          {{ auth.profile()?.displayName || "-" }}
+        </ion-text>
+        <ion-text color="medium" class="block truncate">
+          {{ auth.profile()?.email }}
+        </ion-text>
+      </ion-label>
+    } @else {
+      <ion-avatar slot="start" class="overflow-hidden rounded-full">
+        <ion-skeleton-text animated style="width: 100%" class="h-full" />
+      </ion-avatar>
+      <ion-label class="ion-no-margin flex justify-between gap-x-6 py-5">
+        <ion-skeleton-text class="skeleton" animated style="width: 30%" />
+        <ion-skeleton-text class="skeleton" animated style="width: 60%" />
+      </ion-label>
+    }
+  </ion-item>
+</ion-card>

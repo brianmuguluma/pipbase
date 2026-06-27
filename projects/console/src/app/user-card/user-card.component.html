@@ -1,0 +1,35 @@
+<a [routerLink]="user() ? ['/users', user()?.uid] : null">
+  <div
+    class="ring-border hover:bg-backgroundSecondary col-span-1 rounded-lg shadow-sm ring-1"
+  >
+    <div class="flex w-full items-center justify-between space-x-6 p-6">
+      <div class="flex-1 truncate">
+        @if (!user()) {
+          <div class="skeleton-pulse h-4 w-1/3 rounded-md"></div>
+          <div class="skeleton-pulse mt-1 h-4 w-2/3 rounded-md"></div>
+        } @else {
+          <h3 class="truncate text-sm font-medium">
+            {{ user()?.displayName }}
+          </h3>
+          <p class="text-content2 mt-1 truncate text-sm">
+            {{ user()?.email }}
+          </p>
+        }
+      </div>
+
+      @if (!user()) {
+        <div
+          class="skeleton-pulse h-10 w-10 overflow-hidden rounded-full"
+        ></div>
+        <!-- <ion-skeleton-text
+        class="skeleton h-10 w-10 flex-shrink-0 rounded-full overflow-hidden object-cover"
+      /> -->
+      } @else {
+        <app-avatar
+          [user]="user()"
+          class="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full bg-gray-300 object-cover dark:bg-white/5"
+        />
+      }
+    </div>
+  </div>
+</a>

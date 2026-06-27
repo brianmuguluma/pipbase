@@ -1,0 +1,156 @@
+<app-navbar />
+
+<div class="flex h-screen flex-col justify-between">
+  <main class="mb-auto">
+    <div class="border-border bg-backgroundSecondary border-b">
+      <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <h3 class="text-base font-semibold leading-6">Overview</h3>
+        <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <div
+            class="border-border bg-backgroundPrimary overflow-hidden rounded-lg border px-4 py-5 sm:p-6"
+          >
+            <dt class="text-content2 truncate text-sm font-medium">Users</dt>
+            <dd class="mt-1 text-3xl font-semibold tracking-tight">
+              {{ userCount() | number }}
+            </dd>
+          </div>
+          <div
+            class="border-border bg-backgroundPrimary overflow-hidden rounded-lg border px-4 py-5 sm:p-6"
+          >
+            <dt class="text-content2 truncate text-sm font-medium">Active</dt>
+            <dd class="mt-1 text-3xl font-semibold tracking-tight">
+              {{ subscriberCount() | number }}
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+    <div
+      class="mx-auto max-w-7xl space-y-10 px-4 py-10 sm:block sm:px-6 lg:px-8"
+    >
+      <div class="sm:flex sm:items-center">
+        <div class="sm:flex-auto">
+          <h1 class="text-base font-semibold leading-6">Users</h1>
+          <p class="text-content2 mt-2 text-sm">
+            A list of all the users in your account including their name,
+            metadata, email and role.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex w-full overflow-x-auto">
+        <table class="table">
+          <thead>
+            <tr>
+              @if (!users().length) {
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              } @else {
+              <th>Name</th>
+              <th>Email</th>
+              <th>Created</th>
+              <th>Signed in</th>
+              <th>Last seen</th>
+              <th>Role</th>
+              <th>Premium</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @if (!users().length) { @for (i of [].constructor(maxResults());
+            track $index) {
+            <tr>
+              <th>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </th>
+              <td>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </td>
+              <td>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </td>
+              <td>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </td>
+              <td>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </td>
+              <td>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </td>
+              <td>
+                <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+              </td>
+            </tr>
+            } } @else { @for (user of users(); track $index) {
+            <tr>
+              <th>
+                <div class="flex items-center gap-x-4">
+                  <div
+                    class="border-border h-8 w-8 overflow-hidden rounded-full border"
+                  >
+                    <app-avatar [user]="user" />
+                  </div>
+                  <a
+                    [routerLink]="user.uid"
+                    class="link link-underline-hover text-sm"
+                  >
+                    {{ user.displayName }}
+                  </a>
+                </div>
+              </th>
+              <td>{{ user.email }}</td>
+              <td>{{ user.metadata.creationTime || '-' | date }}</td>
+              <td>{{ user.metadata.lastSignInTime || '-' | date }}</td>
+              <td>{{ user.metadata.lastRefreshTime || '-' | date }}</td>
+              <td>{{ user.customClaims?.['admin'] ? 'Admin' : 'Member' }}</td>
+              <td>
+                <span
+                  class="badge rounded-md px-2 py-1 text-xs font-medium"
+                  [ngClass]="user.customClaims?.['premium'] ? 'badge-flat-success' : 'badge-flat-error'"
+                >
+                  {{ user.customClaims?.['premium'] ? 'Active' : 'Inactive' }}
+                </span>
+              </td>
+            </tr>
+            } }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    @if (users().length && users().length! < maxResults() && !isEnd() &&
+    pageToken()) {
+    <button type="button" (click)="listMoreUsers()">Load more</button>
+    } @if (!isEnd() && pageToken()) {
+    <!-- <ion-infinite-scroll
+          class="ion-margin-top"
+          [disabled]="!users().length || !pageToken()"
+          (ionInfinite)="listMoreUsers($event)"
+          >
+          <ion-infinite-scroll-content />
+        </ion-infinite-scroll> -->
+    }
+  </main>
+  <app-footer class="mt-auto" />
+</div>

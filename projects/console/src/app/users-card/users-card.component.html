@@ -1,0 +1,61 @@
+<section aria-labelledby="recent-users-title">
+  <div
+    class="ring-border bg-backgroundSecondary overflow-hidden rounded-lg shadow-sm ring-1"
+  >
+    <div class="p-6">
+      <h2 class="text-base font-medium" id="recent-users-title">
+        Recent Users
+      </h2>
+      <div class="mt-6 flow-root">
+        <ul role="list" class="divide-gray-4 -my-5 divide-y">
+          @if (!users()?.length) {
+            @for (i of [].constructor(maxResults()); track $index) {
+              <li class="py-5">
+                <div class="relative">
+                  <div
+                    class="skeleton skeleton-pulse h-4 w-1/4 rounded-md"
+                  ></div>
+                  <div
+                    class="skeleton skeleton-pulse mt-1 h-4 w-1/2 rounded-md"
+                  ></div>
+                </div>
+              </li>
+            }
+          }
+          @if (users()?.length) {
+            @for (user of users(); track user) {
+              <li class="py-4">
+                <div class="flex items-center space-x-4">
+                  <div
+                    class="border-border h-8 w-8 flex-shrink-0 overflow-hidden rounded-full border object-cover"
+                  >
+                    <app-avatar [user]="user" />
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <p class="truncate text-sm font-medium">
+                      {{ user.displayName || "-" }}
+                    </p>
+                    <p class="text-content2 truncate text-sm">
+                      {{ user.email }}
+                    </p>
+                  </div>
+                  <div>
+                    <a
+                      [routerLink]="['/users', user.uid]"
+                      class="link btn btn-rounded btn-xs border-border border px-2.5 py-1 text-xs font-semibold"
+                    >
+                      View
+                    </a>
+                  </div>
+                </div>
+              </li>
+            }
+          }
+        </ul>
+      </div>
+      <div class="mt-6">
+        <a routerLink="/users" class="btn btn-block"> View all </a>
+      </div>
+    </div>
+  </div>
+</section>

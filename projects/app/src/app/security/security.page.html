@@ -1,0 +1,98 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/account" />
+    </ion-buttons>
+    <ion-title>Security</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Security</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  @if (!auth.profile()) {
+  <app-spinner />
+  } @else {
+  <div class="divide-y divide-black/10 dark:divide-white/10">
+    <div
+      class="mx-auto grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 pb-16 sm:px-6 md:grid-cols-3 lg:px-8"
+    >
+      <div>
+        <ion-text color="dark">
+          <h2 class="font-semibold leading-7">Change password</h2>
+        </ion-text>
+        <ion-text color="medium" class="mt-1">
+          <p class="leading-6">
+            Update your password associated with your account. This is a
+            security sensitive operation that requires you to have recently
+            signed in.
+          </p>
+        </ion-text>
+      </div>
+
+      <form
+        [formGroup]="form"
+        (ngSubmit)="updatePassword()"
+        class="md:col-span-2"
+      >
+        <div
+          class="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6"
+        >
+          <div class="col-span-full">
+            <label for="new-password" class="block font-medium leading-6">
+              New password
+            </label>
+            <div class="mt-2">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autocomplete="new-password"
+                class="input"
+                formControlName="password"
+              />
+            </div>
+          </div>
+        </div>
+
+        <ion-button type="submit" size="small" class="ion-margin-top">
+          Save
+        </ion-button>
+      </form>
+    </div>
+
+    <div
+      class="mx-auto grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8"
+    >
+      <div>
+        <ion-text color="dark">
+          <h2 class="font-semibold leading-7">Delete account</h2>
+        </ion-text>
+        <ion-text color="medium" class="mt-1">
+          <p class="mt-1 leading-6">
+            No longer want to use our service? You can delete your account here.
+            This action is not reversible. All information related to this
+            account will be deleted permanently.
+          </p>
+        </ion-text>
+        <ion-text color="medium" class="ion-margin-top leading-6">
+          <p class="mt-1 leading-6">
+            This is a security sensitive operation that requires you to have
+            recently signed in.
+          </p>
+        </ion-text>
+      </div>
+
+      <form class="flex items-start md:col-span-2">
+        <ion-button (click)="deleteUser()" color="danger" size="small">
+          Yes, delete my account
+        </ion-button>
+      </form>
+    </div>
+  </div>
+  }
+</ion-content>

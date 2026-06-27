@@ -1,0 +1,100 @@
+<ion-list lines="none" class="divide-y divide-gray-100 dark:divide-white/5">
+  <!-- Power status -->
+  <ion-item>
+    <ion-label class="ion-no-margin py-6">
+      <ion-text color="dark" class="font-medium leading-6">
+        Power status
+      </ion-text>
+      <ion-text
+        color="medium"
+        class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+      >
+        {{ instance().power_status | titlecase }}
+      </ion-text>
+    </ion-label>
+
+    <!-- Reinstall instance -->
+    @if (instance().power_status === "running") {
+      <ion-button (click)="confirmReinstallInstance()" slot="end" fill="clear">
+        <ion-icon slot="icon-only" name="refresh" />
+      </ion-button>
+    }
+
+    <!-- Toggle instance -->
+    @if (
+      (instance().power_status === "stopped" ||
+        instance().power_status === "running") &&
+      instance().label === auth.profile()?.uid
+    ) {
+      <ion-button (click)="confirmToggleInstance()" slot="end" fill="clear">
+        <ion-icon slot="icon-only" name="power-outline" />
+      </ion-button>
+    }
+  </ion-item>
+  <!-- Status -->
+  <ion-item>
+    <ion-label class="ion-no-margin py-6">
+      <ion-text color="dark" class="font-medium leading-6"> Status </ion-text>
+      <ion-text
+        color="medium"
+        class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+      >
+        {{ instance().status | titlecase }}
+      </ion-text>
+    </ion-label>
+  </ion-item>
+  <!-- Server status -->
+  <ion-item>
+    <ion-label class="ion-no-margin py-6">
+      <ion-text color="dark" class="font-medium leading-6">
+        Server status
+      </ion-text>
+      <ion-text
+        color="medium"
+        class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+      >
+        {{ instance().server_status | titlecase }}
+      </ion-text>
+    </ion-label>
+  </ion-item>
+  <!-- Date Created -->
+  <ion-item>
+    <ion-label class="ion-no-margin py-6">
+      <ion-text color="dark" class="font-medium leading-6">
+        Date created
+      </ion-text>
+      <ion-text
+        color="medium"
+        class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+      >
+        {{ instance().date_created | date }}
+      </ion-text>
+    </ion-label>
+  </ion-item>
+  <!-- Operating System -->
+  <ion-item>
+    <ion-label class="ion-no-margin py-6">
+      <ion-text color="dark" class="font-medium leading-6">
+        Operating System
+      </ion-text>
+      <ion-text
+        color="medium"
+        class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+      >
+        {{ instance().os }}
+      </ion-text>
+    </ion-label>
+  </ion-item>
+  <!-- Region -->
+  <ion-item>
+    <ion-label class="ion-no-margin py-6">
+      <ion-text color="dark" class="font-medium leading-6"> Region </ion-text>
+      <ion-text
+        color="medium"
+        class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+      >
+        {{ region().city }}, {{ region().country }}
+      </ion-text>
+    </ion-label>
+  </ion-item>
+</ion-list>

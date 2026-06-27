@@ -1,0 +1,95 @@
+<ion-content [scrollY]="false">
+  <ion-refresher (ionRefresh)="refresh($any($event))" slot="fixed">
+    <ion-refresher-content />
+  </ion-refresher>
+
+  <!-- Empty -->
+  @if (!orders()?.length) {
+    <app-empty text="No Orders" />
+  }
+
+  <cdk-virtual-scroll-viewport
+    [itemSize]="88"
+    [minBufferPx]="1000"
+    [maxBufferPx]="2000"
+    class="ion-content-scroll-host"
+  >
+    <!-- State filters -->
+    <ion-item lines="none" class="ion-no-padding">
+      <ion-label class="ion-no-margin ion-no-padding py-5">
+        <section
+          class="ion-padding-start scrollbar space-x-3 overflow-auto whitespace-nowrap"
+        >
+          @for (
+            state of orderStateFilters();
+            track state;
+            let isFirst = $first
+          ) {
+            <ion-chip
+              (click)="selectOrderState(state)"
+              [color]="state === orderStateFilter() ? undefined : 'medium'"
+              [ngClass]="isFirst ? 'ml-0' : ''"
+            >
+              {{ state | titlecase }}
+            </ion-chip>
+          }
+          <div
+            class="w-px flex-shrink-0 overflow-hidden rounded-lg object-cover"
+          ></div>
+        </section>
+      </ion-label>
+
+      <!-- Filter -->
+      <ion-chip color="primary" (click)="filterInstruments()" slot="end">
+        <ion-label>{{ (instrument()?.name | slash) || "Filter" }}</ion-label>
+        <ion-icon name="filter-circle" />
+      </ion-chip>
+    </ion-item>
+
+    @if (instrument()) {
+      <ion-button
+        (click)="clearInstrument()"
+        expand="block"
+        color="light"
+        class="ion-margin"
+      >
+        Clear filters
+      </ion-button>
+    }
+
+    <!-- Skeleton -->
+    @if (!orders()?.length && !isEmpty()) {
+      <ion-list
+        lines="none"
+        class="divide-y divide-gray-100 dark:divide-white/5"
+      >
+        @for (i of [].constructor(count()); track i) {
+          <div>
+            <app-item-skeleton />
+          </div>
+        }
+      </ion-list>
+    }
+
+    <!-- Orders -->
+    <ion-list
+      lines="none"
+      class="divide-y divide-gray-100 dark:divide-white/5"
+      [ngClass]="orders()?.length ? '' : 'hidden'"
+    >
+      <div *cdkVirtualFor="let order of orders()">
+        <app-order-item [order]="order" />
+      </div>
+    </ion-list>
+
+    <!-- Infinite Scroll -->
+    <ion-infinite-scroll
+      [disabled]="!orders()?.length || isEnd()"
+      [disabled]="!orders()?.length"
+      (ionInfinite)="getNextPage($any($event))"
+      class="ion-margin-top"
+    >
+      <ion-infinite-scroll-content />
+    </ion-infinite-scroll>
+  </cdk-virtual-scroll-viewport>
+</ion-content>

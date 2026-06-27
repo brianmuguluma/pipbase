@@ -1,0 +1,184 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/settings" />
+    </ion-buttons>
+    <ion-title>Notifications</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Notifications</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  @if (!auth.settings()) {
+  <app-spinner />
+  } @else {
+  <ion-card
+    [color]="app.prefersDark() ? undefined : 'light'"
+    class="shadow-none"
+  >
+    <ion-card-content>
+      We'll always let you know about important changes, but you pick what else
+      you want to hear about.
+    </ion-card-content>
+  </ion-card>
+
+  <form
+    [formGroup]="form()"
+    (ngSubmit)="updateNotifications()"
+    class="ion-padding-bottom"
+  >
+    <!-- Orders -->
+    <fieldset>
+      <legend class="ion-padding-start ion-padding-top font-semibold leading-6">
+        Orders
+      </legend>
+    </fieldset>
+    <ion-list
+      formGroupName="orders"
+      lines="none"
+      class="divide-y divide-gray-100 dark:divide-white/5"
+    >
+      <ion-item class="py-6">
+        <ion-toggle
+          [checked]="orders()?.ordersCreated"
+          formControlName="ordersCreated"
+          (ionChange)="impact()"
+        >
+          <ion-text color="dark" class="font-medium leading-6">
+            Created
+          </ion-text>
+          <ion-text
+            color="medium"
+            class="mt-1 block truncate leading-6 sm:col-span-2 sm:mt-0"
+          >
+            Get notified when an order is created.
+          </ion-text>
+        </ion-toggle>
+      </ion-item>
+      <ion-item class="py-6">
+        <ion-toggle
+          [checked]="orders()?.ordersFilled"
+          formControlName="ordersFilled"
+          (ionChange)="impact()"
+        >
+          <ion-text color="dark" class="font-medium leading-6">
+            Filled
+          </ion-text>
+          <ion-text
+            color="medium"
+            class="mt-1 block truncate leading-6 sm:col-span-2 sm:mt-0"
+          >
+            Get notified when an order is filled.
+          </ion-text>
+        </ion-toggle>
+      </ion-item>
+      <ion-item class="py-6">
+        <ion-toggle
+          [checked]="orders()?.ordersTriggered"
+          formControlName="ordersTriggered"
+          (ionChange)="impact()"
+        >
+          <ion-text color="dark" class="font-medium leading-6">
+            Triggered
+          </ion-text>
+          <ion-text
+            color="medium"
+            class="mt-1 block truncate leading-6 sm:col-span-2 sm:mt-0"
+          >
+            Get notified when an order is triggered.
+          </ion-text>
+        </ion-toggle>
+      </ion-item>
+      <ion-item class="py-6">
+        <ion-toggle
+          [checked]="orders()?.ordersCancelled"
+          formControlName="ordersCancelled"
+          (ionChange)="impact()"
+        >
+          <ion-text color="dark" class="font-medium leading-6">
+            Cancelled
+          </ion-text>
+          <ion-text
+            color="medium"
+            class="mt-1 block truncate leading-6 sm:col-span-2 sm:mt-0"
+          >
+            Get notified when an order is cancelled.
+          </ion-text>
+        </ion-toggle>
+      </ion-item>
+    </ion-list>
+
+    <!-- Trades -->
+    <fieldset>
+      <legend class="ion-padding-start ion-padding-top font-semibold leading-6">
+        Trades
+      </legend>
+    </fieldset>
+    <ion-list
+      formGroupName="trades"
+      lines="none"
+      class="divide-y divide-gray-100 dark:divide-white/5"
+    >
+      <ion-item class="py-6">
+        <ion-toggle
+          [checked]="trades()?.tradesOpened"
+          formControlName="tradesOpened"
+          (ionChange)="impact()"
+        >
+          <ion-text color="dark" class="font-medium leading-6">
+            Opened
+          </ion-text>
+          <ion-text
+            color="medium"
+            class="mt-1 block truncate leading-6 sm:col-span-2 sm:mt-0"
+          >
+            Get notified when a trade is opened.
+          </ion-text>
+        </ion-toggle>
+      </ion-item>
+      <ion-item class="py-6">
+        <ion-toggle
+          [checked]="trades()?.tradesClosed"
+          formControlName="tradesClosed"
+          (ionChange)="impact()"
+        >
+          <ion-text color="dark" class="font-medium leading-6">
+            Closed
+          </ion-text>
+          <ion-text
+            color="medium"
+            class="mt-1 block truncate leading-6 sm:col-span-2 sm:mt-0"
+          >
+            Get notified when a trade is closed.
+          </ion-text>
+        </ion-toggle>
+      </ion-item>
+      <ion-item class="py-6">
+        <ion-toggle
+          [checked]="trades()?.tradesReduced"
+          formControlName="tradesReduced"
+          (ionChange)="impact()"
+        >
+          <ion-text color="dark" class="font-medium leading-6">
+            Reduced
+          </ion-text>
+          <ion-text
+            color="medium"
+            class="mt-1 block truncate leading-6 sm:col-span-2 sm:mt-0"
+          >
+            Get notified when a trade is reduced.
+          </ion-text>
+        </ion-toggle>
+      </ion-item>
+    </ion-list>
+    <ion-button type="submit" expand="block" class="ion-margin">
+      Save
+    </ion-button>
+  </form>
+  }
+</ion-content>

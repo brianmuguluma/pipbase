@@ -1,0 +1,29 @@
+<div class="pointer-events-none fixed inset-x-0 bottom-0 px-6 pb-6">
+  <div
+    class="bg-backgroundPrimary ring-border pointer-events-auto ml-auto max-w-xl rounded-xl p-6 shadow-lg ring-1 dark:backdrop-blur-2xl"
+  >
+    <p class="text-sm leading-6">
+      We use cookies to make our site work. With your consent, we may also use
+      non-essential cookies to improve user experience and analyse website
+      traffic. Accepting our cookies is optional but recommended, as they are
+      delicious. See our
+      <a class="text-primary font-semibold">cookie policy</a>.
+    </p>
+    <div class="mt-4 flex items-center gap-x-5">
+      <button
+        type="button"
+        (click)="setConsent('granted')"
+        class="rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 dark:bg-white/10"
+      >
+        Accept all
+      </button>
+      <button
+        type="button"
+        (click)="setConsent('denied')"
+        class="text-sm font-semibold leading-6"
+      >
+        Reject all
+      </button>
+    </div>
+  </div>
+</div>

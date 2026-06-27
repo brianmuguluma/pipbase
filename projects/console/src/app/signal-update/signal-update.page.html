@@ -1,0 +1,90 @@
+<form
+  [formGroup]="form()"
+  (ngSubmit)="updateSignal()"
+  class="flex h-full flex-col divide-y divide-gray-200 dark:divide-white/10"
+>
+  <div class="h-0 flex-1 overflow-y-auto">
+    <div class="bg-blue-700 px-4 py-6 sm:px-6">
+      <div class="flex items-center justify-between">
+        <h2
+          class="text-base font-semibold leading-6 text-white"
+          id="slide-over-title"
+        >
+          Update Signal
+        </h2>
+        <div class="ml-3 flex h-7 items-center">
+          <button
+            type="button"
+            (click)="dismiss()"
+            class="relative rounded-md bg-blue-700 text-blue-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
+          >
+            <span class="absolute -inset-2.5"></span>
+            <span class="sr-only">Close panel</span>
+            <svg
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="mt-1">
+        <p class="text-sm text-blue-300">
+          Get started by filling in the information below to create your new
+          project.
+        </p>
+      </div>
+    </div>
+    <div class="flex flex-1 flex-col justify-between">
+      <div class="divide-y divide-gray-200 px-4 sm:px-6 dark:divide-white/10">
+        <div class="space-y-6 pb-5 pt-6">
+          <!-- Notes -->
+          <div>
+            <div class="flex justify-between">
+              <label for="notes" class="block text-sm font-medium leading-6">
+                Notes
+              </label>
+              <span class="text-content2 text-sm leading-6" id="notes-optional">
+                Optional
+              </span>
+            </div>
+            <div class="mt-2">
+              <textarea
+                id="notes"
+                name="notes"
+                formControlName="notes"
+                [rows]="4"
+                class="textarea"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-shrink-0 justify-end px-4 py-4">
+    <button
+      type="button"
+      (click)="dismiss()"
+      class="rounded-md bg-white px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:ring-0 dark:hover:bg-white/20"
+    >
+      Cancel
+    </button>
+    <button
+      type="submit"
+      [disabled]="form().invalid"
+      class="ml-4 inline-flex justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+    >
+      Save
+    </button>
+  </div>
+</form>

@@ -1,0 +1,50 @@
+<ion-header collapse="fade" translucent>
+  <ion-toolbar>
+    @if (auth.isAdmin()) {
+    <ion-buttons slot="start">
+      <ion-menu-button [disabled]="!auth.isAdmin()" />
+    </ion-buttons>
+    }
+    <ion-title>Exchange</ion-title>
+    <ion-buttons slot="end">
+      <ion-button [disabled]="!app.account()" (click)="presentModal()">
+        <ion-icon slot="icon-only" name="information-circle-outline" />
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment
+      [value]="segment()"
+      (ionChange)="updateSegment($any($event))"
+      scrollable
+    >
+      @for (segment of segments(); track segment) {
+      <ion-segment-button [value]="segment.value">
+        <ion-label>{{ segment.label | titlecase }}</ion-label>
+      </ion-segment-button>
+      }
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [scrollY]="false" fullscreen>
+  <!-- Trades -->
+  @if (segment() === 'trades') {
+  <app-trades />
+  }
+
+  <!-- Orders -->
+  @if (segment() === 'orders') {
+  <app-orders />
+  }
+
+  <!-- Positions -->
+  @if (segment() === 'positions') {
+  <app-positions />
+  }
+
+  <!-- Transactions -->
+  @if (segment() === 'transactions') {
+  <app-transactions />
+  }
+</ion-content>

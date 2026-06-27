@@ -1,0 +1,96 @@
+<h2 class="sr-only">Bot</h2>
+<div class="bg-backgroundSecondary ring-border rounded-lg shadow-sm ring-1">
+  <dl class="flex flex-wrap pb-6">
+    <div class="flex-auto pl-6 pt-6">
+      <dt class="text-sm font-semibold leading-6">Bot</dt>
+      <dt class="sr-only">Status</dt>
+      <dd class="mt-1 text-base font-semibold leading-6">
+        {{ auth.settings()?.bot?.status | titlecase }}
+      </dd>
+    </div>
+    <div class="flex-none self-end px-6 pt-4">
+      <dt class="sr-only">Status</dt>
+      <button
+        type="button"
+        [disabled]="auth.settings()?.bot?.status === 'pending'"
+        (click)="toggleBot()"
+        class="rounded-full bg-white p-1.5 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:bg-white/10 dark:ring-white/20 dark:hover:bg-white/20"
+      >
+        <svg
+          class="h-5 w-5"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            d="M10 2a.75.75 0 01.75.75v7.5a.75.75 0 01-1.5 0v-7.5A.75.75 0 0110 2zM5.404 4.343a.75.75 0 010 1.06 6.5 6.5 0 109.192 0 .75.75 0 111.06-1.06 8 8 0 11-11.313 0 .75.75 0 011.06 0z"
+          />
+        </svg>
+      </button>
+    </div>
+  </dl>
+  <form [formGroup]="form()" (ngSubmit)="updateNotifications()">
+    <div class="border-border relative space-y-4 border-t px-6 pt-6">
+      <div class="flex items-center justify-between">
+        <span class="flex flex-grow flex-col">
+          <span class="text-sm font-medium leading-6" id="availability-label">
+            Start
+          </span>
+          <span class="text-content2 text-sm" id="availability-description">
+            Get notified when your bot starts.
+          </span>
+        </span>
+
+        <input
+          type="checkbox"
+          class="switch"
+          formControlName="onStart"
+          [checked]="auth.settings()?.bot?.notifications?.onStart"
+        />
+      </div>
+      <div class="flex items-center justify-between">
+        <span class="flex flex-grow flex-col">
+          <span class="text-sm font-medium leading-6" id="availability-label">
+            Stop
+          </span>
+          <span class="text-content2 text-sm" id="availability-description">
+            Get notified when your bot stops.
+          </span>
+        </span>
+
+        <input
+          type="checkbox"
+          class="switch"
+          formControlName="onStop"
+          [checked]="auth.settings()?.bot?.notifications?.onStop"
+        />
+      </div>
+      <div class="flex items-center justify-between">
+        <span class="flex flex-grow flex-col">
+          <span class="text-sm font-medium leading-6" id="availability-label">
+            Ping
+          </span>
+          <span class="text-content2 text-sm" id="availability-description">
+            Get notified when your bot pings.
+          </span>
+        </span>
+
+        <input
+          type="checkbox"
+          class="switch"
+          formControlName="onPing"
+          [checked]="auth.settings()?.bot?.notifications?.onPing"
+        />
+      </div>
+    </div>
+    <div class="border-border mt-6 border-t px-6 py-6">
+      <button
+        type="submit"
+        [disabled]="!notifications()"
+        class="btn btn-outline btn-block bg-white dark:bg-inherit"
+      >
+        Save
+      </button>
+    </div>
+  </form>
+</div>

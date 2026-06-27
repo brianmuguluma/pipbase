@@ -1,0 +1,60 @@
+@if (position()) {
+  <li class="border-border overflow-hidden rounded-xl border">
+    <div
+      class="border-border bg-backgroundSecondary flex items-center gap-x-4 border-b p-6"
+    >
+      <div class="text-sm font-medium leading-6">
+        {{ position()?.instrument | slash }}
+      </div>
+    </div>
+    <dl class="divide-gray-4 -my-3 divide-y px-6 py-4 text-sm leading-6">
+      <div class="flex justify-between gap-x-4 py-3">
+        <dt class="text-content2">Realized</dt>
+        <dd class="flex items-start gap-x-2">
+          <div class="font-medium">
+            {{ position()?.pl | currency: app.account()?.currency }}
+          </div>
+        </dd>
+      </div>
+      <div class="flex justify-between gap-x-4 py-3">
+        <dt class="text-content2">Unrealized</dt>
+        <dd>
+          {{ position()?.unrealizedPL | currency: app.account()?.currency }}
+        </dd>
+      </div>
+    </dl>
+  </li>
+}
+@if (calculatedPositionState()) {
+  <li class="border-border overflow-hidden rounded-xl border">
+    <div
+      class="border-border bg-backgroundSecondary flex items-center gap-x-4 border-b p-6"
+    >
+      <div class="text-sm font-medium leading-6">
+        {{ calculatedPositionState()?.instrument | slash }}
+      </div>
+    </div>
+    <dl class="divide-gray-4 -my-3 divide-y px-6 py-4 text-sm leading-6">
+      <div class="flex justify-between gap-x-4 py-3">
+        <dt class="text-content2">Unrealized</dt>
+        <dd class="flex items-start gap-x-2">
+          <div class="font-medium">
+            {{
+              calculatedPositionState()?.netUnrealizedPL
+                | currency: app.account()?.currency
+            }}
+          </div>
+        </dd>
+      </div>
+      <div class="flex justify-between gap-x-4 py-3">
+        <dt class="text-content2">Margin used</dt>
+        <dd class="text-content2">
+          {{
+            calculatedPositionState()?.marginUsed
+              | currency: app.account()?.currency
+          }}
+        </dd>
+      </div>
+    </dl>
+  </li>
+}

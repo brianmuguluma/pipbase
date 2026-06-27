@@ -1,0 +1,77 @@
+@if (!months().length) {
+<app-spinner />
+}
+
+<main>
+  <header class="relative isolate">
+    <app-header />
+
+    <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <div class="flex justify-between">
+        <div>
+          <app-breadcrumbs
+            [breadcrumbs]="[{ title: 'Reports', route: '/reports' }]"
+          />
+
+          <div class="mt-8">
+            <div>
+              <h3 class="page-heading">Reports</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx-auto flex max-w-2xl items-center justify-between gap-x-8 lg:mx-0 lg:max-w-none"
+      ></div>
+    </div>
+  </header>
+
+  <div class="py-10">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="sm:flex sm:items-center">
+        <div class="sm:flex-auto">
+          <h1 class="text-base font-semibold leading-6">All Months</h1>
+          <p class="text-content2 mt-2 text-sm">
+            A list of all the months in your account for all time.
+          </p>
+        </div>
+      </div>
+      <ul role="list" class="divide-gray-4 mt-6 divide-y">
+        @for (month of months(); track $index) {
+        <li class="flex items-center justify-between gap-x-6 py-5">
+          <div class="min-w-0">
+            <div class="flex items-start gap-x-3">
+              <p class="text-sm font-semibold leading-6">
+                {{ month | toDate | date : 'MMMM y' }}
+              </p>
+            </div>
+            <!-- <div
+                class="mt-1 flex items-center gap-x-2 text-xs leading-5 text-content2"
+                >
+                <p class="whitespace-nowrap">
+                  Due on
+                  <time datetime="2023-03-17T00:00Z">March 17, 2023</time>
+                </p>
+                <svg viewBox="0 0 2 2" class="h-0.5 w-0.5 fill-current">
+                  <circle cx="1" cy="1" r="1" />
+                </svg>
+                <p class="truncate">Created by Leslie Alexander</p>
+              </div> -->
+          </div>
+          <div class="flex flex-none items-center gap-x-4">
+            <button
+              type="button"
+              [routerLink]="['/reports', month]"
+              class="btn px-2.5 py-1.5"
+            >
+              View report<span class="sr-only">, GraphQL API</span>
+            </button>
+          </div>
+        </li>
+        }
+      </ul>
+    </div>
+  </div>
+</main>
+
+@if (months().length) { <app-footer /> }

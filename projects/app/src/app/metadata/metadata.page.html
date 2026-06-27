@@ -1,0 +1,54 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/account" />
+    </ion-buttons>
+    <ion-title>Metadata</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Metadata</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  @if (!auth.profile()) {
+  <app-spinner />
+  } @else {
+  <div>
+    <div class="px-4 sm:px-0">
+      <ion-text color="medium" class="mt-1">
+        <p class="max-w-2xl leading-6">
+          Additional metadata around your creation and sign-in times.
+        </p>
+      </ion-text>
+    </div>
+    <div class="mt-6">
+      <dl class="divide-y divide-black/5 dark:divide-white/5">
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+          <dt class="font-medium leading-6">
+            <ion-text color="dark">Creation time</ion-text>
+          </dt>
+          <dd class="mt-1 leading-6 sm:col-span-2 sm:mt-0">
+            <ion-text color="medium">
+              {{ auth.profile()?.metadata?.creationTime }}
+            </ion-text>
+          </dd>
+        </div>
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+          <dt class="font-medium leading-6">
+            <ion-text color="dark">Last sign-in time</ion-text>
+          </dt>
+          <dd class="mt-1 leading-6 sm:col-span-2 sm:mt-0">
+            <ion-text color="medium">
+              {{ auth.profile()?.metadata?.lastSignInTime }}
+            </ion-text>
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+  }
+</ion-content>

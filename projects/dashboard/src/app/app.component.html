@@ -1,0 +1,21 @@
+<!-- <ngx-sonner-toaster /> -->
+
+<div class="flex flex-row">
+  @if (authService.profile()) {
+    <div class="lg:w-full lg:max-w-[18rem]">
+      <input type="checkbox" id="menu" class="sidebar-state" />
+      <label for="menu" class="sidebar-overlay"></label>
+
+      <app-menu
+        class="sidebar sidebar-fixed-left sidebar-mobile border-border h-full justify-start border-r max-lg:fixed max-lg:-translate-x-full"
+      />
+    </div>
+  }
+  <div class="flex w-full flex-col">
+    @if (authService.profile()) {
+      <app-navbar />
+    }
+
+    <router-outlet [style.top.px]="authService.user() ? offsetHeight() : 0" />
+  </div>
+</div>

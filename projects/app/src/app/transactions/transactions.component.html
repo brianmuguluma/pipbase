@@ -1,0 +1,118 @@
+<ion-content [scrollY]="false">
+  <ion-refresher (ionRefresh)="refresh($any($event))" slot="fixed">
+    <ion-refresher-content />
+  </ion-refresher>
+
+  <!-- Empty -->
+  @if (!transactions().length && isEmpty()) {
+    <app-empty text="No Transactions" />
+  }
+
+  <cdk-virtual-scroll-viewport
+    [itemSize]="113"
+    [minBufferPx]="1000"
+    [maxBufferPx]="2000"
+    class="ion-content-scroll-host"
+  >
+    <ion-item lines="none">
+      <ion-label
+        class="ion-no-margin ion-text-wrap flex justify-between gap-x-6 py-5"
+      >
+        <ion-text class="text-base font-semibold leading-6">
+          {{ filter()?.key || "All" | noCase | titlecase }}
+        </ion-text>
+        <ion-text color="medium" class="mt-2 block max-w-4xl">
+          {{ filter()?.value || "All transactions" }}
+        </ion-text>
+      </ion-label>
+
+      <!-- Filter -->
+      <ion-chip id="open-modal" color="primary" slot="end">
+        <ion-label>Filter</ion-label>
+        <ion-icon name="filter-circle" />
+      </ion-chip>
+    </ion-item>
+
+    <!-- <ion-card
+      [color]="app.prefersDark() ? undefined : 'light'"
+      class="shadow-none"
+      button
+    >
+      <ion-card-content>
+        <ion-text
+          class="text-base font-semibold leading-6 "
+        >
+          {{ filter()?.key || "All" | noCase | titlecase }}
+        </ion-text>
+        <ion-text color="medium" class="block mt-2 max-w-4xl">
+          {{ filter()?.value || "All transactions" }}
+        </ion-text>
+      </ion-card-content>
+      <ion-button id="open-modal" slot="end" fill="clear"> Filter </ion-button>
+    </ion-card> -->
+
+    @if (!transactions().length && !isEmpty()) {
+      <ion-list
+        lines="none"
+        class="divide-y divide-gray-100 dark:divide-white/5"
+      >
+        @for (i of [].constructor(10); track i) {
+          <div>
+            <app-item-skeleton />
+          </div>
+        }
+      </ion-list>
+    }
+
+    <!-- Transactions -->
+    <ion-list
+      lines="none"
+      class="divide-y divide-gray-100 dark:divide-white/5"
+      [ngClass]="transactions().length ? '' : 'hidden'"
+    >
+      <div
+        *cdkVirtualFor="
+          let transaction of transactions();
+          trackBy: trackTransactions
+        "
+      >
+        <app-transaction-item [transaction]="transaction" />
+      </div>
+    </ion-list>
+
+    <!-- Infinite Scroll -->
+    <ion-infinite-scroll
+      [disabled]="!transactions().length || isEnd()"
+      (ionInfinite)="getOlderTransactions($any($event))"
+      class="ion-margin-top"
+    >
+      <ion-infinite-scroll-content />
+    </ion-infinite-scroll>
+  </cdk-virtual-scroll-viewport>
+
+  <ion-modal #modal trigger="open-modal" (didDismiss)="onDidDismiss($event)">
+    <ng-template>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button (click)="modal.dismiss(null, 'cancel')">
+            Cancel
+          </ion-button>
+        </ion-buttons>
+        <ion-buttons slot="end">
+          <ion-button (click)="modal.dismiss(filter(), 'confirm')"
+            >Done</ion-button
+          >
+        </ion-buttons>
+      </ion-toolbar>
+      <ion-picker>
+        <ion-picker-column [value]="filter()" (ionChange)="onIonChange($event)">
+          @for (filter of filters(); track $index) {
+            <ion-picker-column-option [value]="filter">
+              {{ filter.key | noCase | titlecase }}
+            </ion-picker-column-option>
+          }
+        </ion-picker-column>
+      </ion-picker>
+    </ng-template>
+  </ion-modal>
+</ion-content>

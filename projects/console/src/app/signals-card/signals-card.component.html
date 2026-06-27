@@ -1,0 +1,55 @@
+<section aria-labelledby="announcements-title">
+  <div
+    class="ring-border bg-backgroundSecondary overflow-hidden rounded-lg shadow-sm ring-1"
+  >
+    <div class="p-6">
+      <h2 class="text-base font-medium" id="announcements-title">Signals</h2>
+      <div class="mt-6 flow-root">
+        <ul
+          role="list"
+          class="-my-5 divide-y divide-gray-200 dark:divide-white/10"
+        >
+          @if (!signals()?.length) {
+            @for (i of [].constructor(limit()); track $index) {
+              <li class="py-5">
+                <div class="relative">
+                  <div
+                    class="skeleton skeleton-pulse h-4 w-1/4 rounded-md"
+                  ></div>
+                  <div
+                    class="skeleton skeleton-pulse mt-1 h-4 w-1/2 rounded-md"
+                  ></div>
+                </div>
+              </li>
+            }
+          }
+          <!-- Signals -->
+          @if (signals()?.length) {
+            @for (signal of signals(); track signal.id) {
+              <li class="py-5">
+                <div class="relative">
+                  <h3 class="text-sm font-semibold">
+                    <a
+                      [routerLink]="['/signals', signal.id]"
+                      class="link link-underline-hover text-sm"
+                    >
+                      <!-- Extend touch target to entire panel -->
+                      <span class="absolute inset-0" aria-hidden="true"></span>
+                      {{ signal.command | noCase | titlecase }}
+                    </a>
+                  </h3>
+                  <p class="text-content2 mt-1 line-clamp-2 text-sm">
+                    {{ signal.notes || "No notes" }}
+                  </p>
+                </div>
+              </li>
+            }
+          }
+        </ul>
+      </div>
+      <div class="mt-6">
+        <button routerLink="/signals" class="btn btn-block">View all</button>
+      </div>
+    </div>
+  </div>
+</section>

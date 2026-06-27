@@ -1,0 +1,187 @@
+<div class="mx-auto max-w-7xl space-y-16 px-4 py-16 sm:px-6 lg:px-8">
+  <form [formGroup]="form()" (ngSubmit)="updateNotifications()">
+    <div class="space-y-12">
+      <div
+        class="border-border grid grid-cols-1 gap-x-8 gap-y-10 border-b pb-12 md:grid-cols-3"
+      >
+        <div>
+          <h2 class="text-base font-semibold leading-7">Notifications</h2>
+          <p class="text-content2 mt-1 text-sm leading-6">
+            We'll always let you know about important changes, but you pick what
+            else you want to hear about.
+          </p>
+        </div>
+
+        <div class="max-w-2xl space-y-10 md:col-span-2">
+          <!-- Orders -->
+          <fieldset formGroupName="orders">
+            <legend class="text-sm font-semibold leading-6">Orders</legend>
+            <div class="mt-6 space-y-6">
+              <!-- Created -->
+              <div class="relative flex gap-x-3">
+                <div class="flex h-6 items-center">
+                  <input
+                    [checked]="orders()?.ordersCreated"
+                    formControlName="ordersCreated"
+                    id="ordersCreated"
+                    name="ordersCreated"
+                    type="checkbox"
+                    class="checkbox"
+                  />
+                </div>
+                <div class="text-sm leading-6">
+                  <label for="ordersCreated" class="font-medium">
+                    Created
+                  </label>
+                  <p class="text-content2">
+                    Get notified when an order is created.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Filled -->
+              <div class="relative flex gap-x-3">
+                <div class="flex h-6 items-center">
+                  <input
+                    [checked]="orders()?.ordersFilled"
+                    formControlName="ordersFilled"
+                    id="ordersFilled"
+                    name="ordersFilled"
+                    type="checkbox"
+                    class="checkbox"
+                  />
+                </div>
+                <div class="text-sm leading-6">
+                  <label for="ordersFilled" class="font-medium"> Filled </label>
+                  <p class="text-content2">
+                    Get notified when an order is filled.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Triggered -->
+              <div class="relative flex gap-x-3">
+                <div class="flex h-6 items-center">
+                  <input
+                    [checked]="orders()?.ordersTriggered"
+                    formControlName="ordersTriggered"
+                    id="ordersTriggered"
+                    name="ordersTriggered"
+                    type="checkbox"
+                    class="checkbox"
+                  />
+                </div>
+                <div class="text-sm leading-6">
+                  <label for="ordersTriggered" class="font-medium">
+                    Triggered
+                  </label>
+                  <p class="text-content2">
+                    Get notified when an order is triggered.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Cancelled -->
+              <div class="relative flex gap-x-3">
+                <div class="flex h-6 items-center">
+                  <input
+                    [checked]="orders()?.ordersCancelled"
+                    formControlName="ordersCancelled"
+                    id="offers"
+                    name="offers"
+                    type="checkbox"
+                    class="checkbox"
+                  />
+                </div>
+                <div class="text-sm leading-6">
+                  <label for="offers" class="font-medium"> Cancelled </label>
+                  <p class="text-content2">
+                    Get notified when an order is cancelled.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Trades -->
+          <fieldset formGroupName="trades">
+            <legend class="text-sm font-semibold leading-6">Trades</legend>
+            <div class="mt-6 space-y-6">
+              <!-- Opened -->
+              <div class="relative flex gap-x-3">
+                <div class="flex h-6 items-center">
+                  <input
+                    [checked]="trades()?.tradesOpened"
+                    formControlName="tradesOpened"
+                    id="tradesOpened"
+                    name="tradesOpened"
+                    type="checkbox"
+                    class="checkbox"
+                  />
+                </div>
+                <div class="text-sm leading-6">
+                  <label for="tradesOpened" class="font-medium"> Opened </label>
+                  <p class="text-content2">
+                    Get notified when a trade is opened.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Closed -->
+              <div class="relative flex gap-x-3">
+                <div class="flex h-6 items-center">
+                  <input
+                    [checked]="trades()?.tradesClosed"
+                    formControlName="tradesClosed"
+                    id="tradesClosed"
+                    name="tradesClosed"
+                    type="checkbox"
+                    class="checkbox"
+                  />
+                </div>
+                <div class="text-sm leading-6">
+                  <label for="tradesClosed" class="font-medium"> Closed </label>
+                  <p class="text-content2">
+                    Get notified when a trade is closed.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Reduced -->
+              <div class="relative flex gap-x-3">
+                <div class="flex h-6 items-center">
+                  <input
+                    [checked]="trades()?.tradesReduced"
+                    formControlName="tradesReduced"
+                    id="tradesReduced"
+                    name="tradesReduced"
+                    type="checkbox"
+                    class="checkbox"
+                  />
+                </div>
+                <div class="text-sm leading-6">
+                  <label for="tradesReduced" class="font-medium">
+                    Reduced
+                  </label>
+                  <p class="text-content2">
+                    Get notified when a trade is reduced.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-6 flex items-center justify-end gap-x-6">
+      <button
+        type="submit"
+        [disabled]="form().invalid"
+        class="btn btn-primary px-3 py-2"
+      >
+        Save
+      </button>
+    </div>
+  </form>
+</div>

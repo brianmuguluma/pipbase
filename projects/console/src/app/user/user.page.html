@@ -1,0 +1,291 @@
+@if (!userRecord()) {
+<app-spinner />
+}
+<div class="flex h-screen flex-col justify-between">
+  <app-navbar />
+
+  @if (userRecord()) {
+  <main>
+    <header class="relative isolate">
+      <div class="absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
+        <div
+          class="absolute left-16 top-full -mt-16 transform-gpu opacity-50 blur-3xl xl:left-1/2 xl:-ml-80"
+        >
+          <div
+            class="aspect-[1154/678] w-[72.125rem] bg-gradient-to-br from-[#FF80B5] to-[#9089FC]"
+            style="
+              clip-path: polygon(
+                100% 38.5%,
+                82.6% 100%,
+                60.2% 37.7%,
+                52.4% 32.1%,
+                47.5% 41.8%,
+                45.2% 65.6%,
+                27.5% 23.4%,
+                0.1% 35.3%,
+                17.9% 0%,
+                27.7% 23.4%,
+                76.2% 2.5%,
+                74.2% 56%,
+                100% 38.5%
+              );
+            "
+          ></div>
+        </div>
+        <div class="bg-border absolute inset-x-0 bottom-0 h-px"></div>
+      </div>
+      <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <div
+          class="mx-auto flex max-w-2xl items-center justify-between gap-x-8 lg:mx-0 lg:max-w-none"
+        >
+          <div class="flex items-center gap-x-6">
+            <div
+              class="ring-border h-16 w-16 flex-none overflow-hidden rounded-full object-cover ring-1"
+            >
+              <app-avatar [user]="userRecord()" size="large" />
+            </div>
+            <h1>
+              <div class="mt-1 text-base font-semibold leading-6">
+                {{ userRecord()?.displayName || '-' }}
+              </div>
+              <div class="text-content2 text-sm leading-6">
+                <span class="text-content2"> {{ userRecord()?.email }} </span>
+              </div>
+            </h1>
+          </div>
+          @if (userRecord()?.uid !== auth.profile()?.uid) {
+          <label
+            for="disable-user"
+            class="btn"
+            [ngClass]="userRecord()?.disabled ? 'btn-primary' : 'btn-error'"
+          >
+            {{ userRecord()?.disabled ? 'Enable' : 'Disable' }}
+          </label>
+          }
+        </div>
+      </div>
+    </header>
+    <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <div
+        class="mx-auto grid max-w-2xl grid-cols-1 grid-rows-1 items-start gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-3"
+      >
+        <div class="space-y-4 lg:col-start-3 lg:row-end-1">
+          @if (userRecord()?.customClaims?.['premium']) {
+          <app-instance-card [instance]="instance()" />
+          }
+          <!-- Metadata-->
+          <div class="lg:col-start-3 lg:row-end-1">
+            <h2 class="sr-only">Metadata</h2>
+            <div
+              class="bg-backgroundSecondary ring-border rounded-lg shadow-sm ring-1"
+            >
+              <dl class="flex flex-wrap">
+                <div class="flex-auto pl-6 pt-6">
+                  <dt class="text-sm font-semibold leading-6">Metadata</dt>
+                  <dd class="mt-1 text-base font-semibold leading-6">
+                    Additional metadata about the user.
+                  </dd>
+                </div>
+                <div
+                  class="border-border mt-6 flex w-full flex-none gap-x-4 border-t px-6 pt-6"
+                >
+                  <dt class="flex-none">
+                    <span class="sr-only">Due date</span>
+                    <svg
+                      class="text-content2 h-6 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </dt>
+                  <dd class="text-content2 text-sm leading-6">
+                    Created {{ userRecord()?.metadata?.creationTime |
+                    formatRelative }}
+                  </dd>
+                </div>
+                @if (userRecord()?.metadata?.lastRefreshTime) {
+                <div class="mt-4 flex w-full flex-none gap-x-4 px-6">
+                  <dt class="flex-none">
+                    <span class="sr-only">Due date</span>
+                    <svg
+                      class="text-content2 h-6 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.433a.75.75 0 000-1.5H3.989a.75.75 0 00-.75.75v4.242a.75.75 0 001.5 0v-2.43l.31.31a7 7 0 0011.712-3.138.75.75 0 00-1.449-.39zm1.23-3.723a.75.75 0 00.219-.53V2.929a.75.75 0 00-1.5 0V5.36l-.31-.31A7 7 0 003.239 8.188a.75.75 0 101.448.389A5.5 5.5 0 0113.89 6.11l.311.31h-2.432a.75.75 0 000 1.5h4.243a.75.75 0 00.53-.219z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </dt>
+                  <dd class="text-content2 text-sm leading-6">
+                    Last active {{ userRecord()?.metadata?.lastRefreshTime! |
+                    formatRelative }}
+                  </dd>
+                </div>
+                }
+                <div class="mt-4 flex w-full flex-none gap-x-4 px-6">
+                  <dt class="flex-none">
+                    <span class="sr-only">Status</span>
+                    <svg
+                      class="text-content2 h-6 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M3 4.25A2.25 2.25 0 015.25 2h5.5A2.25 2.25 0 0113 4.25v2a.75.75 0 01-1.5 0v-2a.75.75 0 00-.75-.75h-5.5a.75.75 0 00-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 00.75-.75v-2a.75.75 0 011.5 0v2A2.25 2.25 0 0110.75 18h-5.5A2.25 2.25 0 013 15.75V4.25z"
+                        clip-rule="evenodd"
+                      />
+                      <path
+                        fill-rule="evenodd"
+                        d="M6 10a.75.75 0 01.75-.75h9.546l-1.048-.943a.75.75 0 111.004-1.114l2.5 2.25a.75.75 0 010 1.114l-2.5 2.25a.75.75 0 11-1.004-1.114l1.048-.943H6.75A.75.75 0 016 10z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </dt>
+                  <dd class="text-content2 text-sm leading-6">
+                    Last signed in {{ userRecord()?.metadata?.lastSignInTime |
+                    formatRelative }}
+                  </dd>
+                </div>
+              </dl>
+              <div class="border-border mt-6 border-t px-6 py-6">
+                <a
+                  [href]="user()?.stripeLink"
+                  target="_blank"
+                  class="link text-sm font-semibold leading-6"
+                >
+                  Stripe <span aria-hidden="true">&rarr;</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Details -->
+        <div
+          class="ring-border -mx-4 px-4 py-8 shadow-sm ring-1 sm:mx-0 sm:rounded-lg sm:px-8 sm:pb-14 lg:col-span-2 lg:row-span-2 lg:row-end-2 xl:px-16 xl:pb-20 xl:pt-16"
+        >
+          <!-- User -->
+          <div>
+            <div class="flex items-center justify-between">
+              <div class="px-4 sm:px-0">
+                <h3 class="text-base font-semibold leading-7">
+                  User Information
+                </h3>
+                <p class="text-content2 mt-1 max-w-2xl text-sm leading-6">
+                  Data for the user corresponding to a given uid.
+                </p>
+              </div>
+              @if (userRecord()?.customClaims?.['premium']) {
+              <svg
+                class="text-success h-6 w-6"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M16.403 12.652a3 3 0 000-5.304 3 3 0 00-3.75-3.751 3 3 0 00-5.305 0 3 3 0 00-3.751 3.75 3 3 0 000 5.305 3 3 0 003.75 3.751 3 3 0 005.305 0 3 3 0 003.751-3.75zm-2.546-4.46a.75.75 0 00-1.214-.883l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              }
+            </div>
+            <div class="mt-6 border-t border-gray-100 dark:border-white/10">
+              <dl class="divide-y divide-gray-100 dark:divide-white/5">
+                <!-- UID -->
+                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                  <dt class="text-sm font-medium leading-6">UID</dt>
+                  <dd
+                    class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                  >
+                    {{ uid() }}
+                  </dd>
+                </div>
+                <!-- Display Name -->
+                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                  <dt class="text-sm font-medium leading-6">Display Name</dt>
+                  <dd
+                    class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                  >
+                    {{ userRecord()?.displayName || '-' }}
+                  </dd>
+                </div>
+                <!-- Email -->
+                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                  <dt class="text-sm font-medium leading-6">Email</dt>
+                  <dd
+                    class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                  >
+                    {{ userRecord()?.email || '-' }}
+                  </dd>
+                </div>
+                <!-- Verified -->
+                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                  <dt class="text-sm font-medium leading-6">Verified</dt>
+                  <dd
+                    class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                  >
+                    {{ userRecord()?.emailVerified ? 'Yes' : 'No' }}
+                  </dd>
+                </div>
+                <!-- Premium -->
+                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                  <dt class="text-sm font-medium leading-6">Premium</dt>
+                  <dd
+                    class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+                  >
+                    {{ userRecord()?.customClaims?.['premium'] ? 'Yes' : 'No' }}
+                  </dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  }
+  <app-footer class="mt-auto" />
+</div>
+
+<!-- Disable user -->
+<input class="modal-state" id="disable-user" type="checkbox" />
+<div class="modal">
+  <label class="modal-overlay" for="disable-user"></label>
+  <div class="modal-content flex flex-col gap-5">
+    <label
+      for="disable-user"
+      class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+    >
+      ✕
+    </label>
+    <h2 class="text-xl">{{ action() }} User</h2>
+    <span>
+      Are you sure you want to {{ action() | lowercase }} {{
+      userRecord()?.displayName }}?
+    </span>
+    <div class="flex gap-3">
+      <label
+        for="disable-user"
+        (click)="updateUser()"
+        class="btn btn-block"
+        [ngClass]="action() === 'Disable' ? 'btn-error' : 'btn-primary'"
+      >
+        {{ action() }}
+      </label>
+
+      <label for="disable-user" class="btn btn-block">Cancel</label>
+    </div>
+  </div>
+</div>

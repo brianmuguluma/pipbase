@@ -1,0 +1,148 @@
+<app-navbar />
+<div class="border-border bg-backgroundSecondary border-b">
+  <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+    <h3 class="text-base font-semibold leading-6">Overview</h3>
+    <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
+      <a>
+        <div
+          class="border-border bg-backgroundPrimary overflow-hidden rounded-lg border px-4 py-5 sm:p-6"
+        >
+          <dt class="text-content2 truncate text-sm font-medium">
+            All Signals
+          </dt>
+          <dd class="mt-1 text-3xl font-semibold tracking-tight">
+            {{ (signalCount() | number) || 0 }}
+          </dd>
+        </div>
+      </a>
+      <div
+        class="border-border bg-backgroundPrimary overflow-hidden rounded-lg border px-4 py-5 sm:p-6"
+      >
+        <dt class="text-content2 truncate text-sm font-medium">My Signals</dt>
+        <dd class="mt-1 text-3xl font-semibold tracking-tight">
+          {{ (userSignalCount() | number) || 0 }}
+        </dd>
+      </div>
+    </dl>
+  </div>
+</div>
+
+<div class="mx-auto max-w-7xl space-y-10 py-10">
+  <div class="px-4 sm:px-6 lg:px-8">
+    <div class="sm:flex sm:items-center">
+      <div class="sm:flex-auto">
+        <h1 class="text-base font-semibold leading-6">Signals</h1>
+        <p class="text-content2 mt-2 text-sm">
+          A list of all the users in your account including their name, title,
+          email and role.
+        </p>
+      </div>
+      <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+        <label for="action-panel" class="btn btn-primary"> New Signal </label>
+      </div>
+    </div>
+
+    <div class="mt-8 flex w-full overflow-x-auto">
+      <table class="table">
+        <thead>
+          <tr>
+            @if (!signals()?.length) {
+            <th>
+              <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+            </th>
+            <th>
+              <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+            </th>
+            <th>
+              <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+            </th>
+            <th>
+              <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+            </th>
+            <th>
+              <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+            </th>
+            <th>
+              <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+            </th>
+            <th>
+              <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+            </th>
+            } @else {
+            <th>ID</th>
+            <th>Command</th>
+            <th>Subscribers</th>
+            <th>Notes</th>
+            <th>Date</th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @if (!signals()?.length) { @for (i of [].constructor(limit()); track
+          $index) {
+          <tr>
+            <th>
+              <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+            </th>
+            <td>
+              <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+            </td>
+            <td>
+              <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+            </td>
+            <td>
+              <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+            </td>
+            <td>
+              <div class="skeleton skeleton-pulse h-4 rounded-md"></div>
+            </td>
+          </tr>
+          } } @else { @for (signal of signals(); track $index) {
+          <tr>
+            <th>
+              <a
+                [routerLink]="signal.id"
+                class="link link-underline-hover text-sm"
+              >
+                {{ signal.id }}
+              </a>
+            </th>
+            <td>{{ signal.command | noCase | titlecase }}</td>
+            <td>{{ (signal.occupancy?.subscribers | number) || '-' }}</td>
+            <td>{{ signal.notes || '-' }}</td>
+            <td>{{ signal.createdAt?.seconds! * 1000 | date }}</td>
+          </tr>
+          } }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  @if (signals()?.length && signals()?.length! < limit() && !isEnd()) {
+  <button type="button" (click)="loadSignals()">Load more</button>
+  } @if (!isEnd()) {
+  <!-- <ion-infinite-scroll
+        class="ion-margin-top"
+        [disabled]="!signals()?.length"
+        (ionInfinite)="loadSignals($any($event))"
+        >
+        <ion-infinite-scroll-content />
+      </ion-infinite-scroll> -->
+  }
+</div>
+<app-footer class="mt-auto" />
+
+<!-- Signals -->
+<input class="modal-state" id="action-panel" type="checkbox" />
+<div class="modal">
+  <label class="modal-overlay" for="action-panel"></label>
+  <div class="modal-content flex flex-col gap-5">
+    <label
+      for="action-panel"
+      class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+      >✕</label
+    >
+    <h2 class="text-xl font-semibold leading-7">Signals</h2>
+    <app-actions-panel />
+  </div>
+</div>

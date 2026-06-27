@@ -1,0 +1,65 @@
+<ion-content>
+  @if (!positions()?.length) {
+    <app-spinner />
+  }
+
+  <!-- State filters -->
+  <ion-item lines="none">
+    <ion-label
+      class="ion-no-margin ion-text-wrap flex justify-between gap-x-6 py-5"
+    >
+      @for (
+        state of app.positionStateFilters;
+        track state;
+        let isFirst = $first
+      ) {
+        <ion-chip
+          (click)="updatePositionStateFilter(state)"
+          [color]="state === app.positionStateFilter() ? undefined : 'medium'"
+          [ngClass]="isFirst ? 'ml-0' : ''"
+        >
+          {{ state | titlecase }}
+        </ion-chip>
+      }
+    </ion-label>
+  </ion-item>
+
+  @if (positions()?.length && !isEmpty && app.positionStateFilter() === "ALL") {
+    <ion-accordion-group class="divide-y divide-gray-100 dark:divide-white/5">
+      @for (position of positions(); track position) {
+        <ion-accordion [value]="position.instrument">
+          <ion-item slot="header" lines="none">
+            <ion-label class="ion-no-margin flex justify-between gap-x-6 py-5">
+              {{ position.instrument | slash }}
+            </ion-label>
+          </ion-item>
+          <app-position slot="content" [position]="position" />
+        </ion-accordion>
+      }
+    </ion-accordion-group>
+  }
+
+  <!-- Positions -->
+  <!-- <ion-list
+      *ngIf="
+        positions()?.length && !isEmpty && app.positionStateFilter() === 'ALL'
+      "
+  lines="none"
+  class="divide-y divide-gray-100 dark:divide-white/5"
+  >
+  <div *ngFor="let position of positions()">
+    <app-position-item [position]="position" />
+  </div>
+</ion-list>
+<ion-list
+      *ngIf="
+        positions()?.length && !isEmpty && app.positionStateFilter() === 'OPEN'
+      "
+  lines="none"
+  class="divide-y divide-gray-100 dark:divide-white/5"
+  >
+  <div *ngFor="let position of openPositions()">
+    <app-position-item [position]="position" />
+  </div>
+</ion-list> -->
+</ion-content>

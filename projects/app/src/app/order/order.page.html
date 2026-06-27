@@ -1,0 +1,295 @@
+<ion-header collapse="fade" translucent>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/exchange" />
+    </ion-buttons>
+    <ion-title>Order</ion-title>
+  </ion-toolbar>
+  @if (order()?.instrument || instrument()) {
+  <ion-toolbar>
+    <ion-title size="small">
+      {{ instrument()?.displayName || order()?.instrument | slash }}
+    </ion-title>
+  </ion-toolbar>
+  }
+</ion-header>
+
+<ion-content fullscreen>
+  <ion-refresher slot="fixed" (ionRefresh)="getOrder($any($event))">
+    <ion-refresher-content />
+  </ion-refresher>
+
+  <!-- Spinner -->
+  @if (order() === undefined) {
+  <app-spinner />
+  }
+
+  <!-- Error -->
+  @if (order() === null) {
+  <app-error [status]="status()" [error]="error()" page="order" />
+  }
+
+  <!-- Order -->
+  @if (order()) {
+  <section>
+    <!-- Details -->
+    <section>
+      <ion-list
+        lines="none"
+        class="divide-y divide-gray-100 dark:divide-white/5"
+      >
+        <!-- ID -->
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6"> ID </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ order()?.id }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().order.id" />
+        </ion-item>
+        <!-- Type -->
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Type
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ order()?.type | noCase | titlecase }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().order.type" />
+        </ion-item>
+        <!-- Instrument -->
+        @if (order()?.instrument) {
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Instrument
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ order()?.instrument | slash }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().order.instrument" />
+        </ion-item>
+        }
+        <!-- State -->
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              State
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ order()?.state | titlecase }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().order.state" />
+        </ion-item>
+        <!-- Units -->
+        @if (order()?.units) {
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Units
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ order()?.units | number }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().order.units" />
+        </ion-item>
+        }
+        <!-- Price -->
+        @if (order()?.price) {
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Price
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ order()?.price }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().order.price" />
+        </ion-item>
+        }
+        <!-- Create Time -->
+        @if (order()?.createTime) {
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Created
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ order()?.createTime | date: 'medium' }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().order.createTime" />
+        </ion-item>
+        }
+        <!-- Filled Time -->
+        @if (order()?.filledTime) {
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Filled
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ order()?.filledTime | date : 'medium' }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().order.filledTime" />
+        </ion-item>
+        }
+        <!-- Cancelled Time -->
+        @if (order()?.cancelledTime) {
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Cancelled
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ order()?.cancelledTime | date : 'medium' }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().order.cancelledTime" />
+        </ion-item>
+        }
+      </ion-list>
+    </section>
+    <!-- Dependants -->
+    @if (order()?.guaranteedStopLossOnFill || order()?.trailingStopLossOnFill ||
+    order()?.stopLossOnFill || order()?.takeProfitOnFill) {
+    <section>
+      <!-- Dependants -->
+      <ion-list-header>
+        <ion-label>Dependants</ion-label>
+      </ion-list-header>
+      <ion-list
+        lines="none"
+        class="mt-6 divide-y divide-gray-100 border-t border-gray-100 dark:divide-white/5 dark:border-white/10"
+      >
+        <!-- Stop Loss -->
+        @if (order()?.stopLossOnFill) {
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text>Stop Loss</ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ order()?.stopLossOnFill?.price }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().stopLossDetails.price" />
+        </ion-item>
+        }
+        <!-- Guaranteed Stop Loss -->
+        @if (order()?.guaranteedStopLossOnFill) {
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text>Guaranteed Stop Loss</ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ order()?.guaranteedStopLossOnFill?.price }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().guaranteedStopLossDetails.price" />
+        </ion-item>
+        }
+        <!-- Trailing Stop Loss -->
+        @if (order()?.trailingStopLossOnFill) {
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6"
+              >Trailing Stop Loss</ion-text
+            >
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ order()?.trailingStopLossOnFill?.distance }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().trailingStopLossDetails.distance" />
+        </ion-item>
+        }
+        <!-- Take Profit -->
+        @if (order()?.takeProfitOnFill) {
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text>Take Profit</ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ order()?.takeProfitOnFill?.price }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().takeProfitDetails.price" />
+        </ion-item>
+        }
+      </ion-list>
+    </section>
+    }
+    <!-- Links -->
+    @if (order()?.tradeID || order()?.fillingTransactionID ||
+    order()?.cancellingTransactionID) {
+    <section class="pb-16">
+      <div class="mx-auto mt-12 max-w-7xl px-4 pb-5 sm:px-6 lg:px-8">
+        <h3 class="text-base font-semibold leading-6">Links</h3>
+      </div>
+      <section class="flex flex-wrap items-end gap-2 px-4">
+        <!-- Trade -->
+        @if (order()?.tradeID) {
+        <app-link
+          [route]="['/trades', order()?.tradeID!]"
+          label="Trade"
+          color="primary"
+        />
+        }
+        <!-- Transaction -->
+        @if (order()?.fillingTransactionID || order()?.cancellingTransactionID)
+        {
+        <app-link
+          [route]="['/transactions', (order()?.state === 'FILLED' ? order()?.fillingTransactionID : order()?.cancellingTransactionID)!]"
+          label="Transaction"
+          color="primary"
+        />
+        }
+      </section>
+    </section>
+    }
+  </section>
+  }
+</ion-content>

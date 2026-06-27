@@ -1,0 +1,210 @@
+<main>
+  <header class="relative isolate">
+    <app-header />
+
+    <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <app-breadcrumbs
+        [breadcrumbs]="[{ title: 'Transactions', route: '/transactions', queryParams: queryParams() }]"
+      />
+
+      <div class="mt-8">
+        <div>
+          <h3 class="page-heading">Transactions</h3>
+        </div>
+      </div>
+      <div
+        class="mx-auto flex max-w-2xl items-center justify-between gap-x-8 lg:mx-0 lg:max-w-none"
+      ></div>
+    </div>
+  </header>
+
+  <div class="py-10">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="sm:flex sm:items-center">
+        <div class="sm:flex-auto">
+          <h1 class="text-base font-semibold leading-6">
+            @if (!filter()) {
+            <span>All Transactions</span>
+            } @if (filter()) {
+            <span> {{ filter()?.key | noCase | titlecase }} </span>
+            }
+          </h1>
+          <p class="text-content2 mt-2 text-sm">
+            @if (!filter()) {
+            <span> A list of all the transactions in your account. </span>
+            } @if (filter()) {
+            <span> {{ filter()?.value }} </span>
+            }
+          </p>
+        </div>
+        <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+          <label for="instrument" class="block text-sm font-medium leading-6">
+            Filter
+          </label>
+          <select
+            id="instrument"
+            name="instrument"
+            (change)="setFilter($event.target)"
+            class="select mt-2 block min-w-full text-sm"
+          >
+            <option [value]="undefined" [selected]="filter() === undefined">
+              All
+            </option>
+            @for (f of filters(); track $index) {
+            <option [value]="f.key" [selected]="f === filter()">
+              {{ f.key | noCase | titlecase }}
+            </option>
+            }
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skeleton -->
+    @if (!transactions().length && !isEmpty()) {
+    <ul
+      role="list"
+      class="divide-y divide-gray-100 sm:hidden dark:divide-white/5"
+    >
+      @for (i of [].constructor(10); track $index) {
+      <div>
+        <app-skeleton />
+      </div>
+      }
+    </ul>
+    }
+
+    <!-- Empty -->
+    @if (!transactions().length && isEmpty()) {
+    <app-empty />
+    }
+
+    <!-- Transactions -->
+    @if (transactions().length) {
+    <ul
+      role="list"
+      class="divide-y divide-gray-100 sm:hidden dark:divide-white/5"
+    >
+      @for (transaction of transactions(); track transaction.id) {
+      <div>
+        <app-transaction-item [transaction]="transaction" />
+      </div>
+      }
+    </ul>
+    }
+
+    <!-- Transactions table -->
+    @if (!isEmpty()) {
+    <div class="mx-auto hidden max-w-7xl px-4 sm:block sm:px-6 lg:px-8">
+      <div class="mt-8 flow-root">
+        <div class="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
+          <div class="inline-block min-w-full py-2 align-middle">
+            <table class="min-w-full border-separate border-spacing-0">
+              <thead>
+                <tr>
+                  <th
+                    scope="col"
+                    class="ion-background-color sticky top-0 z-10 border-b border-gray-300 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold backdrop-blur backdrop-filter sm:pl-6 lg:pl-8 dark:border-white/10"
+                  >
+                    ID
+                  </th>
+                  <th
+                    scope="col"
+                    class="ion-background-color sticky top-0 z-10 hidden border-b border-gray-300 bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold backdrop-blur backdrop-filter sm:table-cell dark:border-white/10"
+                  >
+                    Type
+                  </th>
+                  <th
+                    scope="col"
+                    class="ion-background-color sticky top-0 z-10 hidden border-b border-gray-300 bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold backdrop-blur backdrop-filter lg:table-cell dark:border-white/10"
+                  >
+                    Instrument
+                  </th>
+                  <th
+                    scope="col"
+                    class="ion-background-color sticky top-0 z-10 border-b border-gray-300 bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold backdrop-blur backdrop-filter dark:border-white/10 dark:text-white"
+                  >
+                    Reason
+                  </th>
+                  <th
+                    scope="col"
+                    class="ion-background-color sticky top-0 z-10 border-b border-gray-300 bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold backdrop-blur backdrop-filter dark:border-white/10 dark:text-white"
+                  >
+                    Rejection
+                  </th>
+                  <th
+                    scope="col"
+                    class="ion-background-color sticky top-0 z-10 border-b border-gray-300 bg-opacity-75 py-3.5 pl-3 pr-4 backdrop-blur backdrop-filter sm:pr-6 lg:pr-8 dark:border-white/10"
+                  >
+                    <span class="sr-only">Edit</span>
+                  </th>
+                </tr>
+              </thead>
+              @if (transactions().length) {
+              <tbody>
+                @for (transaction of transactions(); track transaction.id) {
+                <tr class="relative hover:bg-gray-50 dark:hover:bg-white/5">
+                  <td
+                    class="whitespace-nowrap border-b border-gray-200 py-4 pl-4 pr-3 text-sm font-medium sm:pl-6 lg:pl-8 dark:border-white/5"
+                  >
+                    {{ transaction.id }}
+                  </td>
+                  <td
+                    class="text-content2 hidden whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm sm:table-cell dark:border-white/5"
+                  >
+                    {{ transaction.type | noCase | titlecase }}
+                  </td>
+                  <td
+                    class="text-content2 hidden whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm sm:table-cell dark:border-white/5"
+                  >
+                    {{ (transaction.instrument | slash) || '-' }}
+                  </td>
+                  <td
+                    class="text-content2 whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm dark:border-white/5"
+                  >
+                    {{ (transaction?.reason | noCase | titlecase) || '-' }}
+                  </td>
+                  <td
+                    class="text-content2 whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm dark:border-white/5"
+                  >
+                    {{ (transaction?.rejectionReason | noCase | titlecase) ||
+                    '-' }}
+                  </td>
+                  <td
+                    class="text-content2 relative whitespace-nowrap border-b border-gray-200 py-4 pl-3 pr-4 text-right text-sm sm:pr-8 lg:pr-8 dark:border-white/5"
+                  >
+                    {{ transaction.time | date }}
+                  </td>
+                  <a [routerLink]="transaction.id" class="absolute inset-0">
+                  </a>
+                </tr>
+                }
+              </tbody>
+              }
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+
+  @if (transactions().length && transactions().length < pageSize() && !isEnd())
+  {
+  <button (click)="getOlderTransactions()" class="btn mx-auto block">
+    Load more
+  </button>
+  } @if (!isEnd()) {
+  <!-- <ion-infinite-scroll
+      class="ion-margin-top"
+      [disabled]="!transactions().length || isEnd()"
+      (ionInfinite)="getOlderTransactions($any($event))"
+    >
+      <ion-infinite-scroll-content />
+    </ion-infinite-scroll> -->
+  }
+</main>
+
+@if (transactionsResponse() && transactions().length) {
+<app-footer />
+}

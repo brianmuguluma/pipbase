@@ -1,0 +1,67 @@
+<ion-content [fullscreen]="true">
+  <div class="py-24 sm:py-32">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="mx-auto max-w-2xl lg:text-center">
+        <ion-text color="primary">
+          <h2 class="text-base font-semibold leading-7">Don't trade solo</h2>
+        </ion-text>
+        <ion-text color="dark">
+          <p class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
+            Everything you need to grow your portfolio
+          </p>
+        </ion-text>
+        <ion-text color="medium">
+          <p class="mt-6 text-lg leading-8">
+            Traders all over the world use Pipbase to trade faster, scan and
+            analyse hundreds of instruments.
+          </p>
+        </ion-text>
+      </div>
+      <div class="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
+        <dl
+          class="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3"
+        >
+          @for (feature of features(); track feature) {
+          <div class="flex flex-col">
+            <dt
+              class="flex items-center gap-x-3 text-base font-semibold leading-7"
+            >
+              <ion-text color="primary">
+                <svg
+                  class="h-5 w-5 flex-none"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  @for (path of feature.paths; track path) {
+                  <path
+                    fill-rule="evenodd"
+                    [attr.d]="path"
+                    clip-rule="evenodd"
+                  />
+                  }
+                </svg>
+              </ion-text>
+              <ion-text color="dark"> {{ feature.title }} </ion-text>
+            </dt>
+            <dd
+              class="text-content2 mt-4 flex flex-auto flex-col text-base leading-7"
+            >
+              <ion-text color="medium">
+                <p class="flex-auto">{{ feature.description }}</p>
+              </ion-text>
+            </dd>
+          </div>
+          }
+        </dl>
+      </div>
+    </div>
+    <ion-button
+      (click)="login()"
+      expand="block"
+      class="ion-margin-horizontal mt-20"
+    >
+      Get started
+    </ion-button>
+  </div>
+</ion-content>

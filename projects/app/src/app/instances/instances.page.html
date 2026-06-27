@@ -1,0 +1,49 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/home" />
+    </ion-buttons>
+    <ion-title>Instances</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [scrollY]="false" [fullscreen]="true">
+  <ion-refresher (ionRefresh)="refresh($any($event))" slot="fixed">
+    <ion-refresher-content />
+  </ion-refresher>
+
+  <cdk-virtual-scroll-viewport
+    [itemSize]="113"
+    [minBufferPx]="1000"
+    [maxBufferPx]="2000"
+    class="ion-content-scroll-host"
+  >
+    <!-- Skeleton -->
+    @if (!instances().length) {
+    <ion-list lines="none" class="divide-y divide-gray-100 dark:divide-white/5">
+      @for (i of [].constructor(10); track i) {
+      <div>
+        <app-item-skeleton />
+      </div>
+      }
+    </ion-list>
+    }
+
+    <!-- Instances -->
+    @if (instances().length) {
+    <ion-list lines="none" class="divide-y divide-gray-100 dark:divide-white/5">
+      <div *cdkVirtualFor="let instance of instances()">
+        <app-instance-item [instance]="instance" />
+      </div>
+    </ion-list>
+    }
+
+    <!-- Infinite Scroll -->
+    <ion-infinite-scroll
+      [disabled]="!instances().length || isEnd()"
+      class="ion-margin-top"
+    >
+      <ion-infinite-scroll-content />
+    </ion-infinite-scroll>
+  </cdk-virtual-scroll-viewport>
+</ion-content>

@@ -1,0 +1,52 @@
+<div class="ion-padding pb-5">
+  <h3 class="font-semibold leading-6">Accounts</h3>
+  <ion-text color="medium" class="mt-2">
+    <p class="mt-2">
+      A list of all Accounts authorized for the provided API Key. To continue,
+      select a default account; you can change this later.
+    </p>
+  </ion-text>
+</div>
+
+<ion-list [inset]="true">
+  <ion-item id="open-modal" [button]="true">
+    <ion-label class="ion-no-margin py-4">
+      <ion-text class="block font-medium">
+        {{ app.account()?.alias || "Select Account" }}
+      </ion-text>
+      <ion-note class="mt-1">{{ app.account()?.id || "-" }}</ion-note>
+    </ion-label>
+  </ion-item>
+</ion-list>
+
+<ion-modal #modal trigger="open-modal" (didDismiss)="onDidDismiss($event)">
+  <ng-template>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button (click)="modal.dismiss(null, 'cancel')">Cancel</ion-button>
+      </ion-buttons>
+      <ion-buttons slot="end">
+        <ion-button (click)="modal.dismiss(id(), 'confirm')"> Done </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+    <ion-picker>
+      <ion-picker-column
+        [value]="app.account()?.id"
+        (ionChange)="onIonChange($event)"
+      >
+        @if (!app.summaries()?.length) {
+          <ion-picker-column-option disabled="true">
+            --
+          </ion-picker-column-option>
+        }
+        @if (app.summaries()?.length) {
+          @for (account of app.summaries(); track account) {
+            <ion-picker-column-option [value]="account.id">
+              {{ account.alias }}
+            </ion-picker-column-option>
+          }
+        }
+      </ion-picker-column>
+    </ion-picker>
+  </ng-template>
+</ion-modal>

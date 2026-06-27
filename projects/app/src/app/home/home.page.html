@@ -1,0 +1,263 @@
+<ion-header [collapse]="collapse()" [translucent]="translucent()">
+  <ion-toolbar>
+    @if (auth.isAdmin()) {
+    <ion-buttons slot="start">
+      <ion-menu-button [disabled]="!auth.isAdmin()" />
+    </ion-buttons>
+    }
+    <ion-title>
+      @if (auth.hasAccountId() && app.account()) {
+      <span> {{ app.account()?.alias || 'Pipbase' }} </span>
+      } @if (auth.profile() && auth.settings() && (!auth.hasApiKey() ||
+      !auth.hasAccountId())) {
+      <span> Setup </span>
+      }
+    </ion-title>
+    <!-- @if (auth.user()) {
+    <ion-buttons slot="end">
+      <ion-button (click)="getProfile()">
+        <ion-icon slot="icon-only" name="person-circle-outline" />
+      </ion-button>
+    </ion-buttons>
+    } -->
+  </ion-toolbar>
+  @if (auth.hasApiKey() && auth.hasAccountId()) {
+  <ion-toolbar>
+    <ion-segment
+      [disabled]="!app.account()?.positions?.length"
+      [value]="days()"
+      (ionChange)="updateDays($event)"
+      scrollable
+    >
+      <ion-segment-button [value]="7">
+        <ion-label>Last 7 days</ion-label>
+      </ion-segment-button>
+      <ion-segment-button [value]="30">
+        <ion-label>Last 30 days</ion-label>
+      </ion-segment-button>
+      <ion-segment-button [value]="null">
+        <ion-label>All-time</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+  }
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher
+    [disabled]="!auth.hasAccountId()"
+    slot="fixed"
+    (ionRefresh)="refresh($any($event))"
+  >
+    <ion-refresher-content />
+  </ion-refresher>
+
+  <!-- Loading: determine if user is logged in or out -->
+  @if (spinner()) {
+  <app-spinner />
+  }
+
+  <!-- User -->
+  @if (auth.user()) { @if (auth.settings()) {
+  <app-setup />
+  }
+
+  <!--  -->
+  @if (auth.hasApiKey() && auth.hasAccountId()) { @if (days() && !bars().length)
+  {
+  <ion-card
+    [color]="app.prefersDark() ? undefined : 'light'"
+    class="shadow-none"
+  >
+    <ion-card-content> No activity found. </ion-card-content>
+  </ion-card>
+  }
+
+  <!-- Chart -->
+  @if (displayChart()) {
+  <ion-card
+    class="ion-no-margin bg-transparent shadow-none"
+    [ngClass]="days() && bars().length ? '' : 'h-0'"
+  >
+    <ion-card-content>
+      @if (!transactions() || !orderFillsTransactions()?.length) {
+      <app-spinner />
+      }
+      <canvas class="ion-margin-top" #canvas></canvas>
+    </ion-card-content>
+  </ion-card>
+  }
+
+  <!-- Stats -->
+  <dl
+    class="mx-auto grid max-w-7xl grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 lg:px-2 xl:px-0"
+  >
+    <!-- Balance -->
+    <div
+      class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 border-gray-900/5 px-4 py-10 sm:px-6 xl:px-8 dark:border-white/5"
+    >
+      <dt class="text-sm font-medium leading-6">
+        <ion-text color="medium"> Balance </ion-text>
+      </dt>
+      <dd
+        class="w-full flex-none text-3xl font-medium leading-10 tracking-tight"
+      >
+        {{ (app.account()?.balance | compact : app.currencyFormatOptions()) ||
+        '-' }}
+      </dd>
+    </div>
+    <!-- Realized -->
+    <div
+      class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 border-t border-gray-900/5 px-4 py-10 sm:border-l sm:px-6 lg:border-t-0 xl:px-8 dark:border-white/5"
+    >
+      <dt class="text-sm font-medium leading-6">
+        <ion-text color="medium"> Realized </ion-text>
+      </dt>
+      @if (days()) {
+      <dd class="text-xs font-medium">
+        <ion-text [color]="realizedPercentage()! >= 0 ? 'success' : 'danger'">
+          @if (realizedPercentage()! >= 0) {
+          <span>+</span>
+          } {{ realizedPercentage() | percent : '1.0-2' }}
+        </ion-text>
+      </dd>
+      }
+      <dd
+        class="w-full flex-none text-3xl font-medium leading-10 tracking-tight"
+      >
+        @if (days()) {
+        <span>
+          @if (!realized()) {
+          <ion-text color="dark">-</ion-text>
+          } @if (realized()) {
+          <ion-text color="dark">
+            {{ (realized() | compact:app.currencyFormatOptions() ) || '-' }}
+          </ion-text>
+          }
+        </span>
+        } @if (!days()) {
+        <span>
+          {{ (app.account()?.pl | compact : app.currencyFormatOptions()) || '-'
+          }}
+        </span>
+        } @if (days() && orderFillsTransactions()?.length && realizedFrom()) {
+        <ion-note class="truncate text-sm">
+          from {{ realizedFrom().accountBalance |
+          compact:app.currencyFormatOptions() }}
+        </ion-note>
+        }
+      </dd>
+    </div>
+    <!-- Unrealized -->
+    <div
+      class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 border-t border-gray-900/5 px-4 py-10 sm:px-6 lg:border-l lg:border-t-0 xl:px-8 dark:border-white/5"
+    >
+      <dt class="text-sm font-medium leading-6">
+        <ion-text color="medium"> Unrealized </ion-text>
+      </dt>
+      @if (app.poll()?.state?.trades?.length) {
+      <dd class="text-xs font-medium">
+        <ion-text [color]="unrealizedPercentage()! >= 0 ? 'success' : 'danger'">
+          @if (unrealizedPercentage()! >= 0) {
+          <span>+</span>
+          } {{ unrealizedPercentage() | percent : '1.0-2' }}
+        </ion-text>
+      </dd>
+      }
+      <dd
+        class="w-full flex-none text-3xl font-medium leading-10 tracking-tight"
+      >
+        @if (!app.poll()) {
+        <ion-text color="dark">-</ion-text>
+        } @if (app.poll()) {
+        <ion-text color="dark">
+          {{ (app.poll()?.state?.unrealizedPL |
+          compact:app.currencyFormatOptions() ) || '-' }}
+        </ion-text>
+        } @if (app.poll()?.state?.trades?.length) {
+        <ion-note class="truncate text-sm">
+          {{ (app.poll()?.state?.marginCloseoutNAV |
+          compact:app.currencyFormatOptions() ) || '-' }}
+        </ion-note>
+        }
+      </dd>
+    </div>
+    <!-- Available -->
+    <div
+      class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 border-t border-gray-900/5 px-4 py-10 sm:border-l sm:px-6 lg:border-t-0 xl:px-8 dark:border-white/5"
+    >
+      <dt class="text-sm font-medium leading-6">
+        <ion-text color="medium"> Available </ion-text>
+      </dt>
+      <!-- <dd
+              class="text-xs font-medium"
+              >
+              +10.18%
+            </dd> -->
+      <dd
+        class="w-full flex-none text-3xl font-medium leading-10 tracking-tight"
+      >
+        <ion-text color="dark">
+          {{ (app.poll()?.state?.marginAvailable | compact :
+          app.currencyFormatOptions()) || '-' }}
+        </ion-text>
+      </dd>
+    </div>
+  </dl>
+  @if (bars().length) {
+  <div class="ion-padding-horizontal mx-auto max-w-7xl">
+    <div class="flex justify-between">
+      <ion-text color="dark">
+        <h3 class="text-base font-semibold leading-6">Recent activity</h3>
+      </ion-text>
+      @if (orderFills()?.length) {
+      <a
+        routerLink="/tabs/exchange"
+        [queryParams]="{
+                segment: 'transactions',
+                type: 'ORDER_FILL'
+              }"
+        class="text-sm"
+        color="primary"
+      >
+        <ion-text color="primary"> View all </ion-text>
+      </a>
+      }
+    </div>
+  </div>
+  <!-- Skeleton -->
+  @if (!orderFills()?.length) {
+  <ion-list lines="none" class="ion-margin-top">
+    @for (i of [].constructor(5); track i) {
+    <app-item-skeleton />
+    }
+  </ion-list>
+  }
+  <!-- Transactions -->
+  @if (orderFills()?.length) {
+  <ion-list
+    lines="none"
+    class="ion-margin-top divide-y divide-gray-100 dark:divide-white/5"
+  >
+    @for (transaction of orderFills()?.slice(0, 10); track transaction) {
+    <ion-item [routerLink]="['/transactions', transaction?.id]" button>
+      <ion-label class="ion-no-margin flex justify-between gap-x-6 py-5">
+        <ion-text color="dark" class="font-semibold leading-6">
+          {{ transaction?.instrument | slash }}
+        </ion-text>
+        <ion-text color="dark" class="flex items-center font-medium leading-6">
+          {{ transaction.pl | compact : app.currencyFormatOptions() }} &nbsp;
+          <ion-icon name="arrow-forward-outline" />
+          &nbsp; {{ transaction.accountBalance | compact :
+          app.currencyFormatOptions() }}
+        </ion-text>
+        <ion-note class="truncate text-ellipsis leading-5">
+          {{ transaction.reason | noCase | titlecase }} &middot; {{
+          transaction.time | formatRelative }}
+        </ion-note>
+      </ion-label>
+    </ion-item>
+    }
+  </ion-list>
+  } } } }
+</ion-content>

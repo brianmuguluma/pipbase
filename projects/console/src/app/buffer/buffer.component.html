@@ -1,0 +1,94 @@
+<label class="modal-overlay" for="buffer"></label>
+<div class="modal-content flex flex-col gap-5">
+  <label
+    for="buffer"
+    class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+  >
+    ✕
+  </label>
+  <h2 class="text-xl">Buffer</h2>
+  <form
+    [formGroup]="form()"
+    (ngSubmit)="sendSignal()"
+    class="flex h-full flex-col"
+  >
+    <div class="h-0 flex-1 overflow-y-auto">
+      <div class="flex flex-1 flex-col justify-between">
+        <div class="divide-y divide-gray-200 px-px dark:divide-white/10">
+          <div class="space-y-6 pb-5 pt-6">
+            <!-- Buffer -->
+            <fieldset>
+              <legend class="text-sm font-semibold leading-6">Buffer</legend>
+              <div class="mt-6 space-y-6">
+                <div class="flex items-center gap-x-3">
+                  <input
+                    id="enable"
+                    [value]="true"
+                    formControlName="isEnabled"
+                    type="radio"
+                    class="radio"
+                  />
+                  <label
+                    for="enable"
+                    class="block text-sm font-medium leading-6"
+                  >
+                    Enable
+                  </label>
+                </div>
+                <div class="flex items-center gap-x-3">
+                  <input
+                    id="disable"
+                    [value]="false"
+                    formControlName="isEnabled"
+                    type="radio"
+                    class="radio"
+                  />
+                  <label
+                    for="disable"
+                    class="block text-sm font-medium leading-6"
+                  >
+                    Disable
+                  </label>
+                </div>
+              </div>
+            </fieldset>
+
+            <!-- Notes -->
+            <div>
+              <div class="flex justify-between">
+                <label for="notes" class="block text-sm font-medium leading-6">
+                  Notes
+                </label>
+                <span
+                  class="text-content2 text-sm leading-6"
+                  id="notes-optional"
+                >
+                  Optional
+                </span>
+              </div>
+              <div class="mt-2">
+                <textarea
+                  id="notes"
+                  name="notes"
+                  formControlName="notes"
+                  [rows]="4"
+                  class="textarea"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex gap-3">
+      <button
+        type="submit"
+        [disabled]="form().invalid"
+        class="btn btn-block btn-primary"
+      >
+        Send
+      </button>
+      <label for="buffer" class="btn btn-block">Cancel</label>
+    </div>
+  </form>
+</div>

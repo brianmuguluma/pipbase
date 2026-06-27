@@ -1,0 +1,326 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Update Order</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()"> Cancel </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <form
+    [formGroup]="form()"
+    (ngSubmit)="sendSignal()"
+    class="flex h-full flex-col divide-y divide-gray-200 shadow-xl dark:divide-white/10"
+  >
+    <div class="h-0 flex-1 overflow-y-auto pb-10">
+      <div class="flex flex-1 flex-col justify-between">
+        <div class="divide-y divide-gray-200 px-4 sm:px-6">
+          <div class="space-y-6 pb-5 pt-6">
+            <div>
+              <h2 class="text-base font-semibold leading-7">
+                Update Dependant Orders
+              </h2>
+              <p class="text-content2 mt-1 text-sm leading-6">
+                Create, replace and cancel a Trade's dependent Orders (Take
+                Profit, Stop Loss and Trailing Stop Loss) through the Trade
+                itself.
+              </p>
+            </div>
+
+            <!-- Instrument -->
+            <div>
+              <label
+                for="project-name"
+                class="block text-sm font-medium leading-6"
+              >
+                Instrument
+              </label>
+              <select
+                id="instrument"
+                name="instrument"
+                (change)="selectInstrument($event.target)"
+                class="select mt-2"
+              >
+                <option [value]="undefined" [disabled]="instrument()">
+                  Select an instrument
+                </option>
+
+                <!-- Instruments -->
+                @for (pair of instruments(); track pair) {
+                <option
+                  [value]="pair.name"
+                  [selected]="pair.name === instrument()?.name"
+                >
+                  {{ pair.displayName }}
+                </option>
+                }
+              </select>
+            </div>
+
+            <!-- Dependants -->
+            <div>
+              <!-- <p
+              class="block text-sm font-medium leading-6 "
+              >
+              Dependants
+            </p> -->
+
+              <h2 class="text-base font-semibold leading-7">Dependants</h2>
+              <p class="text-content2 mt-1 text-sm leading-6">
+                Replace an Order in an Account by simultaneously cancelling it
+                and creating a replacement Order.
+              </p>
+
+              <dl
+                class="mt-2 space-y-6 divide-y divide-gray-100 text-sm leading-6 dark:divide-white/5"
+              >
+                <div class="pt-6">
+                  <div>
+                    <div class="flex justify-between">
+                      <label
+                        for="takeProfit"
+                        class="block text-sm font-medium leading-6"
+                      >
+                        Take Profit
+                      </label>
+                      <span
+                        class="text-content2 text-sm leading-6"
+                        id="take-profit-optional"
+                      >
+                        Optional
+                      </span>
+                    </div>
+                    <div class="mt-2 flex rounded-md shadow-sm">
+                      <div
+                        class="relative flex flex-grow items-stretch focus-within:z-10"
+                      >
+                        <input
+                          type="number"
+                          inputmode="decimal"
+                          formControlName="takeProfit"
+                          name="takeProfit"
+                          id="takeProfit"
+                          class="input"
+                          placeholder="Price"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        (click)="toggleDependant('takeProfit')"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                          class="h-5 w-5"
+                        >
+                          @if (form().controls.takeProfit.enabled) {
+                          <path
+                            d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"
+                          />
+                          } @if (form().controls.takeProfit.disabled) {
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                          />
+                          }
+                        </svg>
+
+                        {{ form().controls.takeProfit.disabled ? "Enable" :
+                        "Cancel" }}
+                      </button>
+                    </div>
+                  </div>
+                  <p class="mt-2 text-sm text-red-600" id="email-error">
+                    This will cancel all pending orders.
+                  </p>
+                </div>
+                <div class="pt-6">
+                  <div>
+                    <div class="flex justify-between">
+                      <label
+                        for="stopLoss"
+                        class="block text-sm font-medium leading-6"
+                      >
+                        Stop Loss
+                      </label>
+                      <span
+                        class="text-content2 text-sm leading-6"
+                        id="stop-loss-optional"
+                      >
+                        Optional
+                      </span>
+                    </div>
+                    <div class="mt-2 flex rounded-md shadow-sm">
+                      <div
+                        class="relative flex flex-grow items-stretch focus-within:z-10"
+                      >
+                        <input
+                          type="number"
+                          inputmode="decimal"
+                          formControlName="stopLoss"
+                          name="stopLoss"
+                          id="stopLoss"
+                          class="input"
+                          placeholder="Price"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        (click)="toggleDependant('stopLoss')"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                          class="h-5 w-5"
+                        >
+                          @if (form().controls.stopLoss.enabled) {
+                          <path
+                            d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"
+                          />
+                          } @if (form().controls.stopLoss.disabled) {
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                          />
+                          }
+                        </svg>
+
+                        {{ form().controls.stopLoss.disabled ? "Enable" :
+                        "Cancel" }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="pt-6">
+                  <div>
+                    <div class="flex justify-between">
+                      <label
+                        for="trailingStopLoss"
+                        class="block text-sm font-medium leading-6"
+                      >
+                        Trailing Stop Loss
+                      </label>
+                      <span
+                        class="text-content2 text-sm leading-6"
+                        id="trailing-stop-loss-optional"
+                      >
+                        Optional
+                      </span>
+                    </div>
+                    <div class="mt-2 flex rounded-md shadow-sm">
+                      <div
+                        class="relative flex flex-grow items-stretch focus-within:z-10"
+                      >
+                        <input
+                          type="number"
+                          inputmode="decimal"
+                          formControlName="trailingStopLoss"
+                          name="trailingStopLoss"
+                          id="trailingStopLoss"
+                          class="input"
+                          placeholder="Distance"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        (click)="toggleDependant('trailingStopLoss')"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                          class="h-5 w-5"
+                        >
+                          @if (form().controls.trailingStopLoss.enabled) {
+                          <path
+                            d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"
+                          />
+                          } @if (form().controls.trailingStopLoss.disabled) {
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                          />
+                          }
+                        </svg>
+
+                        {{ form().controls.trailingStopLoss.disabled ? "Enable"
+                        : "Cancel" }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </dl>
+            </div>
+
+            <!-- Notes -->
+            <div>
+              <div class="flex justify-between">
+                <label for="notes" class="block text-sm font-medium leading-6">
+                  Notes
+                </label>
+                <span
+                  class="text-content2 text-sm leading-6"
+                  id="notes-optional"
+                >
+                  Optional
+                </span>
+              </div>
+              <div class="mt-2">
+                <textarea
+                  id="notes"
+                  name="notes"
+                  formControlName="notes"
+                  [rows]="4"
+                  class="textarea"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-shrink-0 justify-end px-4 py-4">
+      <button
+        type="button"
+        (click)="dismiss()"
+        class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-white dark:ring-0 dark:hover:bg-white/20"
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        class="ml-4 inline-flex justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+        [disabled]="!instrument || form().invalid || isPublishing()"
+      >
+        @if (isPublishing()) {
+        <svg
+          class="-ml-1 mr-3 h-5 w-5 animate-spin text-white"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          ></circle>
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          ></path>
+        </svg>
+        } {{ isPublishing() ? "Sending signal..." : "Update Dependants" }}
+      </button>
+    </div>
+  </form>
+</ion-content>

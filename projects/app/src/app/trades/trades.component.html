@@ -1,0 +1,92 @@
+<ion-content [scrollY]="false">
+  <ion-refresher (ionRefresh)="refresh($any($event))" slot="fixed">
+    <ion-refresher-content />
+  </ion-refresher>
+
+  <!-- Empty -->
+  @if (!trades()?.length) {
+    <app-empty text="No Trades" />
+  }
+
+  <cdk-virtual-scroll-viewport
+    [itemSize]="113"
+    [minBufferPx]="1000"
+    [maxBufferPx]="2000"
+    class="ion-content-scroll-host"
+  >
+    <!-- State filters -->
+    <ion-item lines="none">
+      <ion-label
+        class="ion-no-margin flex justify-between gap-x-6 overflow-x-scroll py-5"
+      >
+        @for (state of tradeStateFilters(); track state; let isFirst = $first) {
+          <ion-chip
+            (click)="selectTradeState(state)"
+            [color]="state === tradeStateFilter() ? undefined : 'medium'"
+            [ngClass]="isFirst ? 'ml-0' : ''"
+          >
+            {{ state | titlecase }}
+          </ion-chip>
+        }
+      </ion-label>
+
+      <!-- Filter -->
+      <ion-chip color="primary" (click)="filterInstruments()" slot="end">
+        <ion-label>{{ (instrument()?.name | slash) || "Filter" }}</ion-label>
+        <ion-icon name="filter-circle" />
+      </ion-chip>
+    </ion-item>
+
+    @if (instrument()) {
+      <ion-button
+        (click)="clearInstrument()"
+        expand="block"
+        color="light"
+        class="ion-margin"
+      >
+        Clear filters
+      </ion-button>
+    }
+
+    <!-- Skeleton -->
+    @if (!trades()?.length && !isEmpty()) {
+      <ion-list
+        lines="none"
+        class="divide-y divide-gray-100 dark:divide-white/5"
+      >
+        @for (i of [].constructor(count()); track i) {
+          <div>
+            <app-item-skeleton />
+          </div>
+        }
+      </ion-list>
+    }
+
+    <!-- No more trades -->
+    @if (!trades()?.length && isEnd()) {
+      <div class="ion-padding-top grid place-items-center">
+        <ion-text>No more Trades</ion-text>
+      </div>
+    }
+
+    <!-- Trades -->
+    <ion-list
+      lines="none"
+      class="divide-y divide-gray-100 dark:divide-white/5"
+      [ngClass]="trades()?.length ? '' : 'hidden'"
+    >
+      <div *cdkVirtualFor="let trade of trades(); trackBy: trackTrades">
+        <app-trade-item [trade]="trade" />
+      </div>
+    </ion-list>
+
+    <!-- Infinite Scroll -->
+    <ion-infinite-scroll
+      [disabled]="!trades()?.length || isEnd()"
+      (ionInfinite)="getNextPage($any($event))"
+      class="ion-margin-top"
+    >
+      <ion-infinite-scroll-content />
+    </ion-infinite-scroll>
+  </cdk-virtual-scroll-viewport>
+</ion-content>

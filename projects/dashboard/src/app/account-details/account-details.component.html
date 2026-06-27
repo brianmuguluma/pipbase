@@ -1,0 +1,220 @@
+<div
+  class="sm:ring-border -mx-4 sm:mx-0 sm:rounded-lg sm:px-8 sm:py-8 sm:pb-14 sm:shadow-sm sm:ring-1 lg:col-span-2 lg:row-span-2 lg:row-end-2 xl:px-16 xl:pb-20 xl:pt-16"
+>
+  <div>
+    <div class="flex items-center justify-between px-4 sm:px-0">
+      <div>
+        <h3 class="text-base font-semibold leading-7">Details</h3>
+        <p class="text-content2 mt-1 max-w-2xl text-sm leading-6">
+          A summary for your Account that you have access to.
+        </p>
+      </div>
+    </div>
+    <div class="border-border mt-6 border-t">
+      <dl class="divide-gray-4 divide-y">
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+          <dt
+            class="flex items-center justify-between text-sm font-medium leading-6"
+          >
+            ID
+            <app-tooltip [tip]="glossary().account.id" class="relative" />
+          </dt>
+          <dd
+            class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ app.account()?.id }}
+          </dd>
+        </div>
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+          <dt
+            class="flex items-center justify-between text-sm font-medium leading-6"
+          >
+            Alias
+            <app-tooltip [tip]="glossary().account.alias" class="relative" />
+          </dt>
+          <dd
+            class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ app.account()?.alias }}
+          </dd>
+        </div>
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+          <dt
+            class="flex items-center justify-between text-sm font-medium leading-6"
+          >
+            Balance
+            <app-tooltip [tip]="glossary().account.balance" class="relative" />
+          </dt>
+          <dd
+            class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ app.account()?.balance | currency: app.account()?.currency }}
+          </dd>
+        </div>
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+          <dt
+            class="flex items-center justify-between text-sm font-medium leading-6"
+          >
+            Commission
+            <app-tooltip
+              [tip]="glossary().account.commission"
+              class="relative"
+            />
+          </dt>
+          <dd
+            class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ app.account()?.commission | currency: app.account()?.currency }}
+          </dd>
+        </div>
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+          <dt
+            class="flex items-center justify-between text-sm font-medium leading-6"
+          >
+            Created By
+            <app-tooltip
+              [tip]="glossary().account.createdByUserID"
+              class="relative"
+            />
+          </dt>
+          <dd
+            class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ app.account()?.createdByUserID }}
+          </dd>
+        </div>
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+          <dt
+            class="flex items-center justify-between text-sm font-medium leading-6"
+          >
+            Created Time
+            <app-tooltip
+              [tip]="glossary().account.createdTime"
+              class="relative"
+            />
+          </dt>
+          <dd
+            class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ app.account()?.createdTime | date }}
+          </dd>
+        </div>
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+          <dt
+            class="flex items-center justify-between text-sm font-medium leading-6"
+          >
+            Currency
+            <app-tooltip [tip]="glossary().account.currency" class="relative" />
+          </dt>
+          <dd
+            class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ app.account()?.currency }}
+          </dd>
+        </div>
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+          <dt
+            class="flex items-center justify-between text-sm font-medium leading-6"
+          >
+            Margin Rate
+            <app-tooltip
+              [tip]="glossary().account.marginRate"
+              class="relative"
+            />
+          </dt>
+          <dd
+            class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ 1 / (app.account()?.marginRate | toNumber) | number: "1.0-0" }}:1
+          </dd>
+        </div>
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+          <dt
+            class="flex items-center justify-between text-sm font-medium leading-6"
+          >
+            Dividend Adjustment
+            <app-tooltip
+              [tip]="glossary().account.dividendAdjustment"
+              class="relative"
+            />
+          </dt>
+          <dd
+            class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ app.account()?.dividendAdjustment }}
+          </dd>
+        </div>
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+          <dt
+            class="flex items-center justify-between text-sm font-medium leading-6"
+          >
+            Financing
+            <app-tooltip
+              [tip]="glossary().account.financing"
+              class="relative"
+            />
+          </dt>
+          <dd
+            class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ app.account()?.financing | currency: app.account()?.currency }}
+          </dd>
+        </div>
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+          <dt
+            class="flex items-center justify-between text-sm font-medium leading-6"
+          >
+            Guaranteed Execution Fees
+            <app-tooltip
+              [tip]="glossary().account.guaranteedExecutionFees"
+              class="relative"
+            />
+          </dt>
+          <dd
+            class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{
+              app.account()?.guaranteedExecutionFees
+                | currency: app.account()?.currency
+            }}
+          </dd>
+        </div>
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+          <dt
+            class="flex items-center justify-between text-sm font-medium leading-6"
+          >
+            Guaranteed Stop Loss Order Mode
+            <app-tooltip
+              [tip]="glossary().account.guaranteedStopLossOrderMode"
+              class="relative"
+            />
+          </dt>
+          <dd
+            class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{
+              app.account()?.guaranteedStopLossOrderMode
+                | guarenteedStopLossOrderMode
+            }}
+          </dd>
+        </div>
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+          <dt
+            class="flex items-center justify-between text-sm font-medium leading-6"
+          >
+            Hedging
+            <app-tooltip
+              [tip]="glossary().account.hedgingEnabled"
+              class="relative"
+            />
+          </dt>
+          <dd
+            class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ app.account()?.hedgingEnabled ? "Enabled" : "Disabled" }}
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "pipbase": {
+      "hosting": {
+        "app": [
+          "pipbase"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "pipbase"
+  }
+}

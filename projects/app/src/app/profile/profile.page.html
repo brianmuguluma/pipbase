@@ -1,0 +1,128 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Profile</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()"> Done </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Profile</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <main>
+    <div
+      class="ion-padding-horizontal mx-auto grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 pb-16 md:grid-cols-3"
+    >
+      <div>
+        <ion-text color="dark">
+          <h2 class="font-semibold leading-7">Personal Information</h2>
+        </ion-text>
+        <ion-text color="medium" class="mt-1">
+          <p class="leading-6">
+            Update the personal information associated with your account.
+          </p>
+        </ion-text>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="update()" class="md:col-span-2">
+        <div
+          class="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6"
+        >
+          <div class="col-span-full flex items-center gap-x-8">
+            <span class="relative inline-block">
+              <div
+                class="aspect-square h-24 w-24 overflow-hidden rounded-lg object-scale-down"
+              >
+                <app-avatar [photo]="photo()" size="large" />
+              </div>
+
+              @if (photo()) {
+              <button
+                type="button"
+                (click)="clearPhoto()"
+                class="absolute right-0 top-0 block -translate-y-1/2 translate-x-1/2 transform cursor-pointer rounded-full bg-red-600 p-1 text-white shadow-sm ring-2 ring-white duration-200 ease-in-out hover:scale-105 hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 dark:ring-gray-900"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  class="h-5 w-5"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5Zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5Z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </button>
+              }
+            </span>
+            <div>
+              <ion-button (click)="getPhoto()" color="light" size="small">
+                Change photo
+              </ion-button>
+              @if (auth.profile()?.photoURL && !photo()) {
+              <ion-button
+                (click)="confirmDeletePhoto()"
+                fill="clear"
+                color="danger"
+                size="small"
+              >
+                Delete photo
+              </ion-button>
+              }
+              <p class="mt-2 text-xs leading-5">
+                <ion-note> JPG, GIF or PNG. </ion-note>
+              </p>
+            </div>
+          </div>
+
+          <div class="col-span-full">
+            <label for="displayName" class="block font-medium leading-6">
+              Display Name
+            </label>
+            <div class="mt-2">
+              <div class="mt-2">
+                <input
+                  type="text"
+                  name="displayName"
+                  id="displayName"
+                  autocomplete="displayName"
+                  class="input"
+                  placeholder="Jane Doe"
+                  formControlName="displayName"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="col-span-full">
+            <div class="col-span-full">
+              <label for="email" class="block font-medium leading-6">
+                Email address
+              </label>
+              <div class="mt-2">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autocomplete="email"
+                  class="input"
+                  formControlName="email"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ion-button type="submit" expand="block" class="mt-8">
+          Save
+        </ion-button>
+      </form>
+    </div>
+  </main>
+</ion-content>

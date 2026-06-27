@@ -1,0 +1,51 @@
+<div class="flex h-screen flex-col justify-between">
+  <main>
+    <header
+      class="border-border bg-backgroundPrimary sticky top-0 z-10 border-b"
+    >
+      <!-- Secondary navigation -->
+      <nav class="overflow-x-auto py-4">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <ul
+            role="list"
+            class="text-content2 flex min-w-full flex-none gap-x-6 text-sm font-semibold leading-6"
+          >
+            @for (t of tabs(); track $index) {
+
+            <a
+              [routerLink]="['/settings']"
+              [queryParams]="{ tab: t === 'profile' ? null : t }"
+              class="link text-sm leading-6"
+            >
+              <button [ngClass]="tab() === t ? 'link-primary' : ''">
+                {{ t | titlecase }}
+              </button>
+            </a>
+            }
+          </ul>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Profile -->
+    @if (tab() === 'profile') {
+    <app-profile />
+    }
+
+    <!-- Exchange -->
+    @if (tab() === 'exchange') {
+    <app-exchange />
+    }
+
+    <!-- Notifications -->
+    @if (tab() === 'notifications') {
+    <app-notifications />
+    }
+
+    <!-- Billing -->
+    @if (tab() === 'billing') {
+    <app-billing />
+    }
+  </main>
+  <app-footer class="mt-auto" />
+</div>

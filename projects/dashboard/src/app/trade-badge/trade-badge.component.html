@@ -1,0 +1,12 @@
+<span
+  class="inline-flex items-center px-2 py-1 text-xs font-medium"
+  [ngClass]="[
+    state() === 'OPEN' ? 'badge badge-flat-success badge-outline-success' : '',
+    state() === 'CLOSED' ? 'badge badge-flat-error badge-outline-error' : '',
+    state() === 'CLOSE_WHEN_TRADEABLE'
+      ? 'badge badge-flat-warning badge-outline-warning'
+      : '',
+  ]"
+>
+  {{ state() }}
+</span>

@@ -1,0 +1,54 @@
+<ion-header collapse="fade" translucent>
+  <ion-toolbar>
+    @if (auth.isAdmin()) {
+    <ion-buttons slot="start">
+      <ion-menu-button [disabled]="!auth.isAdmin()" />
+    </ion-buttons>
+    }
+    <ion-title>Server</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment
+      [disabled]="!auth.user()"
+      [value]="segment()"
+      (ionChange)="updateSegment($event)"
+    >
+      <ion-segment-button value="bot">
+        <ion-label>Bot</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="instance">
+        <ion-label>Instance</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher
+    [disabled]="segment() !== 'instance'"
+    slot="fixed"
+    (ionRefresh)="refresh($any($event))"
+  >
+    <ion-refresher-content />
+  </ion-refresher>
+
+  <!-- Bot -->
+  @if (segment() === 'bot') {
+  <app-bot />
+  } @if (segment() === 'instance') {
+  <section>
+    <!-- Spinner -->
+    @if (!instances()) {
+    <app-spinner />
+    }
+    <!-- Page not found -->
+    @if (instances() && !instances()?.instances?.length) {
+    <app-error />
+    }
+    <!-- Instance -->
+    @if (instance()) {
+    <app-instance-details [instance]="instance()!" />
+    }
+  </section>
+  }
+</ion-content>

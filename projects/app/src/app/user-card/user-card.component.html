@@ -1,0 +1,35 @@
+<ion-card
+  [color]="app.prefersDark() ? undefined : 'light'"
+  class="shadow-none"
+  button
+>
+  <ion-item
+    [color]="app.prefersDark() ? undefined : 'light'"
+    lines="none"
+    [routerLink]="user() ? ['/users', user()?.uid] : undefined"
+  >
+    @if (user()) {
+      <ion-avatar slot="start" class="overflow-hidden rounded-full">
+        <app-avatar [user]="user()" />
+      </ion-avatar>
+      <ion-label
+        class="ion-no-margin flex justify-between gap-x-6 bg-transparent py-5"
+      >
+        <ion-text color="dark" class="font-semibold leading-6">
+          {{ user()?.displayName || "-" }}
+        </ion-text>
+        <ion-text color="medium" class="block truncate">
+          {{ user()?.email }}
+        </ion-text>
+      </ion-label>
+    } @else {
+      <ion-avatar slot="start" class="overflow-hidden rounded-full">
+        <ion-skeleton-text animated style="width: 100%" />
+      </ion-avatar>
+      <ion-label class="ion-no-margin flex justify-between gap-x-6 py-5">
+        <ion-skeleton-text class="skeleton" animated style="width: 30%" />
+        <ion-skeleton-text class="skeleton" animated style="width: 60%" />
+      </ion-label>
+    }
+  </ion-item>
+</ion-card>

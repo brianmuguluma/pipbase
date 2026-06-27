@@ -1,0 +1,96 @@
+@if (!auth.user()) {
+  <app-spinner />
+}
+
+@if (auth.user()) {
+  <div>
+    <ion-list lines="none">
+      <!-- Date Created -->
+      <ion-item>
+        <ion-label class="ion-no-margin py-6">
+          <ion-text color="dark" class="font-medium leading-6">
+            Status
+          </ion-text>
+          <ion-note class="mt-1 block leading-6">
+            {{ auth.settings()?.bot?.status | titlecase }}
+          </ion-note>
+        </ion-label>
+        @if (auth.settings()?.bot?.status !== "pending") {
+          <ion-button (click)="pingBot()" slot="end" fill="clear">
+            <ion-icon slot="icon-only" name="radio-outline" />
+          </ion-button>
+        }
+        @if (auth.settings()?.bot?.status !== "pending") {
+          <ion-button (click)="toggleBot()" slot="end" fill="clear">
+            <ion-icon slot="icon-only" name="power-outline" />
+          </ion-button>
+        }
+      </ion-item>
+    </ion-list>
+    <!-- Notifications -->
+    <section class="mt-6">
+      <div class="ion-padding-horizontal">
+        <ion-text color="dark">
+          <h3 class="font-semibold leading-6">Notifications</h3>
+        </ion-text>
+        <ion-note class="mt-2 max-w-4xl">
+          We'll always let you know about important changes, but you pick what
+          else you want to hear about.
+        </ion-note>
+      </div>
+      <form [formGroup]="form()" (ngSubmit)="updateNotifications()">
+        <ion-list
+          lines="none"
+          class="divide-y divide-gray-100 dark:divide-white/5"
+        >
+          <ion-item class="py-6">
+            <ion-toggle
+              [checked]="auth.settings()?.bot?.notifications?.onStart"
+              formControlName="onStart"
+              (ionChange)="impact()"
+            >
+              <ion-text color="dark" class="font-medium leading-6">
+                Start
+              </ion-text>
+              <ion-text color="medium" class="leading-6truncate mt-1 block">
+                Get notified when your bot starts.
+              </ion-text>
+            </ion-toggle>
+          </ion-item>
+          <ion-item class="py-6">
+            <ion-toggle
+              [checked]="auth.settings()?.bot?.notifications?.onStop"
+              formControlName="onStop"
+              (ionChange)="impact()"
+            >
+              <ion-text color="dark" class="font-medium leading-6">
+                Stop
+              </ion-text>
+              <ion-text color="medium" class="leading-6truncate mt-1 block">
+                Get notified when your bot stops.
+              </ion-text>
+            </ion-toggle>
+          </ion-item>
+          <ion-item>
+            <ion-toggle
+              [checked]="auth.settings()?.bot?.notifications?.onPing"
+              formControlName="onPing"
+              (ionChange)="impact()"
+              class="py-6"
+            >
+              <ion-text color="dark" class="font-medium leading-6">
+                Ping
+              </ion-text>
+              <ion-text color="medium" class="leading-6truncate mt-1 block">
+                Get notified when your bot pings.
+              </ion-text>
+            </ion-toggle>
+          </ion-item>
+        </ion-list>
+        <ion-button type="submit" expand="block" class="ion-margin">
+          Save
+        </ion-button>
+      </form>
+    </section>
+  </div>
+}

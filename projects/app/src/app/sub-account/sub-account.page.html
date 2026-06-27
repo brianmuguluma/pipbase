@@ -1,0 +1,453 @@
+<ion-header collapse="fade" translucent>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/exchange" />
+    </ion-buttons>
+    <ion-title>Sub Account</ion-title>
+    @if (app.poll()?.lastTransactionID) {
+    <ion-buttons slot="end">
+      <ion-button
+        [routerLink]="['/transactions', app.poll()?.lastTransactionID]"
+        slot="icon-only"
+      >
+        <ion-icon slot="icon-only" name="link" />
+      </ion-button>
+    </ion-buttons>
+    }
+  </ion-toolbar>
+  @if (app.account()?.alias) {
+  <ion-toolbar>
+    <ion-title size="small">
+      {{ app.account()?.alias }} &middot; {{ app.account()?.balance | currency:
+      app.account()?.currency }}
+    </ion-title>
+  </ion-toolbar>
+  }
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  @if (!app.account()) {
+  <app-spinner />
+  } @if (app.account()) {
+  <section>
+    <!-- Details -->
+    <section>
+      <ion-list
+        lines="none"
+        class="divide-y divide-gray-100 dark:divide-white/5"
+      >
+        <!-- ID -->
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6"> ID </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ app.account()?.id }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().account.id" />
+        </ion-item>
+        <!-- Alias -->
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Alias
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ app.account()?.alias }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().account.alias" />
+        </ion-item>
+        <!-- Margin Rate (Leverage) -->
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Leverage
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ (1 / (app.account()?.marginRate | toNumber) | number:'1.0-0')
+              }}:1
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().account.marginRate" />
+        </ion-item>
+        <!-- Created Time -->
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Created
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ app.account()?.createdTime | date : 'medium' }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().account.createdTime" />
+        </ion-item>
+        <!-- Created By User ID -->
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Created By
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ app.account()?.createdByUserID }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().account.createdByUserID" />
+        </ion-item>
+        <!-- Balance -->
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Balance
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ app.account()?.balance | currency : app.account()?.currency }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().account.balance" />
+        </ion-item>
+        <!-- Unrealized PL -->
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Unrealized PL
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ app.poll()?.state?.unrealizedPL| currency :
+              app.account()?.currency }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().account.unrealizedPL" />
+        </ion-item>
+        <!-- Currency -->
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Currency
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ app.account()?.currency }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().account.currency" />
+        </ion-item>
+        <!-- Financing -->
+        @if (app.poll()?.state?.financing || app.account()?.financing) {
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Financing
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ app.poll()?.state?.financing || app.account()?.financing |
+              currency : app.account()?.currency }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().account.financing" />
+        </ion-item>
+        }
+        <!-- Dividend Adjustment -->
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Dividend Adjustment
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ app.account()?.dividendAdjustment | currency :
+              app.account()?.currency }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().account.dividendAdjustment" />
+        </ion-item>
+        <!-- Commission -->
+        @if (app.poll()?.state?.commission || app.account()?.commission) {
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Commission
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ app.poll()?.state?.commission || app.account()?.commission |
+              currency : app.account()?.currency }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().account.commission" />
+        </ion-item>
+        }
+        <!-- Hedging Enabled -->
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Hedging
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ app.account()?.hedgingEnabled ? 'Enabled' : 'Disabled' }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().account.hedgingEnabled" />
+        </ion-item>
+      </ion-list>
+      <!-- Guarenteed Stop Loss Order Mode -->
+      <ion-card
+        [color]="app.prefersDark() ? undefined : 'light'"
+        class="shadow-none"
+      >
+        <ion-card-content>
+          <ion-text color="dark" class="font-medium leading-6">
+            Guarenteed Stop Loss Order Mode
+          </ion-text>
+          <ion-note
+            color="medium"
+            class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ app.account()?.guaranteedStopLossOrderMode |
+            guarenteedStopLossOrderMode }}
+          </ion-note>
+        </ion-card-content>
+      </ion-card>
+    </section>
+    <!-- State -->
+    <section>
+      <ion-list-header>
+        <ion-label color="dark" class="text-base font-semibold leading-6">
+          State
+        </ion-label>
+      </ion-list-header>
+      <ion-list
+        lines="none"
+        class="divide-y divide-gray-100 dark:divide-white/5"
+      >
+        <!-- Pending orders -->
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Pending orders
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ app.account()?.pendingOrderCount }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().account.pendingOrderCount" />
+        </ion-item>
+        <!-- Open trades -->
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Open trades
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ app.account()?.openTradeCount }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().account.openTradeCount" />
+        </ion-item>
+        <!-- Open positions -->
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Open positions
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ app.account()?.openPositionCount }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().account.openPositionCount" />
+        </ion-item>
+        <!-- NAV -->
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              NAV
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ app.poll()?.state?.NAV | currency : app.account()?.currency }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip [tip]="glossary().account.NAV" />
+        </ion-item>
+      </ion-list>
+    </section>
+    <!-- Margin Call -->
+    <section>
+      <ion-list-header>
+        <ion-label color="dark" class="text-base font-semibold leading-6">
+          Margin Call
+        </ion-label>
+      </ion-list-header>
+      <ion-list
+        lines="none"
+        class="divide-y divide-gray-100 dark:divide-white/5"
+      >
+        <!-- Margin Used -->
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Margin Used
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ app.poll()?.state?.marginCallMarginUsed | currency :
+              app.account()?.currency }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip
+            [tip]="glossary().accountChangesState.marginCallMarginUsed"
+          />
+        </ion-item>
+        <!-- Percent -->
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Percent
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ app.poll()?.state?.marginCallPercent | percent }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip
+            [tip]="glossary().accountChangesState.marginCallPercent"
+          />
+        </ion-item>
+      </ion-list>
+    </section>
+    <!-- Margin Closeout -->
+    <section>
+      <ion-list-header>
+        <ion-label color="dark" class="text-base font-semibold leading-6">
+          Margin Closeout
+        </ion-label>
+      </ion-list-header>
+      <ion-list
+        lines="none"
+        class="divide-y divide-gray-100 dark:divide-white/5"
+      >
+        <!-- NAV -->
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              NAV
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ app.poll()?.state?.marginCloseoutNAV | currency :
+              app.account()?.currency }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip
+            [tip]="glossary().accountChangesState.marginCloseoutNAV"
+          />
+        </ion-item>
+        <!-- Margin Used -->
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Margin Used
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ app.poll()?.state?.marginCloseoutMarginUsed | currency :
+              app.account()?.currency }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip
+            [tip]="glossary().accountChangesState.marginCloseoutMarginUsed"
+          />
+        </ion-item>
+        <!-- Percent -->
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Percent
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ app.poll()?.state?.marginCloseoutPercent | percent }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip
+            [tip]="glossary().accountChangesState.marginCloseoutPercent"
+          />
+        </ion-item>
+        <!-- Unrealized PL -->
+        <ion-item>
+          <ion-label class="ion-no-margin py-6">
+            <ion-text color="dark" class="font-medium leading-6">
+              Unrealized PL
+            </ion-text>
+            <ion-note
+              color="medium"
+              class="mt-1 block leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ app.poll()?.state?.marginCloseoutUnrealizedPL | currency :
+              app.account()?.currency }}
+            </ion-note>
+          </ion-label>
+          <app-tooltip
+            [tip]="glossary().accountChangesState.marginCloseoutUnrealizedPL"
+          />
+        </ion-item>
+      </ion-list>
+    </section>
+  </section>
+  }
+</ion-content>

@@ -1,0 +1,9 @@
+<!-- Credentials -->
+@if (!auth.hasApiKey()) {
+  <app-credentials />
+}
+
+<!-- Accounts -->
+@if (auth.hasApiKey() && !auth.hasAccountId()) {
+  <app-accounts />
+}

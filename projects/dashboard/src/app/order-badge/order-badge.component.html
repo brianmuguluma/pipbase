@@ -1,0 +1,17 @@
+<span
+  class="inline-flex items-center px-2 py-1 text-xs font-medium"
+  [ngClass]="[
+    state() === 'FILLED'
+      ? 'badge badge-flat-success badge-outline-success'
+      : '',
+    state() === 'CANCELLED' ? 'badge badge-flat-error badge-outline-error' : '',
+    state() === 'TRIGGERED'
+      ? 'badge badge-flat-primary badge-outline-primary'
+      : '',
+    state() === 'PENDING'
+      ? 'badge badge-flat-warning badge-outline-warning'
+      : '',
+  ]"
+>
+  {{ state() }}
+</span>

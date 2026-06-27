@@ -1,0 +1,13 @@
+<li class="relative md:flex md:flex-1">
+  <!-- Completed Step -->
+  <a class="group flex w-full items-center">
+    <span class="flex items-center px-6 py-4 text-sm font-medium">
+      <app-step-complete-icon />
+      <span class="ml-4 text-sm font-medium">{{ step() }}</span>
+    </span>
+  </a>
+  <!-- Arrow separator for lg screens and up -->
+  @if (displaySeperator()) {
+    <app-step-seperator />
+  }
+</li>

@@ -1,0 +1,18 @@
+@if (!app.properties()?.length) {
+  <app-spinner />
+}
+<main>
+  <div class="mt-12 border-b border-gray-200 pb-5 dark:border-white/10">
+    <h3 class="text-base font-semibold leading-6">Accounts</h3>
+    <p class="text-content2 mt-2 max-w-4xl text-sm">
+      A list of all Accounts authorized for the provided API Key. To continue,
+      select a default account; you can change this later.
+    </p>
+  </div>
+
+  <ul role="list">
+    @for (account of app.summaries(); track account.id; let last = $last) {
+      <app-account-item [account]="account" [isLast]="last" />
+    }
+  </ul>
+</main>

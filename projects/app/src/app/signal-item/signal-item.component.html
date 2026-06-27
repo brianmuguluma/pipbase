@@ -1,0 +1,17 @@
+<ion-item
+  [routerLink]="[signal().id]"
+  class="border-b border-gray-100 dark:border-white/5"
+  button
+>
+  <ion-label class="ion-no-margin flex justify-between gap-x-6 py-5">
+    <ion-text class="font-semibold leading-6">
+      {{ signal().command | noCase | titlecase }}
+    </ion-text>
+    <ion-text class="block">
+      {{ signal().occupancy?.subscribers }} subscribers
+    </ion-text>
+    <ion-note class="truncate">
+      Published {{ signal().createdAt?.seconds! * 1000 | formatRelative }}
+    </ion-note>
+  </ion-label>
+</ion-item>

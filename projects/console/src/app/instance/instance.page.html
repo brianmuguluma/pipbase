@@ -1,0 +1,231 @@
+<app-navbar />
+@if (!instance()) {
+<app-spinner />
+} @if (instance()) {
+<main>
+  <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+    <div
+      class="mx-auto grid max-w-2xl grid-cols-1 grid-rows-1 items-start gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-3"
+    >
+      <div class="space-y-4 lg:col-start-3 lg:row-end-1">
+        <!-- User -->
+        <app-user-card [user]="user()" />
+
+        <!-- Specs -->
+        <h2 class="sr-only">Summary</h2>
+        <div
+          class="bg-backgroundSecondary ring-border rounded-lg shadow-sm ring-1"
+        >
+          <dl class="flex flex-wrap">
+            <div class="flex-auto pl-6 pt-6">
+              <dt class="text-sm font-semibold leading-6">Specs</dt>
+              <dd class="mt-1 text-base font-semibold leading-6">
+                {{ instance()?.plan }}
+              </dd>
+            </div>
+            <div
+              class="mt-6 flex w-full flex-none gap-x-4 border-t border-gray-900/5 px-6 pt-6 dark:border-white/10"
+            >
+              <dt class="flex-none">
+                <span class="sr-only">Client</span>
+                <svg
+                  class="text-content2 h-6 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path d="M14 6H6v8h8V6Z" />
+                  <path
+                    fill-rule="evenodd"
+                    d="M9.25 3V1.75a.75.75 0 0 1 1.5 0V3h1.5V1.75a.75.75 0 0 1 1.5 0V3h.5A2.75 2.75 0 0 1 17 5.75v.5h1.25a.75.75 0 0 1 0 1.5H17v1.5h1.25a.75.75 0 0 1 0 1.5H17v1.5h1.25a.75.75 0 0 1 0 1.5H17v.5A2.75 2.75 0 0 1 14.25 17h-.5v1.25a.75.75 0 0 1-1.5 0V17h-1.5v1.25a.75.75 0 0 1-1.5 0V17h-1.5v1.25a.75.75 0 0 1-1.5 0V17h-.5A2.75 2.75 0 0 1 3 14.25v-.5H1.75a.75.75 0 0 1 0-1.5H3v-1.5H1.75a.75.75 0 0 1 0-1.5H3v-1.5H1.75a.75.75 0 0 1 0-1.5H3v-.5A2.75 2.75 0 0 1 5.75 3h.5V1.75a.75.75 0 0 1 1.5 0V3h1.5ZM4.5 5.75c0-.69.56-1.25 1.25-1.25h8.5c.69 0 1.25.56 1.25 1.25v8.5c0 .69-.56 1.25-1.25 1.25h-8.5c-.69 0-1.25-.56-1.25-1.25v-8.5Z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </dt>
+              <dd class="text-content2 text-sm font-medium leading-6">
+                {{ instance()?.vcpu_count }} vCPU
+              </dd>
+            </div>
+            <div class="mt-4 flex w-full flex-none gap-x-4 px-6">
+              <dt class="flex-none">
+                <span class="sr-only">Due date</span>
+                <svg
+                  class="text-content2 h-6 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 1c3.866 0 7 1.79 7 4s-3.134 4-7 4-7-1.79-7-4 3.134-4 7-4Zm5.694 8.13c.464-.264.91-.583 1.306-.952V10c0 2.21-3.134 4-7 4s-7-1.79-7-4V8.178c.396.37.842.688 1.306.953C5.838 10.006 7.854 10.5 10 10.5s4.162-.494 5.694-1.37ZM3 13.179V15c0 2.21 3.134 4 7 4s7-1.79 7-4v-1.822c-.396.37-.842.688-1.306.953-1.532.875-3.548 1.369-5.694 1.369s-4.162-.494-5.694-1.37A7.009 7.009 0 0 1 3 13.179Z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </dt>
+              <dd class="text-content2 text-sm leading-6">
+                {{ instance()?.ram }} MB
+              </dd>
+            </div>
+            <div class="mt-4 flex w-full flex-none gap-x-4 px-6">
+              <dt class="flex-none">
+                <span class="sr-only">Status</span>
+                <svg
+                  class="text-content2 h-6 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M16.555 5.412a8.028 8.028 0 0 0-3.503-2.81 14.899 14.899 0 0 1 1.663 4.472 8.547 8.547 0 0 0 1.84-1.662ZM13.326 7.825a13.43 13.43 0 0 0-2.413-5.773 8.087 8.087 0 0 0-1.826 0 13.43 13.43 0 0 0-2.413 5.773A8.473 8.473 0 0 0 10 8.5c1.18 0 2.304-.24 3.326-.675ZM6.514 9.376A9.98 9.98 0 0 0 10 10c1.226 0 2.4-.22 3.486-.624a13.54 13.54 0 0 1-.351 3.759A13.54 13.54 0 0 1 10 13.5c-1.079 0-2.128-.127-3.134-.366a13.538 13.538 0 0 1-.352-3.758ZM5.285 7.074a14.9 14.9 0 0 1 1.663-4.471 8.028 8.028 0 0 0-3.503 2.81c.529.638 1.149 1.199 1.84 1.66ZM17.334 6.798a7.973 7.973 0 0 1 .614 4.115 13.47 13.47 0 0 1-3.178 1.72 15.093 15.093 0 0 0 .174-3.939 10.043 10.043 0 0 0 2.39-1.896ZM2.666 6.798a10.042 10.042 0 0 0 2.39 1.896 15.196 15.196 0 0 0 .174 3.94 13.472 13.472 0 0 1-3.178-1.72 7.973 7.973 0 0 1 .615-4.115ZM10 15c.898 0 1.778-.079 2.633-.23a13.473 13.473 0 0 1-1.72 3.178 8.099 8.099 0 0 1-1.826 0 13.47 13.47 0 0 1-1.72-3.178c.855.151 1.735.23 2.633.23ZM14.357 14.357a14.912 14.912 0 0 1-1.305 3.04 8.027 8.027 0 0 0 4.345-4.345c-.953.542-1.971.981-3.04 1.305ZM6.948 17.397a8.027 8.027 0 0 1-4.345-4.345c.953.542 1.971.981 3.04 1.305a14.912 14.912 0 0 0 1.305 3.04Z"
+                  />
+                </svg>
+              </dt>
+              <dd class="text-content2 text-sm leading-6">
+                {{ instance()?.main_ip }}
+              </dd>
+            </div>
+          </dl>
+          <!-- todo: try disabling anchor if no kvm link -->
+          @if (instance()?.kvm) {
+          <div class="border-border mt-6 border-t px-6 py-6">
+            <a
+              [href]="instance()?.kvm"
+              target="_blank"
+              class="link text-sm font-semibold leading-6"
+            >
+              Web console <span aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+          }
+        </div>
+      </div>
+      <!-- Details -->
+      <div
+        class="ring-border -mx-4 px-4 py-8 shadow-sm ring-1 sm:mx-0 sm:rounded-lg sm:px-8 sm:pb-14 lg:col-span-2 lg:row-span-2 lg:row-end-2 xl:px-16 xl:pb-20 xl:pt-16"
+      >
+        <div class="flex items-center justify-between px-4 sm:px-0">
+          <div>
+            <h3 class="text-base font-semibold leading-7">Instance</h3>
+            <p class="text-content2 mt-1 max-w-2xl text-sm leading-6">
+              Information about your virtual machine
+            </p>
+          </div>
+          <div class="relative ml-3 inline-block text-left">
+            <button
+              type="button"
+              (click)="confirmReinstallInstance()"
+              class="rounded-full bg-white p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:bg-white/10 dark:text-white dark:ring-0 dark:hover:bg-white/20"
+            >
+              <svg
+                class="h-5 w-5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.433a.75.75 0 000-1.5H3.989a.75.75 0 00-.75.75v4.242a.75.75 0 001.5 0v-2.43l.31.31a7 7 0 0011.712-3.138.75.75 0 00-1.449-.39zm1.23-3.723a.75.75 0 00.219-.53V2.929a.75.75 0 00-1.5 0V5.36l-.31-.31A7 7 0 003.239 8.188a.75.75 0 101.448.389A5.5 5.5 0 0113.89 6.11l.311.31h-2.432a.75.75 0 000 1.5h4.243a.75.75 0 00.53-.219z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="mt-6 border-t border-gray-200 dark:border-white/10">
+          <dl class="divide-y divide-gray-100 dark:divide-white/5">
+            <!-- ID -->
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+              <dt class="text-content2 text-sm font-medium leading-6">ID</dt>
+              <dd
+                class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+              >
+                {{ id() }}
+              </dd>
+            </div>
+            <!-- Label -->
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+              <dt class="text-content2 text-sm font-medium leading-6">Label</dt>
+              <dd
+                class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+              >
+                {{ instance()?.label }}
+              </dd>
+            </div>
+            <!-- Date created -->
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+              <dt class="text-content2 text-sm font-medium leading-6">
+                Date created
+              </dt>
+              <dd
+                class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+              >
+                {{ instance()?.date_created | date }}
+              </dd>
+            </div>
+            <!-- Operating system -->
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+              <dt class="text-content2 text-sm font-medium leading-6">
+                Operating system
+              </dt>
+              <dd
+                class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+              >
+                {{ instance()?.os }}
+              </dd>
+            </div>
+            <!-- Region -->
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+              <dt class="text-content2 text-sm font-medium leading-6">
+                Region
+              </dt>
+              <dd
+                class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+              >
+                @if (!region()) {
+                <span>-</span>
+                } @if (region()) {
+                <span> {{ region().city }}, {{ region().country }} </span>
+                }
+              </dd>
+            </div>
+            <!-- Status -->
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+              <dt class="text-content2 text-sm font-medium leading-6">
+                Status
+              </dt>
+              <dd
+                class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+              >
+                {{ instance()?.status | titlecase }}
+              </dd>
+            </div>
+            <!-- Server status -->
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+              <dt class="text-content2 text-sm font-medium leading-6">
+                Server status
+              </dt>
+              <dd
+                class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+              >
+                {{ instance()?.server_status | titlecase }}
+              </dd>
+            </div>
+            <!-- Power status -->
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+              <dt class="text-content2 text-sm font-medium leading-6">
+                Power status
+              </dt>
+              <dd
+                class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+              >
+                {{ instance()?.power_status | titlecase }}
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-footer />
+</main>
+}

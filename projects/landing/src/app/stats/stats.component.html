@@ -1,0 +1,46 @@
+<div class="py-24 sm:py-32">
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <div class="mx-auto max-w-2xl lg:max-w-none">
+      <div class="text-center">
+        <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">
+          Trusted by traders worldwide
+        </h2>
+        <p class="text-content2 mt-4 text-lg leading-8">
+          Join thousands of traders growing their portfolio.
+        </p>
+      </div>
+      <dl
+        class="mt-16 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-4"
+      >
+        <div class="bg-backgroundSecondary flex flex-col p-8">
+          <dt class="text-content2 text-sm font-semibold leading-6">
+            Trades executed
+          </dt>
+          <dd class="order-first text-3xl font-semibold tracking-tight">1M+</dd>
+        </div>
+        <div class="bg-backgroundSecondary flex flex-col p-8">
+          <dt class="text-content2 text-sm font-semibold leading-6">
+            Average compound interest
+          </dt>
+          <dd class="order-first text-3xl font-semibold tracking-tight">
+            {{ app.interest() | percent: "1.0-1" }}
+          </dd>
+        </div>
+        <div class="bg-backgroundSecondary flex flex-col p-8">
+          <dt class="text-content2 text-sm font-semibold leading-6">
+            Uptime guarantee
+          </dt>
+          <dd class="order-first text-3xl font-semibold tracking-tight">
+            {{ app.uptime() | percent: "1.1-1" }}
+          </dd>
+        </div>
+        <div class="bg-backgroundSecondary flex flex-col p-8">
+          <dt class="text-content2 text-sm font-semibold leading-6">
+            Instruments available
+          </dt>
+          <dd class="order-first text-3xl font-semibold tracking-tight">90+</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</div>

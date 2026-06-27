@@ -1,0 +1,93 @@
+<ion-header collapse="fade" translucent>
+  <ion-toolbar>
+    <ion-title>Instruments</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()" color="medium">
+        <ion-icon slot="icon-only" name="close-circle" />
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      placeholder="Instruments..."
+      inputmode="text"
+      type="decimal"
+      showCancelButton="focus"
+      (ionChange)="searchInstruments($event)"
+    ></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+  <!-- Instrument types -->
+  <ion-item class="sticky top-0 z-10" lines="none">
+    <ion-label>
+      <ion-chip
+        (click)="instrumentType.set(undefined)"
+        [color]="instrumentType() === undefined ? undefined : 'medium'"
+        class="ml-0"
+      >
+        All
+      </ion-chip>
+      @for (type of instrumentTypes(); track type) {
+      <ion-chip
+        (click)="instrumentType.set(type)"
+        [color]="type === instrumentType() ? undefined : 'medium'"
+      >
+        @if (type !== 'CFD') {
+        <span>{{ type | titlecase }}</span>
+        } @if (type === 'CFD') {
+        <span>{{ type }}</span>
+        }
+      </ion-chip>
+      }
+    </ion-label>
+  </ion-item>
+
+  <!-- <ion-list>
+  <ion-item>
+    <ion-checkbox indeterminate>All Instruments</ion-checkbox>
+  </ion-item> -->
+  <!-- <ion-item *ngFor="let instrument of app.instruments()">
+  <ion-label>{{ instrument.displayName }}</ion-label>
+</ion-item> -->
+  <!-- <app-instrument-item
+*ngFor="let instrument of instruments; trackBy:trackInstruments"
+[instrument]="instrument"
+></app-instrument-item> -->
+  <!-- </ion-list>
+<ion-list *ngIf="!results?.length && instrumentType"> -->
+  <!-- <app-instrument-item
+  *ngFor="let instrument of filteredInstruments; trackBy:trackInstruments"
+  [instrument]="instrument"
+></app-instrument-item> -->
+  <!-- </ion-list>
+<ion-list *ngIf="results?.length"> -->
+  <!-- <app-instrument-item
+  *ngFor="let result of results"
+  [instrument]="result.item"
+  >
+</app-instrument-item> -->
+  <!-- </ion-list> -->
+
+  @if (!results?.length && app.instruments()?.length) {
+  <ion-list lines="none" class="divide-y divide-gray-100 dark:divide-white/5">
+    @for (instrument of instruments(); track instrument) {
+    <div>
+      <app-instrument-item
+        (click)="selectInstrument(instrument)"
+        [instrument]="instrument"
+      />
+    </div>
+    }
+  </ion-list>
+  } @if (!app.instruments()?.length) {
+  <ion-list lines="none" class="divide-y divide-gray-100 dark:divide-white/5">
+    @for (i of [].constructor(10); track i) {
+    <div>
+      <app-item-skeleton />
+    </div>
+    }
+  </ion-list>
+  }
+</ion-content>

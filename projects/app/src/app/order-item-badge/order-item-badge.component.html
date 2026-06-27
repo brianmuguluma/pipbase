@@ -1,0 +1,31 @@
+<!-- PENDING -->
+@if (state() === "PENDING") {
+  <div>
+    <ion-icon name="timer" color="medium" />
+    <!-- <ion-label>{{ state | titlecase }}</ion-label> -->
+  </div>
+}
+
+<!-- FILLED -->
+@if (state() === "FILLED") {
+  <div>
+    <ion-icon name="checkmark-circle" color="success" />
+    <!-- <ion-label>{{ state | titlecase }}</ion-label> -->
+  </div>
+}
+
+<!-- CANCELLED -->
+@if (state() === "CANCELLED") {
+  <div>
+    <ion-icon name="close-circle" color="danger" />
+    <!-- <ion-label>{{ state | titlecase }}</ion-label> -->
+  </div>
+}
+
+<!-- TRIGGERED -->
+@if (state() === "TRIGGERED") {
+  <div>
+    <ion-icon name="pulse" color="warning" />
+    <!-- <ion-label>{{ state | titlecase }}</ion-label> -->
+  </div>
+}

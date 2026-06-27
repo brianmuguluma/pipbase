@@ -1,0 +1,34 @@
+<ion-tabs>
+  <ion-tab-bar slot="bottom" translucent>
+    <ion-tab-button tab="home">
+      <ion-icon aria-hidden="true" name="home" />
+      <ion-label>Home</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button [disabled]="!auth.hasAccountId()" tab="exchange">
+      <ion-icon aria-hidden="true" name="list-circle" />
+      <ion-label>Exchange</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button
+      [disabled]="!auth.profile() || !auth.hasAccountId()"
+      tab="reports"
+    >
+      <ion-icon aria-hidden="true" name="pie-chart" />
+      <ion-label>Reports</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button
+      [disabled]="!auth.profile() || !auth.hasAccountId()"
+      tab="server"
+    >
+      <ion-icon aria-hidden="true" name="server" />
+      <ion-label>Server</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="settings">
+      <ion-icon aria-hidden="true" name="cog" />
+      <ion-label>Settings</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs>

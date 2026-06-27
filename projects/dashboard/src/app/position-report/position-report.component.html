@@ -1,0 +1,43 @@
+<li
+  class="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10"
+>
+  <div
+    class="border-border bg-backgroundSecondary flex items-center gap-x-4 border-b p-6"
+  >
+    <div class="text-sm font-medium leading-6">
+      {{ instrument()?.displayName || name() | slash }}
+    </div>
+  </div>
+  <dl class="divide-gray-4 -my-3 divide-y px-6 py-4 text-sm leading-6">
+    <div class="flex justify-between gap-x-4 py-3">
+      <dt class="text-content2">Trades</dt>
+      <dd class="">
+        {{ trades().length || "-" }}
+      </dd>
+    </div>
+    <div class="flex justify-between gap-x-4 py-3">
+      <dt class="text-content2">Realized</dt>
+      <dd class="">
+        {{ (realized() | currency: app.account()?.currency) || "-" }}
+      </dd>
+    </div>
+    <div class="flex justify-between gap-x-4 py-3">
+      <dt class="text-content2">Average</dt>
+      <dd class="">
+        {{ (average() | currency: app.account()?.currency) || "-" }}
+      </dd>
+    </div>
+    <div class="flex justify-between gap-x-4 py-3">
+      <dt class="text-content2">Highest</dt>
+      <dd class="">
+        {{ (max() | currency: app.account()?.currency) || "-" }}
+      </dd>
+    </div>
+    <div class="flex justify-between gap-x-4 py-3">
+      <dt class="text-content2">Lowest</dt>
+      <dd class="">
+        {{ (min() | currency: app.account()?.currency) || "-" }}
+      </dd>
+    </div>
+  </dl>
+</li>

@@ -1,0 +1,12 @@
+@if (!user()?.photoURL && user()?.displayName) {
+  <span
+    class="inline-flex h-full w-full items-center justify-center bg-gray-500 dark:bg-white/5"
+  >
+    <span
+      class="font-medium leading-none text-white"
+      [ngClass]="size() === 'large' ? 'text-3xl' : 'text-sm'"
+    >
+      {{ user()?.displayName || auth.profile()?.displayName | slice: 0 : 1 }}
+    </span>
+  </span>
+}

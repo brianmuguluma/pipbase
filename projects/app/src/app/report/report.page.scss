@@ -1,0 +1,9 @@
+.ion-background-color {
+  background-color: white;
+}
+
+@media (prefers-color-scheme: dark) {
+  .ion-background-color {
+    background-color: var(--ion-background-color);
+  }
+}

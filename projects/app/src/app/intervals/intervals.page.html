@@ -1,0 +1,16 @@
+<ion-content [scrollY]="false">
+  <div class="ion-padding grid w-full grid-cols-3 gap-3">
+    @for (int of intervals; track int) {
+    <ion-button
+      (click)="selectInterval(int)"
+      [color]="int === interval() ? 'primary' : 'light'"
+      size="small"
+      class="ion-no-margin"
+    >
+      <ion-text [color]="int !== interval() ? 'primary' : ''"
+        >{{ int }}</ion-text
+      >
+    </ion-button>
+    }
+  </div>
+</ion-content>

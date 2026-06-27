@@ -1,0 +1,16 @@
+<ion-item (click)="selectAccount()">
+  <ion-radio
+    [value]="account().id"
+    class="ion-no-margin flex justify-between gap-x-6 py-5"
+  >
+    <ion-text color="dark" class="font-semibold leading-6">
+      {{ account().alias }}
+    </ion-text>
+    <ion-text class="block font-medium leading-6">
+      {{ account().balance | currency: account().currency }}
+    </ion-text>
+    <ion-note class="truncate leading-5">
+      {{ account().id }}
+    </ion-note>
+  </ion-radio>
+</ion-item>

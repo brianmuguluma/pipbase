@@ -1,0 +1,115 @@
+<section class="relative isolate overflow-hidden">
+  <div
+    class="border-b border-b-gray-900/10 lg:border-t lg:border-t-gray-900/5 dark:border-b-white/10 lg:dark:border-t-white/5"
+  >
+    <dl
+      class="mx-auto grid max-w-7xl grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 lg:px-2 xl:px-0"
+    >
+      <!-- Account Balance -->
+      <div
+        class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 border-t border-gray-900/5 px-4 py-10 sm:px-6 lg:border-t-0 xl:px-8 dark:border-white/5"
+      >
+        <dt class="text-content2 text-sm font-medium leading-6">Balance</dt>
+        <!-- <dd
+              *ngIf="percentageChange"
+              class="text-xs font-medium"
+              [ngClass]="percentageChange >= 0 ? 'text-success' : 'text-error'"
+              >
+              <span *ngIf="percentageChange > 0">+</span>{{ percentageChange |
+              percent : '1.0-2' }}
+            </dd> -->
+        <dd
+          class="flex w-full flex-none items-baseline gap-x-2 text-3xl font-medium leading-10 tracking-tight"
+        >
+          {{ app.account()?.balance | currency: app.account()?.currency }}
+        </dd>
+      </div>
+      <!-- Realized -->
+      <div
+        class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 border-t border-gray-900/5 px-4 py-10 sm:px-6 lg:border-l lg:border-t-0 xl:px-8 dark:border-white/5"
+      >
+        <dt class="text-content2 text-sm font-medium leading-6">Realized</dt>
+        <dd class="text-xs font-medium">
+          <!-- {{ (trade()?.initialUnits | toNumber) > 0 ? 'Long' : 'Short' }} -->
+        </dd>
+        <dd
+          class="w-full flex-none text-3xl font-medium leading-10 tracking-tight"
+        >
+          {{ (app.account()?.pl | currency: app.account()?.currency) || "-" }}
+        </dd>
+      </div>
+      <!-- Unrealized -->
+      <div
+        class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 border-t border-gray-900/5 px-4 py-10 sm:border-l sm:px-6 lg:border-t-0 xl:px-8 dark:border-white/5"
+      >
+        <dt class="text-content2 text-sm font-medium leading-6">Unrealized</dt>
+        @if (app.poll()?.state?.trades?.length) {
+          <dd
+            class="text-xs font-medium"
+            [ngClass]="change()! >= 0 ? 'text-success' : 'text-error'"
+          >
+            @if (change()! >= 0) {
+              <span>+</span>
+            }
+            {{ change() | percent: "1.0-2" }}
+          </dd>
+        }
+        <dd
+          class="w-full flex-none text-3xl font-medium leading-10 tracking-tight"
+        >
+          {{
+            (app.poll()?.state?.unrealizedPL
+              | currency: app.account()?.currency) || "-"
+          }}
+          <!-- @if (app.poll()?.state?.trades?.length) {
+            <span class="text-sm text-content2 truncate">
+              {{
+                (app.poll()?.state?.marginCloseoutNAV
+                  | currency: app.account()?.currency) || "-"
+              }}
+            </span>
+          } -->
+        </dd>
+      </div>
+      <!-- Margin available -->
+      <div
+        class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 border-t border-gray-900/5 px-4 py-10 sm:border-l sm:px-6 lg:border-t-0 xl:px-8 dark:border-white/5"
+      >
+        <dt class="text-content2 text-sm font-medium leading-6">Available</dt>
+        <dd
+          class="w-full flex-none text-3xl font-medium leading-10 tracking-tight"
+        >
+          {{
+            (app.poll()?.state?.marginAvailable
+              | currency: app.account()?.currency) || "-"
+          }}
+        </dd>
+      </div>
+    </dl>
+  </div>
+  <div
+    class="absolute left-0 top-full -z-10 mt-96 origin-top-left translate-y-40 -rotate-90 transform-gpu opacity-20 blur-3xl sm:left-1/2 sm:-ml-96 sm:-mt-10 sm:translate-y-0 sm:rotate-0 sm:transform-gpu sm:opacity-50"
+    aria-hidden="true"
+  >
+    <div
+      class="aspect-[1154/678] w-[72.125rem] bg-gradient-to-br from-[#FF80B5] to-[#9089FC]"
+      style="
+        clip-path: polygon(
+          100% 38.5%,
+          82.6% 100%,
+          60.2% 37.7%,
+          52.4% 32.1%,
+          47.5% 41.8%,
+          45.2% 65.6%,
+          27.5% 23.4%,
+          0.1% 35.3%,
+          17.9% 0%,
+          27.7% 23.4%,
+          76.2% 2.5%,
+          74.2% 56%,
+          100% 38.5%
+        );
+      "
+    ></div>
+  </div>
+</section>

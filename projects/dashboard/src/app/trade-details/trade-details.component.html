@@ -1,0 +1,220 @@
+<div
+  class="sm:ring-border -mx-4 sm:mx-0 sm:rounded-lg sm:px-8 sm:py-8 sm:pb-14 sm:shadow-sm sm:ring-1 lg:col-span-2 lg:row-span-2 lg:row-end-2 xl:px-16 xl:pb-20 xl:pt-16"
+>
+  <div>
+    <div class="px-4 sm:px-0">
+      <h3 class="texc text-base font-semibold leading-7">Details</h3>
+      <p class="text-content2 mt-1 max-w-2xl text-sm leading-6">
+        {{ instrument()?.displayName || trade().instrument | slash }}
+      </p>
+    </div>
+    <div class="border-border mt-6 border-t">
+      <dl class="divide-gray-4 divide-y">
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+          <dt
+            class="flex items-center justify-between text-sm font-medium leading-6"
+          >
+            ID
+            <app-tooltip [tip]="glossary().trade.id" />
+          </dt>
+          <dd
+            class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ trade().id }}
+          </dd>
+        </div>
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+          <dt
+            class="texc flex items-center justify-between text-sm font-medium leading-6"
+          >
+            Instrument
+            <app-tooltip [tip]="glossary().trade.instrument" class="relative" />
+          </dt>
+          <dd
+            class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ trade().instrument | slash }}
+          </dd>
+        </div>
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+          <dt
+            class="texc flex items-center justify-between text-sm font-medium leading-6"
+          >
+            State
+            <app-tooltip [tip]="glossary().trade.state" class="relative" />
+          </dt>
+          <dd
+            class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ trade().state | noCase | titlecase }}
+          </dd>
+        </div>
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+          <dt
+            class="texc flex items-center justify-between text-sm font-medium leading-6"
+          >
+            Initial Units
+            <app-tooltip
+              [tip]="glossary().trade.initialUnits"
+              class="relative"
+            />
+          </dt>
+          <dd
+            class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ trade().initialUnits | number }}
+          </dd>
+        </div>
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+          <dt
+            class="texc flex items-center justify-between text-sm font-medium leading-6"
+          >
+            Initial Margin
+            <app-tooltip
+              [tip]="glossary().trade.initialMarginRequired"
+              class="relative"
+            />
+          </dt>
+          <dd
+            class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{
+              trade().initialMarginRequired | currency: app.account()?.currency
+            }}
+          </dd>
+        </div>
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+          <dt
+            class="texc flex items-center justify-between text-sm font-medium leading-6"
+          >
+            Price
+            <app-tooltip [tip]="glossary().trade.price" class="relative" />
+          </dt>
+          <dd
+            class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+          >
+            {{ trade().price }}
+          </dd>
+        </div>
+
+        <!-- Close price -->
+        @if (trade().averageClosePrice) {
+          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt
+              class="texc flex items-center justify-between text-sm font-medium leading-6"
+            >
+              Average Close Price
+              <app-tooltip
+                [tip]="glossary().trade.averageClosePrice"
+                class="relative"
+              />
+            </dt>
+            <dd
+              class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ trade().averageClosePrice }}
+            </dd>
+          </div>
+        }
+
+        <!-- Unrealized -->
+        @if (calculatedTradeState()) {
+          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt
+              class="texc flex items-center justify-between text-sm font-medium leading-6"
+            >
+              Unrealized
+              <app-tooltip
+                [tip]="glossary().trade.unrealizedPL"
+                class="relative"
+              />
+            </dt>
+            <dd
+              class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{
+                calculatedTradeState()?.unrealizedPL
+                  | currency: app.account()?.currency
+              }}
+            </dd>
+          </div>
+        }
+
+        <!-- Realized -->
+        @if (trade().realizedPL) {
+          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt
+              class="texc flex items-center justify-between text-sm font-medium leading-6"
+            >
+              Realized
+              <app-tooltip
+                [tip]="glossary().trade.realizedPL"
+                class="relative"
+              />
+            </dt>
+            <dd
+              class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ trade().realizedPL | currency: app.account()?.currency }}
+            </dd>
+          </div>
+        }
+        @if (trade().financing) {
+          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt
+              class="texc flex items-center justify-between text-sm font-medium leading-6"
+            >
+              Financing
+              <app-tooltip
+                [tip]="glossary().trade.financing"
+                class="relative"
+              />
+            </dt>
+            <dd
+              class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ trade().financing | currency: app.account()?.currency }}
+            </dd>
+          </div>
+        }
+
+        <!-- Open time -->
+        @if (trade().openTime) {
+          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt
+              class="texc flex items-center justify-between text-sm font-medium leading-6"
+            >
+              Opened
+              <app-tooltip [tip]="glossary().trade.openTime" class="relative" />
+            </dt>
+            <dd
+              class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ trade().openTime | date: "medium" }}
+            </dd>
+          </div>
+        }
+
+        <!-- Close time -->
+        @if (trade().closeTime) {
+          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt
+              class="texc flex items-center justify-between text-sm font-medium leading-6"
+            >
+              Closed
+              <app-tooltip
+                [tip]="glossary().trade.closeTime"
+                class="relative"
+              />
+            </dt>
+            <dd
+              class="text-content2 mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0"
+            >
+              {{ trade().closeTime | date: "medium" }}
+            </dd>
+          </div>
+        }
+      </dl>
+    </div>
+  </div>
+</div>
